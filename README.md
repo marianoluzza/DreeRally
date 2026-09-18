@@ -6,7 +6,7 @@ Base de trabajo para recuperar una versión jugable en Windows, conservando el h
 - [Preparar VS Code y compilar](doc/DEVELOPMENT.md)
 - [Assets originales y compatibilidad DOS/Windows](doc/ASSETS.md)
 
-Estado inicial: compilación Debug x86 verificada; ejecución pendiente de completar datos y DLL compatibles. Los archivos originales y las partidas permanecen fuera de Git.
+Estado inicial: Debug y Release x86 compilan; assets Windows preparados localmente y proceso propio iniciado. Intro y llegada al menú confirmadas por Mariano; carrera completa pendiente. Los archivos originales y las partidas permanecen fuera de Git.
 
 ---
 
@@ -113,4 +113,3 @@ And a special thanks to all the support and people who work on this project to m
 DreeRally is released to the Public Domain. The documentation and function provided by DreeRally may only be utilized with assets provided by ownership of Death Rally.
 
 DreeRally and any of its' maintainers are in no way associated with or endorsed by Remedy Entertainment(R).
-

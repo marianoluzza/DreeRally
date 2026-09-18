@@ -1,34 +1,42 @@
 # Assets originales y ejecución local
 
-DreeRally upstream declara que usa archivos de **Death Rally para Windows**. La carpeta DOS aportada por Mariano no es una fuente completa para este runtime.
+## Fuente preparada
 
-## Inventario inicial
+Los archivos se extrajeron del instalador clásico para Windows `DeathRallyWin_10.exe` aportado por Mariano, usando 7-Zip sin ejecutar el instalador.
 
-Inspección de `D:\DOS\Drally2`, 17 de septiembre de 2026 (hora de Argentina):
+- Fuente local: `.local/windows-original/`.
+- Copia de ejecución: `runtime/`.
+- Configuración local: `.local/settings.json`.
+- La licencia original se conserva junto a los archivos extraídos.
+- Las tres ubicaciones permanecen ignoradas por Git.
 
-| Archivo | Estado |
+La copia DOS original y sus partidas no se modificaron.
+
+## Archivos comprobados
+
+| Grupo | Estado |
 | --- | --- |
-| ENGINE.BPA, IBFILES.BPA, MENU.BPA, MUSICS.BPA | Presentes; compatibilidad binaria pendiente |
-| TRX.BPA | Ausente; hay TR0.BPA a TR9.BPA de DOS |
-| ENDANI.haf, SANIM.haf | Ausentes |
-| SDL.dll, fmod.dll | Ausentes |
-| msvcr71.dll | Ausente; figura en la lista upstream, revisar dependencias de sus DLL |
-| ENDANI0.HAF | Ausente; referenciado en rutas de resultados del código |
+| ENGINE.BPA, IBFILES.BPA, MENU.BPA, MUSICS.BPA | Presentes |
+| TR0.BPA a TR9.BPA | Los diez circuitos presentes |
+| ENDANI.haf, ENDANI0.HAF, SANIM.haf | Presentes |
+| SDL.dll, fmod.dll, msvcr71.dll | Presentes; formato PE x86 verificado |
 
-No se modificaron archivos ni partidas de esa carpeta.
+**Corrección del inventario inicial:** `TRX.BPA` en el README upstream representa la familia de circuitos; no se necesita un archivo llamado literalmente TRX.BPA. El código forma el nombre del circuito y le agrega `.BPA` (ver `dr.c`). Los scripts comprueban y copian los diez archivos TR0–TR9.
 
-## Resolver el bloqueo
+Los 14 archivos BPA de esta descarga coinciden por SHA-256 con los de la copia DOS examinada. En este caso faltaban las animaciones y DLL del paquete Windows, no otros contenedores de circuitos. Esta comparación no demuestra compatibilidad de todas las ediciones ni de los guardados.
 
-Usar una copia legítima de la edición Windows indicada por el [README upstream](https://github.com/enriquesomolinos/DreeRally#installing), o investigar de forma separada cómo adaptar contenedores DOS. No asumir que renombrar o concatenar TR0–TR9 produce TRX. No descargar DLL sueltas de sitios desconocidos.
+## Prueba inicial
 
-El ejecutable Debug compilado importa SDL.dll y fmod.dll, además de bibliotecas de Windows y el runtime de depuración de MSVC. Se requieren DLL x86 compatibles con las bibliotecas de enlace de este repositorio. Los nombres por sí solos no prueban versión ni compatibilidad.
+El ejecutable Debug propio arrancó con `-window`, permaneció activo y Windows lo reportó respondiendo con título DreeRally. Generó su configuración en `runtime/dr.cfg`. Mariano confirmó visualmente que la ventana pasó la intro y llegó al menú. La inspección automatizada quedó pendiente de autorización. Aún faltan navegación completa, audio, depuración y una carrera completa.
 
-## Separación local
+## Uso
 
-- `.local/settings.json`: ruta de la copia fuente, ignorada.
-- `runtime/`: copia para ejecutar y guardar partidas nuevas, ignorada.
-- `Debug/` y `Release/`: resultados de compilación, ignorados.
-- No añadir BPA, HAF, DLL o partidas originales a commits o releases.
-- Mantener avisos/licencias de upstream y revisar cada dependencia antes de redistribuir.
+```powershell
+.\scripts\Setup-VSCode.ps1 -AssetSource "$PWD\.local\windows-original"
+.\scripts\Check-Assets.ps1
+.\scripts\Prepare-Runtime.ps1 -Configuration Debug
+```
 
-`Check-Assets.ps1` comprueba el inventario mínimo declarado; las animaciones adicionales y la compatibilidad real deben verificarse durante las pruebas de campaña.
+En VS Code, F5 compila Debug, prepara el runtime y lanza el juego. Cerrar la instancia anterior antes de F5, porque Windows bloquea la sustitución del ejecutable mientras está abierto.
+
+Los scripts copian datos, DLL, idiomas y mods. No importan ni sobrescriben partidas de la carpeta original. No añadir BPA, HAF, DLL ni partidas originales a commits o releases. Mantener atribución upstream y revisar licencias de cada dependencia antes de redistribuir.

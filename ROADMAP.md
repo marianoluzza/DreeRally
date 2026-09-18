@@ -26,15 +26,16 @@ Salida: checkout reproducible y ejecutable compilado. Esto todavía no acredita 
 
 Prioridad P0; bloquea todas las pruebas del juego.
 
-- [ ] Conseguir una copia legítima de los datos de la edición Windows que pide upstream, o investigar una adaptación explícita de los datos DOS.
+- [x] Extraer los datos y DLL de la edición Windows aportada por Mariano, manteniéndolos fuera de Git.
 - [ ] Validar formatos y arquitectura x86 de SDL 1.2 y FMOD 3.x; no reemplazarlas por SDL2/SDL3 o FMOD modernas sin adaptar el código.
 - [ ] Comprobar las animaciones `SANIM.haf`, `ENDANI.haf` y el uso condicional de `ENDANI0.HAF`.
 - [ ] Revisar rutas de carga y errores cuando faltan archivos.
-- [ ] Arrancar con `-window`, llegar al menú y cerrar sin dejar procesos.
+- [x] Arrancar con `-window`, pasar la intro y llegar al menú (confirmado por Mariano).
+- [ ] Cerrar normalmente y verificar que no queden procesos.
 - [ ] Confirmar un breakpoint en VS Code.
 - [ ] Registrar versión de datos, argumentos, errores y resultado en una ficha de prueba local.
 
-El inventario inicial tiene `TR0.BPA` a `TR9.BPA`, pero falta `TRX.BPA`, las animaciones HAF y las DLL requeridas. No asumir equivalencia ni renombrar contenedores DOS como solución. Ver [assets](doc/ASSETS.md).
+Assets preparados desde el instalador Windows. Corrección: TRX.BPA era una referencia genérica; se usan TR0.BPA a TR9.BPA, cuyos hashes coinciden con la copia DOS examinada. Las animaciones y DLL x86 ya están presentes. El proceso propio arrancó y responde; Mariano confirmó la intro y el menú. Falta validar jugabilidad. Ver [assets](doc/ASSETS.md).
 
 Salida: menú visible y controles básicos estables.
 
@@ -97,4 +98,4 @@ Multijugador, motor nuevo, conversión a 64 bits y contenido adicional quedan pa
 
 Cada cambio debe tener un objetivo verificable, instrucciones de prueba y evidencia del resultado. Mantener mejoras de infraestructura separadas de cambios de gameplay. Trabajar en ramas para las siguientes modificaciones y conservar siempre la atribución upstream.
 
-Próximo paso concreto: resolver los archivos faltantes de la edición Windows y realizar la primera prueba de arranque. Los assets no se publican en el repositorio.
+Próximo paso concreto: completar la primera carrera y comprobar depuración en VS Code. Assets, intro y llegada al menú confirmados; los assets no se publican en el repositorio.

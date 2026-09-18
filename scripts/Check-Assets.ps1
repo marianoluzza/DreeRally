@@ -8,7 +8,7 @@ if (!$Source) {
 }
 if (!$Source) { $Source = Join-Path $root 'runtime' }
 if (!(Test-Path -LiteralPath $Source -PathType Container)) { throw "Asset folder not found: $Source" }
-$required = @('ENGINE.BPA','IBFILES.BPA','MENU.BPA','MUSICS.BPA','TRX.BPA','ENDANI.haf','SANIM.haf','SDL.dll','fmod.dll')
+$required = @('ENGINE.BPA','IBFILES.BPA','MENU.BPA','MUSICS.BPA','TR0.BPA','TR1.BPA','TR2.BPA','TR3.BPA','TR4.BPA','TR5.BPA','TR6.BPA','TR7.BPA','TR8.BPA','TR9.BPA','ENDANI.haf','SANIM.haf','SDL.dll','fmod.dll')
 $missing = @()
 Write-Host "Checking: $Source"
 foreach ($name in $required) {

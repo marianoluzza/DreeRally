@@ -13,7 +13,7 @@ if (!(Test-Path $exe)) { throw "Build $Configuration first." }
 $runtime = Join-Path $root 'runtime'
 New-Item -ItemType Directory -Path $runtime -Force | Out-Null
 # Copy only runtime data. Never copy or modify original saves/configuration.
-$names = @('ENGINE.BPA','IBFILES.BPA','MENU.BPA','MUSICS.BPA','TRX.BPA','ENDANI.haf','ENDANI0.HAF','SANIM.haf','SDL.dll','fmod.dll','msvcr71.dll')
+$names = @('ENGINE.BPA','IBFILES.BPA','MENU.BPA','MUSICS.BPA','TR0.BPA','TR1.BPA','TR2.BPA','TR3.BPA','TR4.BPA','TR5.BPA','TR6.BPA','TR7.BPA','TR8.BPA','TR9.BPA','ENDANI.haf','ENDANI0.HAF','SANIM.haf','SDL.dll','fmod.dll','msvcr71.dll')
 if ((Resolve-Path $Source).Path -ne (Resolve-Path $runtime).Path) {
     foreach ($name in $names) {
         $file = Join-Path $Source $name

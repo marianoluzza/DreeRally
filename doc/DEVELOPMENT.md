@@ -14,10 +14,10 @@ Las compilaciones Debug y Release se verificaron con MSVC 14.29 (v142) y SDK 10.
 Desde la raíz del repositorio, en PowerShell:
 
 ```powershell
-.\scripts\Setup-VSCode.ps1 -AssetSource 'D:\DOS\Drally2' -Open
+.\scripts\Setup-VSCode.ps1 -AssetSource "$PWD\.local\windows-original" -Open
 ```
 
-La ruta anterior corresponde a la copia DOS examinada: aún faltan archivos; ver [ASSETS.md](ASSETS.md). Cuando haya una fuente compatible, ejecutar nuevamente con su ruta.
+La ruta anterior corresponde al paquete Windows extraído localmente; no se distribuye en Git. En otra máquina, indicar la carpeta que contenga los datos originales. Ver [ASSETS.md](ASSETS.md).
 
 El comando genera `.local/DreeRally.code-workspace` con la ruta del compilador detectado y guarda la ruta de assets en `.local/settings.json`. Ambos quedan fuera de Git. Para continuar otro día, abrir ese workspace.
 
@@ -52,7 +52,7 @@ Para futuras tareas, crear una rama desde la base propia. Inspeccionar cambios u
 
 ## Límites actuales
 
-- Falta probar arranque, depuración y carreras con datos compatibles.
+- El proceso arrancó con los assets Windows y responde; Mariano confirmó que pasó la intro y llegó al menú. Falta probar depuración y completar carreras. Cerrar la instancia abierta antes de F5 para liberar el ejecutable.
 - El proyecto silencia muchas advertencias; build exitoso no equivale a ausencia de errores.
 - Los builds muestran advertencias de mezcla de runtime MSVCRT/MSVCRTD (LNK4098) y de la opción antigua /Gm (D9035); se conservan para estudiar después de obtener una referencia funcional.
 - CI heredado y migración a CMake quedan registrados en el [roadmap](../ROADMAP.md).
