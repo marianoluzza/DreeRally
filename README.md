@@ -1,3 +1,15 @@
+# DreeRally — fork personal de Mariano Luzza
+
+Base de trabajo para recuperar una versión jugable en Windows, conservando el historial y los créditos de enriquesomolinos/DreeRally.
+
+- [Roadmap y próximos hitos](ROADMAP.md)
+- [Preparar VS Code y compilar](doc/DEVELOPMENT.md)
+- [Assets originales y compatibilidad DOS/Windows](doc/ASSETS.md)
+
+Estado inicial: compilación Debug x86 verificada; ejecución pendiente de completar datos y DLL compatibles. Los archivos originales y las partidas permanecen fuera de Git.
+
+---
+
 [![Gitter](https://img.shields.io/gitter/room/DAVFoundation/DAV-Contributors.svg)](https://gitter.im/DreeRally-deathrally/community#)
 [![GitHub Actions build status (0.3.x)](https://github.com/enriquesomolinos/DreeRally/workflows/CI/badge.svg?branch=0.3.x)](https://github.com/enriquesomolinos/DreeRally/actions?query=branch:0.3.x)
 [![AppVeyor build status (master)](https://ci.appveyor.com/api/projects/status/u7idbsek3njnh648/branch/master?svg=true&passingText=master%20-%20OK&failingText=master%20-%20Fails)](https://ci.appveyor.com/project/enriquesomolinos/dreerally/branch/master)

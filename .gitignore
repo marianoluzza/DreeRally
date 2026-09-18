@@ -489,3 +489,12 @@ ModelManifest.xml
 /tools/MENU.BPA_dir/15X150.BPK
 /DrWin/fmod.dll
 /DrWin/SDL.dll
+
+# Personal development: local assets, saves and machine settings
+/.local/
+/runtime/
+*.BPA
+*.HAF
+*.SG*
+*.dll
+*.gch
