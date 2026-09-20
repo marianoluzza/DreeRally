@@ -13,14 +13,17 @@ $functions = foreach ($name in $names) {
 }
 $functions -join "`n" | Set-Content (Join-Path $testDir 'race-palette-functions.inc') -Encoding ASCII
 $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
-$vs = & $vswhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+$vs = @(& $vswhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath)[0]
 if (!$vs) { throw 'MSVC C++ build tools not found.' }
 $vcvars = Join-Path $vs 'VC\Auxiliary\Build\vcvars32.bat'
 Push-Location $root
 try {
-    $command = 'call "' + $vcvars + '" >nul && cl /nologo /W3 /I.local\tests /Fe:.local\tests\race-palette-test.exe /Fo:.local\tests\race-palette-test.obj tests\race_palette_test.c'
-    & cmd.exe /c $command
-    if ($LASTEXITCODE -ne 0) { throw 'Palette test compilation failed.' }
+    # vcvars32.bat escribe en stderr aunque funcione; se redirige dentro de cmd para que
+    # PowerShell no lo tome como error y aborte el script.
+    $compileLog = Join-Path $testDir 'compile.log'
+    $command = 'call "' + $vcvars + '" >nul 2>&1 && cl /nologo /W3 /I.local\tests /Fe:.local\tests\race-palette-test.exe /Fo:.local\tests\race-palette-test.obj tests\race_palette_test.c > "' + $compileLog + '" 2>&1'
+    & cmd.exe /c $command | Out-Null
+    if ($LASTEXITCODE -ne 0) { Get-Content $compileLog; throw 'Palette test compilation failed.' }
     & (Join-Path $testDir 'race-palette-test.exe')
     if ($LASTEXITCODE -ne 0) { throw 'Palette regression tests failed.' }
 } finally { Pop-Location }
