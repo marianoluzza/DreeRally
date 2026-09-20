@@ -31,9 +31,9 @@ Prioridad P0; bloquea todas las pruebas del juego.
 - [ ] Comprobar las animaciones `SANIM.haf`, `ENDANI.haf` y el uso condicional de `ENDANI0.HAF`.
 - [ ] Revisar rutas de carga y errores cuando faltan archivos.
 - [x] Arrancar con `-window`, pasar la intro y llegar al menú (confirmado por Mariano).
-- [ ] Cerrar normalmente y verificar que no queden procesos.
+- [x] Cerrar normalmente y verificar que no queden procesos (sesión del 18/09: SDL_QUIT y salida 0).
 - [ ] Confirmar un breakpoint en VS Code.
-- [ ] Registrar versión de datos, argumentos, errores y resultado en una ficha de prueba local.
+- [x] Registrar argumentos, build, eventos y fallos por sesión; conservar binario, símbolos y volcado con ProcDump.
 
 Assets preparados desde el instalador Windows. Corrección: TRX.BPA era una referencia genérica; se usan TR0.BPA a TR9.BPA, cuyos hashes coinciden con la copia DOS examinada. Las animaciones y DLL x86 ya están presentes. El proceso propio arrancó y responde; Mariano confirmó la intro y el menú. Falta validar jugabilidad. Ver [assets](doc/ASSETS.md).
 
@@ -43,7 +43,7 @@ Salida: menú visible y controles básicos estables.
 
 Prioridad P0; depende del arranque.
 
-- [ ] Seleccionar piloto, coche y circuito.
+- [x] Seleccionar piloto, coche y circuito; nombre y Backspace probados el 18/09.
 - [ ] Verificar aceleración, freno, dirección, colisiones y límites de pista.
 - [ ] Comprobar vueltas, posiciones, oponentes, armas, daño y finalización.
 - [ ] Terminar una carrera y volver a resultados/tienda.
@@ -52,6 +52,8 @@ Prioridad P0; depende del arranque.
 - [ ] Comparar comportamiento con el original antes de modificar física o tiempos.
 
 Salida: tres carreras consecutivas completas sin bloqueo, pérdida de controles ni resultados incoherentes. Corregir primero cierres y corrupción de memoria; luego fidelidad.
+
+Diagnóstico del 18/09: el primer volcado detectó un fallo en el dibujo de humo. Se corrigieron accesos fuera de límites en las paletas y referencias antiguas a los participantes. Las pruebas de regresión cubren cinco rutinas de paleta y el humo de los cuatro participantes. Los logs posteriores muestran carga de TR8/TR1 y salida normal, pero todavía no acreditan una carrera completa.
 
 ## 3. Sonido, campaña y guardados
 

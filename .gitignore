@@ -491,6 +491,8 @@ ModelManifest.xml
 /DrWin/SDL.dll
 
 # Personal development: local assets, saves and machine settings
+/logs/
+*.dmp
 /.local/
 /runtime/
 *.BPA

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -187,6 +187,7 @@
       <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</BufferSecurityCheck>
       <FunctionLevelLinking Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</FunctionLevelLinking>
     </ClCompile>
+    <ClCompile Include="diagnostics.c" />
     <ClCompile Include="drivers.c" />
     <ClCompile Include="graphics.c" />
     <ClCompile Include="imageUtil.c" />
@@ -236,6 +237,7 @@
     <ClInclude Include="defs.h" />
     <ClInclude Include="doc.h" />
     <ClInclude Include="dr.h" />
+    <ClInclude Include="diagnostics.h" />
     <ClInclude Include="drivers.h" />
     <ClInclude Include="graphics.h" />
     <ClInclude Include="imageUtil.h" />
