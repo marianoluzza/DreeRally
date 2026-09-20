@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../diagnostics.h"
 
 char byte_461F00[256]; // weak
 int lastCircuitsSelected_456780[3];
@@ -260,6 +261,7 @@ if(debug==1){
 //----- (004357F0) --------------------------------------------------------
 void selectRaceScreen()
 {
+  diagnosticLog("pantalla: selectRaceScreen");
   unsigned __int8 v0; // di@1
 //  signed int v1; // esi@1
   int v2; // ST48_4@2

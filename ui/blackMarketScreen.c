@@ -16,6 +16,7 @@
 #include "../imageUtil.h"
 #include "util/menus.h"
 #include "util/popup.h"
+#include "../diagnostics.h"
 
 _UNKNOWN unk_444160;
  _UNKNOWN unk_45FDC4; // weak;
@@ -1073,6 +1074,7 @@ LABEL_48:
 //----- (00436700) --------------------------------------------------------
 void enterBlackMarketScreen()
 {
+  diagnosticLog("pantalla: enterBlackMarketScreen");
 //  int v0; // eax@1
 //  signed int v1; // edx@1
 //  int v2; // ecx@1

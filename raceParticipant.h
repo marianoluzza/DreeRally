@@ -256,6 +256,12 @@ typedef struct RaceParticipantIngame {
 	double carVelocity_4A7DB0; // weak //parece la velocidad que llevas
 	float absolutePositionX_4A7DB4; // weak
 	float absolutePositionY_4A7DB8; // weak
+	//OJO: estos ocho se usan como float en todo el codigo, pero pasarlos a float rompe
+	//la carrera (los coches salen disparados). El truncado a int esta absorbiendo
+	//valores NaN/infinito que se generan antes, en el calculo de advanceX/advanceY:
+	//(int)NaN da un entero fijo, mientras que en float el NaN se propaga y ademas
+	//atraviesa los guardas "< -1000 || > 10000" (toda comparacion con NaN es falsa).
+	//Hay que eliminar la fuente de NaN antes de volver a tocar estos tipos.
 	int dword_4A7DBC;//este no venia
 	int dword_4A7DC0;//este no venia  parece como el tiempo que llevas girando
 	int dword_4A7DC4; //este n venia  estos son para el calculo del mobvimiento dle usuario
@@ -281,20 +287,20 @@ typedef struct RaceParticipantIngame {
 	int hasFinishedTheRace_4A7E0C; // weak
 	int frontLeftAbsoluteXPosition_4A7E10; // weak
 	int frontLeftAbsoluteYPosition_4A7E14; // weak
-	int lastFrontLeftAbsoluteXPosition_4A7E18; // weak  relacionado con la anterios
- 	int lastFrontLeftAbsoluteYPosition_4A7E1C; // weak relacionado con la anterios
+	float lastFrontLeftAbsoluteXPosition_4A7E18; // weak  relacionado con la anterios
+ 	float lastFrontLeftAbsoluteYPosition_4A7E1C; // weak relacionado con la anterios
 	int frontRightAbsoluteXPosition_4A7E20;
 	int frontRightAbsoluteYPosition_4A7E24; // weak
-	int lastFrontRightAbsoluteXPosition_4A7E28; // weak relacionado con la anterios
-	int lastFrontRightAbsoluteYPosition_4A7E2C; // weak relacionado con la anterios
+	float lastFrontRightAbsoluteXPosition_4A7E28; // weak relacionado con la anterios
+	float lastFrontRightAbsoluteYPosition_4A7E2C; // weak relacionado con la anterios
 	int backLeftAbsoluteXPosition_4A7E30; // weak  //esquina de atras izquierda
 	int backLeftAbsoluteYPosition_4A7E34; // weak
-	int lastBackLeftAbsoluteXPosition_4A7E38; // weak
-	int lastBackLeftAbsoluteYPosition_4A7E3C; // weak  
+	float lastBackLeftAbsoluteXPosition_4A7E38; // weak
+	float lastBackLeftAbsoluteYPosition_4A7E3C; // weak  
 	int backRightAbsoluteXPosition_4A7E40; // weak//esquina de atras derecha
 	int backRightAbsoluteYPosition_4A7E44; // weak
-	int lastBackRightAbsoluteXPosition_4A7E48; // weak 
-	int lastBackRightAbsoluteYPosition_4A7E4C; // weak
+	float lastBackRightAbsoluteXPosition_4A7E48; // weak 
+	float lastBackRightAbsoluteYPosition_4A7E4C; // weak
 	int dword_4A7E50; // weak
 	int dword_4A7E54; // weak
 	float flt_4A7E58; // weak//parece algo relacionado con el angulo del coche

@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <SDL_stdinc.h>
 #include <string.h>
+#include "../diagnostics.h"
 
 char showEndAnim_463DF8; // weak
 char byte_45FC0F[256]; // weak
@@ -120,6 +121,7 @@ int v14 = 0;
 //----- (0042B290) --------------------------------------------------------
 int   postRaceMain(int argc, const char **argv, const char **envp)
 {
+  diagnosticLog("pantalla: postRaceMain");
   signed int v3; // ebx@1
   int v4; // esi@2
   unsigned __int8 v5; // bp@3
@@ -760,26 +762,13 @@ unsigned int drawStadistics()
   int v86; // edx@69
   int v87; // eax@69
   char *v88; // edx@69
-  int v89; // ecx@69
   int v90; // edi@69
   int v91; // esi@69
-  char *v92; // ecx@71
-  int v93; // eax@71
-  char *v94; // esi@71
-  char *v95; // edx@71
-  char v96; // al@72
+  int recordIndex; // indice en configuration.circuitRecords (circuito + 18 * tipoDeCoche)
   int v97; // ebx@73
-  int v98; // ecx@73
-  int v99; // ecx@74
-  char *v100; // ecx@76
-  int v101; // eax@76
-  char *v102; // esi@76
-  char *v103; // edx@76
   char v104; // bl@76
-  char v105; // al@77
   int v106; // edx@78
   int v107; // ecx@78
-  int v108; // eax@78
   char *v109; // edi@80
 //  char v110; // al@81
   char *v111; // edi@84
@@ -1266,27 +1255,22 @@ unsigned int drawStadistics()
     drawTextWithFont(v86, (int)&letterSpacing_4458B0, (const char *)&v173, 246926);
     v87 = 27 * driverId;
     v88 = &circuitsToSelect_46126C[selectedRace_462CE8];
-    v89 = 24 * ((unsigned __int8)circuitsToSelect_46126C[selectedRace_462CE8] + 18 * drivers[driverId].carType);
+    //El original indexaba la tabla de records con &dword_45F04C + 24*indice, pero aqui
+    //dword_45F04C/50/54 son enteros sueltos: eso escribia miles de bytes fuera. La tabla
+    //real es configuration.circuitRecords[circuito + 18*tipoDeCoche] (18*6 entradas de 24 bytes).
+    recordIndex = (unsigned __int8)circuitsToSelect_46126C[selectedRace_462CE8] + 18 * drivers[driverId].carType;
     v90 = currentRaceBestLapSeconds_45EB48;
     v91 = currentRaceBestLapMinutes_463CAC;
-    if ( currentRaceBestLapMilliseconds_461FEC + 100 * (currentRaceBestLapSeconds_45EB48 + 60 * currentRaceBestLapMinutes_463CAC) < *(int *)((char *)&dword_45F054 + v89)
+    if ( currentRaceBestLapMilliseconds_461FEC + 100 * (currentRaceBestLapSeconds_45EB48 + 60 * currentRaceBestLapMinutes_463CAC) < configuration.circuitRecords[recordIndex].cen
                                                                  + 100
-                                                                 * (*(int *)((char *)&dword_45F050 + v89)
-                                                                  + 60 * *(int *)((char *)&dword_45F04C + v89))
+                                                                 * (configuration.circuitRecords[recordIndex].sec
+                                                                  + 60 * configuration.circuitRecords[recordIndex].min)
       && currentRaceBestLapMinutes_463CAC + currentRaceBestLapSeconds_45EB48 + currentRaceBestLapMilliseconds_461FEC )
     {
-      v92 = &byte_460840[v87 * 4];
-      v93 = (unsigned __int8)*v88 + 18 * drivers[driverId].carType;
-      v94 = (char *)(24 * v93 + 4583488);
-      //TODO FIX configuration.circuitRecords v95 = &configuration.byte_45F040[24 * v93 - (_DWORD)v92];
-      do
-      {
-        v96 = *v92;
-        v95[(_DWORD)v92] = *v92;
-        ++v92;
-      }
-      while ( v96 );
-      _strupr(v94);
+      //v95 estaba sin inicializar (el TODO habia comentado su asignacion) y se usaba como
+      //puntero de destino: ahi se cerraba el juego al terminar la carrera.
+      strcpy(configuration.circuitRecords[recordIndex].name, drivers[driverId].name);
+      _strupr(configuration.circuitRecords[recordIndex].name);
       v87 = 27 * driverId;
       v90 = currentRaceBestLapSeconds_45EB48;
       v97 = currentRaceBestLapMilliseconds_461FEC;
@@ -1294,41 +1278,32 @@ unsigned int drawStadistics()
       v91 = currentRaceBestLapMinutes_463CAC;
 
 	  //esto es de circuit record
-      v98 = 24 * ((unsigned __int8)circuitsToSelect_46126C[selectedRace_462CE8] + 18 * drivers[driverId].carType);
-      *(int *)((char *)&dword_45F04C + v98) = currentRaceBestLapMinutes_463CAC;
-      *(int *)((char *)&dword_45F050 + v98) = v90;
-      *(int *)((char *)&dword_45F054 + v98) = v97;
+      recordIndex = (unsigned __int8)circuitsToSelect_46126C[selectedRace_462CE8] + 18 * drivers[driverId].carType;
+      configuration.circuitRecords[recordIndex].min = currentRaceBestLapMinutes_463CAC;
+      configuration.circuitRecords[recordIndex].sec = v90;
+      configuration.circuitRecords[recordIndex].cen = v97;
     }
-    v99 = 24 * ((unsigned __int8)*v88 + 18 * drivers[driverId].carType);
-    if ( *(int *)((char *)&dword_45F04C + v99)
-       + *(int *)((char *)&dword_45F050 + v99)
-       + *(int *)((char *)&dword_45F054 + v99)
+    recordIndex = (unsigned __int8)*v88 + 18 * drivers[driverId].carType;
+    if ( configuration.circuitRecords[recordIndex].min
+       + configuration.circuitRecords[recordIndex].sec
+       + configuration.circuitRecords[recordIndex].cen
       || currentRaceBestLapMilliseconds_461FEC + 100 * (v90 + 60 * v91) <= 0 )
     {
       v104 = 0;
     }
     else
     {
-      v100 = &byte_460840[v87 * 4];
-      v101 = (unsigned __int8)*v88 + 18 * drivers[driverId].carType;
-      v102 = (char *)(24 * v101 + 4583488);
-      //TODO FIX configuration.circuitRecords v103 = &configuration.byte_45F040[24 * v101 - (_DWORD)v100];
+      //mismo caso que arriba con v103 sin inicializar
       v104 = 0;
-      do
-      {
-        v105 = *v100;
-        v103[(_DWORD)v100] = *v100;
-        ++v100;
-      }
-      while ( v105 );
-      _strupr(v102);
+      strcpy(configuration.circuitRecords[recordIndex].name, drivers[driverId].name);
+      _strupr(configuration.circuitRecords[recordIndex].name);
       v91 = currentRaceBestLapMinutes_463CAC;
       v106 = currentRaceBestLapMilliseconds_461FEC;
       v107 = currentRaceBestLapSeconds_45EB48;
-      v108 = 24 * ((unsigned __int8)circuitsToSelect_46126C[selectedRace_462CE8] + 18 * drivers[driverId].carType);
-      *(int *)((char *)&dword_45F04C + v108) = currentRaceBestLapMinutes_463CAC;
-      *(int *)((char *)&dword_45F050 + v108) = v107;
-      *(int *)((char *)&dword_45F054 + v108) = v106;
+      recordIndex = (unsigned __int8)circuitsToSelect_46126C[selectedRace_462CE8] + 18 * drivers[driverId].carType;
+      configuration.circuitRecords[recordIndex].min = currentRaceBestLapMinutes_463CAC;
+      configuration.circuitRecords[recordIndex].sec = v107;
+      configuration.circuitRecords[recordIndex].cen = v106;
     }
     SDL_itoa(v91, &v184, 10);
     SDL_itoa(currentRaceBestLapSeconds_45EB48, &v178, 10);
@@ -1425,18 +1400,10 @@ unsigned int drawStadistics()
     v142 = (int)graphicsGeneral.fsma3aBpk;
     memcpy(&v140[4 * (v139 >> 2)], &DstBuf[4 * (v139 >> 2)], v139 & 3);
     drawTextWithFont(v142, (int)&letterSpacing_4458B0, (const char *)&v173, 261646);
-    SDL_itoa(
-      *(&dword_45F04C + 6 * ((unsigned __int8)circuitsToSelect_46126C[selectedRace_462CE8] + 18 * drivers[driverId].carType)),
-      &v184,
-      10);
-    SDL_itoa(
-      *(&dword_45F050 + 6 * ((unsigned __int8)circuitsToSelect_46126C[selectedRace_462CE8] + 18 * drivers[driverId].carType)),
-      &v178,
-      10);
-    SDL_itoa(
-      *(&dword_45F054 + 6 * ((unsigned __int8)circuitsToSelect_46126C[selectedRace_462CE8] + 18 * drivers[driverId].carType)),
-      &v181,
-      10);
+    recordIndex = (unsigned __int8)circuitsToSelect_46126C[selectedRace_462CE8] + 18 * drivers[driverId].carType;
+    SDL_itoa(configuration.circuitRecords[recordIndex].min, &v184, 10);
+    SDL_itoa(configuration.circuitRecords[recordIndex].sec, &v178, 10);
+    SDL_itoa(configuration.circuitRecords[recordIndex].cen, &v181, 10);
     v143 = &v184;
     do
       v144 = *v143++;
@@ -1856,8 +1823,12 @@ int   sub_424240(int a1, double a2, double a3, double a4)
   v19 = 0.1 * a2;
   v17 = 0;
   
-  v5 = ((12 * a1) / 4)-1;
-  //v5 = 12 * a1 + 4586564; //45FC44
+  //v5 = 12 * a1 + 4586564; //0x45FC44; la primera escritura era *(v5 - 4), o sea
+  //0x45FC40 + 12*a1. palette1 empieza en 0x45FD00, asi que el indice es 3*a1 - 48
+  //(a1=64 -> 144, igual que el 144 de sub_418B00). Con el -1 que habia, las rampas de
+  //color de los coches se escribian en entradas equivocadas: los coches salian todos del
+  //mismo color y ademas se pisaban otras entradas de la paleta.
+  v5 = 3 * a1 - 48;
  
   v20 = 0.1 * a3;
   v21 = 0.1 * a4;
@@ -1891,8 +1862,8 @@ int   sub_424240(int a1, double a2, double a3, double a4)
   } while (v4 < 8);*/
   v10 = 0;
   v18 = 0;
-  v11 = (12 * (a1+8) / 4)-1;
-  //v11 = 12 * (a1 + 8) + 4586564;//45FC44
+  //v11 = 12 * (a1 + 8) + 4586564;//0x45FC44; mismo calculo que arriba: 3*(a1+8) - 48
+  v11 = 3 * (a1 + 8) - 48;
   do
   {
     v15 = (double)v18;

@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <SDL.h>
+#include "../diagnostics.h"
 
 char aThisIsIt_Here_[68] = "This is it. Here. Now. In Death Rally, where life is short and hot,"; // weak
 char aFastAndDeadly_[58] = "fast and deadly. The race is on. Watch the road. Hear the"; // weak
@@ -202,26 +203,27 @@ LABEL_11:
   while (participantsRace[0] < 4u || participantsRace[2] < 4u );
   //while (HIBYTE(word_461EB4) < 4u || (unsigned __int8)byte_461EB6 < 4u);
   //v29 = 0;
-  indexRaceParticipant = 0;
- // v17 = (signed int)dword_4A7AA0;
-  do
+  //Sorteo de posiciones de parrilla. El original marcaba las ocupadas en *(&v28 + n),
+  //un array de 5 bytes en la pila que aqui no se inicializa nunca: con el relleno 0xCC
+  //del build Debug todas las posiciones figuran ocupadas y el bucle interno no termina.
   {
-    do
+    char positionTaken[5] = { 0, 0, 0, 0, 0 };
+    for ( indexRaceParticipant = 0; indexRaceParticipant < 4; ++indexRaceParticipant )
     {
-      v18 = rand() % 4;
-      v19 = *(&v28 + v18 + 1);
-      v20 = v18 + 1;
+      do
+      {
+        v18 = rand() % 4;
+        v20 = v18 + 1;
+      }
+      while ( positionTaken[v20] );
       raceParticipant[indexRaceParticipant].racePosition = v20;
+      positionTaken[v20] = 1;
     }
-    while ( v19 );
-    //v17 += 84;
-    *(&v28 + v20) = 1;
-
-	indexRaceParticipant++;
   }
-  while (indexRaceParticipant < 4 );
   //while (v17 < (signed int)&unk_4A7BF0);
-  postRaceMain(1, v26, v27);
+  //v26/v27 estaban sin inicializar. postRaceMain solo usa argc; el resto de las llamadas
+  //ya pasan cadenas vacias, asi que se hace lo mismo aqui.
+  postRaceMain(1, (const char **)"", (const char **)"");
   //result = 0;
   result = getMaxDriverPoints(driverId);
   if ( isMultiplayerGame
@@ -238,6 +240,7 @@ LABEL_11:
 //----- (004321B0) --------------------------------------------------------
 void   previewRaceScreen(signed int participants)
 {
+  diagnosticLog("pantalla: previewRaceScreen");
   signed int v1; // edi@2
   signed int v2; // esi@2
   int v3; // ecx@3
@@ -1276,10 +1279,12 @@ LABEL_160:
 	raceParticipant[3].g = *((BYTE *)v112 + 31);
 	raceParticipant[3].b = *((BYTE *)v112 + 32);
   }
-  v123 = 24 * ((unsigned __int8)circuitsToSelect_46126C[selectedRace_462CE8] + 18 * drivers[v121].carType);
-  circuitRecordMinutes_50A160 = *(int *)((char *)&dword_45F04C + v123);
-  v124 = *(int *)((char *)&dword_45F050 + v123);
-  circuitRecordMilliseconds_4A9B8C = *(int *)((char *)&dword_45F054 + v123);
+  //dword_45F04C/50/54 son enteros sueltos en este puerto; indexarlos con 24*indice leia
+  //fuera de rango. La tabla real es configuration.circuitRecords[circuito + 18*tipoDeCoche].
+  v123 = (unsigned __int8)circuitsToSelect_46126C[selectedRace_462CE8] + 18 * drivers[v121].carType;
+  circuitRecordMinutes_50A160 = configuration.circuitRecords[v123].min;
+  v124 = configuration.circuitRecords[v123].sec;
+  circuitRecordMilliseconds_4A9B8C = configuration.circuitRecords[v123].cen;
   circuitRecordSeconds_501260 = v124;
   Val = 0;
   if ( isMultiplayerGame )

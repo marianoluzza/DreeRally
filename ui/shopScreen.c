@@ -17,6 +17,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
+#include "../diagnostics.h"
 
 _UNKNOWN unk_444160; // weak
 int dword_4451AC = 163840; // weak
@@ -154,6 +156,7 @@ void shopScreenMoveRight_42DAB0()
 //----- (004373B0) --------------------------------------------------------
 void enterShop()
 {
+  diagnosticLog("pantalla: enterShop");
   int v0; // edi@1
   int v1; // ecx@1
   __int64 v2; // rax@2
@@ -578,6 +581,7 @@ void enterShop()
             loadMenuSoundEffect(5u, 4, 0, configuration.effectsVolume, 147456);
             //v57 = actualCarSelected;
             //v58 =  driverId;
+            diagnosticLog("shop: compra de coche tipo=%d", actualCarSelected);
             drivers[driverId].carType = actualCarSelected;
 			drivers[driverId].money += v5 - cars[drivers[driverId].carType].cost;
 			drivers[driverId].carMoneyCost = cars[drivers[driverId].carType].cost;
@@ -604,6 +608,7 @@ void enterShop()
             BYTE2(v102) = 0;
             drawTextWithFont((int)graphicsGeneral.fsma3cBpk, (int)&letterSpacing_4458B0, (const char *)&v99, 100010);
             refreshAllScreen();
+            diagnosticLog("shop: eligiendo color (Enter para salir)");
             v59 = 0;
             do
             {
@@ -697,6 +702,7 @@ void enterShop()
 			  carAnimCurrentFrame_45FBA0 = carAnimCurrentFrame_45FBA0 % 64;
             }
             while ( v59 != 28 );
+            diagnosticLog("shop: color elegido, mostrando coche comprado");
             v71 = drivers[driverId].carType;
             if ( v71 >= 5 )
             {
@@ -712,6 +718,7 @@ void enterShop()
               framesToWaitAfterBuy_456B70 = 310;
               refreshAllScreen();
             }
+            diagnosticLog("shop: compra completada");
             break;
           case 1:
 LABEL_90:
@@ -926,6 +933,7 @@ LABEL_154:
 //----- (004387D0) --------------------------------------------------------
 char postLoadedOrLicense()
 {
+  diagnosticLog("pantalla: postLoadedOrLicense");
   int v0; // esi@1
   int v1; // ecx@1
   __int64 v2; // rax@2

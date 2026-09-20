@@ -45,8 +45,9 @@ Prioridad P0; depende del arranque.
 
 - [x] Seleccionar piloto, coche y circuito; nombre y Backspace probados el 18/09.
 - [ ] Verificar aceleración, freno, dirección, colisiones y límites de pista.
-- [ ] Comprobar vueltas, posiciones, oponentes, armas, daño y finalización.
-- [ ] Terminar una carrera y volver a resultados/tienda.
+- [x] Comprobar vueltas, posiciones, oponentes y finalización (dos carreras seguidas el 20/09).
+- [x] Terminar una carrera y volver a resultados/tienda.
+- [ ] Comprobar armas y daño (el porcentaje de daño todavía no se lee bien en el HUD).
 - [ ] Repetir en varios circuitos y coches, incluyendo abandono y destrucción.
 - [ ] Registrar fallos reproducibles con circuito, coche, pasos y resultado esperado.
 - [ ] Comparar comportamiento con el original antes de modificar física o tiempos.
@@ -54,6 +55,67 @@ Prioridad P0; depende del arranque.
 Salida: tres carreras consecutivas completas sin bloqueo, pérdida de controles ni resultados incoherentes. Corregir primero cierres y corrupción de memoria; luego fidelidad.
 
 Diagnóstico del 18/09: el primer volcado detectó un fallo en el dibujo de humo. Se corrigieron accesos fuera de límites en las paletas y referencias antiguas a los participantes. Las pruebas de regresión cubren cinco rutinas de paleta y el humo de los cuatro participantes. Los logs posteriores muestran carga de TR8/TR1 y salida normal, pero todavía no acreditan una carrera completa.
+
+### Sesión del 20/09
+
+Se completaron dos carreras seguidas con vuelta a resultados y tienda. Los fallos encontrados
+y su causa, todos errores de la traducción del decompilado (índices, tipos y llamadas
+perdidas), no del diseño original:
+
+| Síntoma | Causa | Dónde |
+| --- | --- | --- |
+| Los coches se atraviesan | La detección de colisión coche-contra-coche estaba comentada desde 0.2 | `dr.c`, llamada a `recalculateRaceCarWithOrientation` |
+| ↳ y por eso se comentó | `v5/4` residual y límite de barrido en Y sin inicializar hacían que indexara fuera de `participantCarBpk` | `recalculateRaceCarWithOrientation` |
+| Coches clavados contra las paredes | El bucle de recuperación iba de `N` a `1`: leía `raceParticipantIngame[4]` y saltaba al participante 0 | `startRace` |
+| La IA no compensaba su motor | Constantes float declaradas `int` (truncaban a 0) y el factor se aplicaba al participante siguiente, con escritura en `raceParticipant2[4]` | `balanceIAEngineInRace_40B920` |
+| Cuelgue al elegir circuito | `ceil` sin prototipo: el valor se leía de `eax` en vez del FPU | `carRightSide.c`, faltaba `math.h` |
+| ↳ mismo defecto | `sqrt`/`floor`/`ceil` sin prototipo en cinco archivos más | `3dSystem.c`, `lightSystem.c`, `leftBar.c`, `powerup.c`, `shopScreen.c` |
+| Cierre al terminar la carrera | `v95`/`v103` sin inicializar usados como puntero; tabla de récords indexada sobre tres enteros sueltos | `raceResultsScreen.c` |
+| Basura persistente sobre la pista | Campos de interpolación `int` leídos con `*(float*)&`, y escritura sin comprobar límites | `recalculateCarBoundary_411D10` |
+| Los cuatro coches iguales en la parrilla | El recálculo de circuito invertido perdía el banco de sprites por participante | `calculateCircuitReversed_40A9A0` |
+| Coches del mismo color en resultados | Índice de rampa de paleta `3*a1-1` en vez de `3*a1-48` | `raceResultsScreen.c`, `sub_424240` |
+| Cierre al comprar sin dinero | `strcat` sobre un literal de cadena (memoria de solo lectura) | `hasInsuficientMoneyToBuy` |
+| Minutos del tiempo de vuelta | División mágica por 60 con `>> 32` sobre un valor de 32 bits | `leftBar.c` |
+| Entrada del jugador perdida | Escritura fuera del array de participantes y doble incremento del índice de frame | `startRace` |
+
+Cambios de infraestructura en la misma sesión:
+
+- `DreeRally.vcxproj` pasó de `TurnOffAllWarnings` a `Level3`. Ese ajuste era lo que
+  ocultaba los `ceil`/`sqrt`/`floor` sin prototipo.
+- `scripts/Check-Warnings.ps1`: compila con `/W3`, clasifica y compara contra
+  `scripts/warnings-baseline.txt`. Bloquea si aparece una advertencia nueva de la lista
+  peligrosa. Normaliza el número de línea y compara conteos, para que mover código no
+  genere falsos positivos.
+- `scripts/Test-RacePalette.ps1` estaba roto: `vcvars32.bat` escribe en stderr aunque
+  funcione y con `ErrorActionPreference = 'Stop'` abortaba antes de compilar.
+- Registro por pantalla (`pantalla: <nombre>`) y por etapa de carga y de compra, para
+  acotar cuelgues sin volver a instrumentar.
+- ProcDump con `-h`: los cuelgues no generan excepción, así que `-e` solo no los capturaba.
+- `sanitizeValue` en `dr.c`: corta la propagación de NaN/infinito en las cuatro divisiones
+  de la física y registra la primera vez que salta. Todavía no saltó en ninguna corrida.
+
+Pendiente, en orden sugerido:
+
+1. **Superposición residual.** Dos coches pueden quedar pegados unos segundos y luego
+   despegarse. La separación depende hoy solo de revertir la posición; falta el impulso.
+2. **Tipos de la física.** `unk_4A7DFC`, `unk_4A7E00`, `unk_4A7E04`, `dword_4A7DBC`,
+   `dword_4A7DC0`, `dword_4A7DC4`, `dword_4A7DF4` y `dword_4A7DF8` son `int` pero se usan
+   como float, así que el impulso de choque se trunca. Pasarlos a float el 20/09 hizo que
+   los coches salieran disparados: el truncado a `int` estaba absorbiendo un NaN. Las
+   guardas ya están puestas; reintentar **de a un grupo**, empezando por los tres de choque.
+3. **Buffer de teclas.** `dword_4A7D20` es `char[16]` pero se escribe con `*(_DWORD*)`,
+   así que cada `|=` pisa los tres frames siguientes. Debería ser `int[16]` (64 bytes,
+   que es lo que ocupa en el binario original). Afecta a la entrada de la IA.
+4. **`int debug = 1;`** en `dr.c`. La bandera de depuración está encendida y la única
+   escritura correcta del buffer de teclas del jugador está detrás de un `if(debug)`.
+5. **Daño en el HUD.** El cálculo es correcto; falta ver qué dibuja `drawSprite_402590`.
+6. **Deuda restante del gate**: 5 `C4739` en `ui/menu.c` (escritura fuera del
+   almacenamiento de una variable) y 2 `C4700` en `ui/hallOfFame.c`.
+
+Método que funcionó y conviene repetir: lanzar el juego con
+`scripts/Start-Diagnostics.ps1`, que Mariano pruebe y reporte con capturas, y resolver cada
+volcado con símbolos antes de tocar código. Un cambio de comportamiento por vuelta, para
+poder atribuir las regresiones.
 
 ## 3. Sonido, campaña y guardados
 
