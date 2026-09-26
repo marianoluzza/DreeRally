@@ -277,17 +277,11 @@ void   previewRaceScreen(signed int participants)
 //  char v34; // cl@30
 //  char *v35; // edi@31
 //  char v36; // al@32
-  int *v37; // ecx@33
-  signed int v38; // eax@33
-  char v39; // dl@34
 //  char *v40; // eax@36
 //  signed int v41; // edx@36
 //  char v42; // cl@37
 //  char *v43; // edi@38
 //  char v44; // al@39
-  int *v45; // ecx@40
-  signed int v46; // eax@40
-  char v47; // dl@41
 //  unsigned __int8 v48; // cl@45
 //  unsigned __int8 v49; // dl@45
 //  unsigned __int8 v50; // cl@45
@@ -493,7 +487,6 @@ void   previewRaceScreen(signed int participants)
   int v248; // [sp+30h] [bp-C4h]@43
   int v249; // [sp+34h] [bp-C0h]@43
   int v250; // [sp+38h] [bp-BCh]@43
-  int v251; // [sp+54h] [bp-A0h]@1
   int v252; // [sp+58h] [bp-9Ch]@1
   int v253; // [sp+5Ch] [bp-98h]@1
   int v254; // [sp+60h] [bp-94h]@1
@@ -528,7 +521,7 @@ void   previewRaceScreen(signed int participants)
   int v283; // [sp+D4h] [bp-20h]@1
   int v284; // [sp+D8h] [bp-1Ch]@1
   int v285; // [sp+DCh] [bp-18h]@1
-  char DstBuf; // [sp+E0h] [bp-14h]@47
+  char DstBuf[16]; // era un solo char y SDL_itoa escribe el numero completo con terminador
    int indexRaceParticipant = 0;
   int iDriver = 0;  
   int maxDriverPoints = getMaxDriverPoints(driverId);
@@ -728,8 +721,8 @@ void   previewRaceScreen(signed int participants)
 		//en funcion del circuito seleccionado saca el TRx
 		//v29 = &v251 + (unsigned __int8)circuitsToSelect_46126C[0];
 		strcpy(raceFilePrefix_45EA50, "TR");
-		SDL_itoa((circuitsToSelect_46126C[0]%9)+1, &DstBuf, 10);
-		strcat(raceFilePrefix_45EA50, &DstBuf);
+		SDL_itoa((circuitsToSelect_46126C[0]%9)+1, DstBuf, 10);
+		strcat(raceFilePrefix_45EA50, DstBuf);
         /*v30 = (char *)&raceFilePrefix_45EA50[-(unsigned __int8)circuitsToSelect_46126C[0]] - (char *)&v251;
         do
         {
@@ -766,20 +759,9 @@ void   previewRaceScreen(signed int participants)
 		extractFromBpa("MENU.BPA", textureTemp, Str);
         copyImageToBuffer((int)textureTemp, (int)tsahpeBpk_45EB5C);
         drawImageWithPosition((int)tsahpeBpk_45EB5C, 360, 274, (int)((char *)screenBuffer + 64264));
-        v37 = &v251 + (unsigned __int8)circuitsToSelect_46126C[1];
-		//v37 = &v251 + (unsigned __int8)byte_46126D;
 		strcpy(raceFilePrefix_45EA50, "TR");
-		SDL_itoa((circuitsToSelect_46126C[1] % 9) + 1, &DstBuf, 10);
-		strcat(raceFilePrefix_45EA50, &DstBuf);
-        v38 = (char *)&raceFilePrefix_45EA50[-(unsigned __int8)circuitsToSelect_46126C[1]] - (char *)&v251;
-		//v38 = (char *)&raceFilePrefix_45EA50[-(unsigned __int8)byte_46126D] - (char *)&v251;
-        do
-        {
-          v39 = *(BYTE *)v37;
-          *((BYTE *)v37 + v38) = *(BYTE *)v37;
-          v37 = (int *)((char *)v37 + 1);
-        }
-        while ( v39 );
+		SDL_itoa((circuitsToSelect_46126C[1] % 9) + 1, DstBuf, 10);
+		strcat(raceFilePrefix_45EA50, DstBuf);
         numberOfLaps = getModIntEntry("RACE_MEDIUM_LAPS", 5);
         goto LABEL_44;
       case 2:
@@ -806,20 +788,9 @@ void   previewRaceScreen(signed int participants)
         extractFromBpa("MENU.BPA", textureTemp,Str);
         copyImageToBuffer((int)textureTemp, (int)tsahpeBpk_45EB5C);
         drawImageWithPosition((int)tsahpeBpk_45EB5C, 360, 274, (int)((char *)screenBuffer + 64264));
-        v45 = &v251 + (unsigned __int8)circuitsToSelect_46126C[2];
 		strcpy(raceFilePrefix_45EA50, "TR");
-		SDL_itoa((circuitsToSelect_46126C[2] % 9) + 1, &DstBuf, 10);
-		strcat(raceFilePrefix_45EA50, &DstBuf);
-        v46 = (char *)&raceFilePrefix_45EA50[-(unsigned __int8)circuitsToSelect_46126C[2]] - (char *)&v251;
-		//v45 = &v251 + (unsigned __int8)byte_46126E;
-		//v46 = (char *)&raceFilePrefix_45EA50[-(unsigned __int8)byte_46126E] - (char *)&v251;
-        do
-        {
-          v47 = *(BYTE *)v45;
-          *((BYTE *)v45 + v46) = *(BYTE *)v45;
-          v45 = (int *)((char *)v45 + 1);
-        }
-        while ( v47 );
+		SDL_itoa((circuitsToSelect_46126C[2] % 9) + 1, DstBuf, 10);
+		strcat(raceFilePrefix_45EA50, DstBuf);
         numberOfLaps = getModIntEntry("RACE_HARD_LAPS", 6);
         goto LABEL_44;
       case 3:
@@ -831,7 +802,7 @@ void   previewRaceScreen(signed int participants)
         copyImageToBuffer((int)textureTemp, (int)tsahpeBpk_45EB5C);
         drawImageWithPosition((int)tsahpeBpk_45EB5C, 360, 274, (int)((char *)screenBuffer + 64264));
         //raceFilePrefix_45EA50[0] = 3166804; //TR0
-		strcat(raceFilePrefix_45EA50, "TR0");
+		strcpy(raceFilePrefix_45EA50, "TR0");
         numberOfLaps = getModIntEntry("RACE_ADVERSARY_LAPS", 9);
 		raceParticipant[0].isCircuitReversed_4A7AA8 = 0;
 LABEL_44:
@@ -865,14 +836,14 @@ LABEL_44:
     }
   }
   strcpy(Str, getLanguageEntry("NUMBER OF LAPS: "));
-  SDL_itoa(numberOfLaps, &DstBuf, 10);
-  strcat(Str, &DstBuf);
-  /*v51 = strlen(&DstBuf) + 1;
+  SDL_itoa(numberOfLaps, DstBuf, 10);
+  strcat(Str, DstBuf);
+  /*v51 = strlen(DstBuf) + 1;
   v52 = (char *)&v246 + 3;
   do
     v53 = (v52++)[1];
   while ( v53 );
-  memcpy(v52, &DstBuf, v51);*/
+  memcpy(v52, DstBuf, v51);*/
   drawTextWithFont((int)graphicsGeneral.fmed1aBpk, (int)&unk_445928, Str, 229389);
   //v248 = 1330454597; //duke
   *(_DWORD *)Str = 1514754640;//nukem
@@ -886,13 +857,13 @@ LABEL_44:
     while ( v55 );
     v56 = (double)dword_4456E8 * 0.3;
     *(_WORD *)v54 = 36;
-    SDL_itoa((unsigned __int64)v56, &DstBuf, 10);
-    v57 = strlen(&DstBuf) + 1;
+    SDL_itoa((unsigned __int64)v56, DstBuf, 10);
+    v57 = strlen(DstBuf) + 1;
     v58 = (char *)&v246 + 3;
     do
       v59 = (v58++)[1];
     while ( v59 );
-    memcpy(v58, &DstBuf, v57);
+    memcpy(v58, DstBuf, v57);
   }
   else if ( selectedRace_462CE8 )
   {
@@ -1026,8 +997,8 @@ LABEL_44:
 		v87 = 0;
 		v245 = 0;
 		memset(Str, "\0", strlen(Str));
-		SDL_itoa(drivers[currentDriverId].rank, &DstBuf, 10);
-		strcpy(Str, &DstBuf);
+		SDL_itoa(drivers[currentDriverId].rank, DstBuf, 10);
+		strcpy(Str, DstBuf);
 		strcat(Str, ".\0");
         do
           v245 += (unsigned __int8)letterSpacing_4458B0[90+(unsigned __int8)Str[v87++]];
