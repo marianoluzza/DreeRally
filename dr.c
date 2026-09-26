@@ -208,7 +208,7 @@ char sub_418090();
 int transformJoystickReadValue_418150();
 
 int   setPaletteValueWithFloats(double, double, double); // idb
-int   sub_418B00(float, float, float); // idb
+int   sub_418B00(double, double, double); // la definicion recibe double: con float se leian mal (C4028)
 
 int   loadPaletteMenu();
 signed int isVesaCompatible();
@@ -12047,7 +12047,11 @@ int   sub_418B00(double a1, double a2, double a3)
   v16 = 0;
   //FIXED
  // v4 = &unk_45FF44;
-  index = 144;//posiciones desde dword_45FD00 que es el inicio de la paleta
+  //palette1[0] esta en 0x45FC40 (ver showEndScreen: v3 = dword_45FC44). La primera escritura
+  //del original era *(unk_45FF44 - 4) = 0x45FF40: color 64, indice 192. El segundo bucle sigue
+  //en 0x460000, color 80. Con 144 y el incremento antes de escribir iba a los colores 49..80,
+  //y el coche de la tienda salia oscuro.
+  index = 192;
   v18 = 0.1 * a1;
   v19 = 0.1 * a2;
   v20 = 0.1 * a3;
@@ -12061,11 +12065,10 @@ int   sub_418B00(double a1, double a2, double a3)
     v7 = (a3 - v20) * 0.0625;
     ///*((_DWORD *)v4 + 1) = colorToPaletteEntry((unsigned int)(unsigned __int64)(v8 * v7 + v20) << 16, 6553600);
     //v4 = (char *)v4 + 12;*/
-	index = index + 3;
-
 	palette1[index] = colorToPaletteEntry((unsigned int)(unsigned __int64)(v8 * v5 + v18) << 16, 6553600);
  	palette1[index +1] = colorToPaletteEntry((unsigned int)(unsigned __int64)(v8 * v6 + v19) << 16, 6553600);
 	palette1[index +2] = colorToPaletteEntry((unsigned int)(unsigned __int64)(v8 * v7 + v20) << 16, 6553600);
+	index = index + 3;
    
     ++v3;
     v16 = v3;

@@ -25,6 +25,7 @@ $blocking = @{
     'C4113' = 'listas de parametros distintas en puntero a funcion'
     'C4022' = 'puntero que no coincide con el parametro'
     'C4047' = 'niveles de indireccion distintos'
+    'C4028' = 'parametro distinto de la declaracion (float/double se leen corridos)'
 }
 
 $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'

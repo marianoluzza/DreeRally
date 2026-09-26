@@ -19,6 +19,7 @@
 #include <string.h>
 #include <math.h>
 #include "../diagnostics.h"
+#include "raceResultsScreen.h"
 
 _UNKNOWN unk_444160; // weak
 int dword_4451AC = 163840; // weak
@@ -661,7 +662,8 @@ void enterShop()
               v97 = *(BYTE *)v64;
               v67 = (double)v65;
               v68 = (double)v97;
-			  sub_424240(224,v4,v67,v66);
+			  //Pasaba v4, un int sin relacion, en vez del rojo (v68); y sin prototipo los double se corrian.
+			  sub_424240(224,v68,v67,v66);
 			  /*		  v1 = *((BYTE *)graphicsGeneral.copperPal + 1);
 					  v66 = (double)*((BYTE *)graphicsGeneral.copperPal + 2);
 					  v58 = *((BYTE *)graphicsGeneral.copperPal + 0);
