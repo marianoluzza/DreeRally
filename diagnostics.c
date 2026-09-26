@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <signal.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -39,6 +40,46 @@ void diagnosticLog(const char *format, ...)
 }
 
 #ifdef _WIN32
+// Pila actual como direcciones relativas al exe (para llvm-symbolizer --relative-address).
+static void logStack(void)
+{
+    void *frames[32];
+    char line[32 * 12 + 1];
+    char *base = (char *)GetModuleHandleA(NULL);
+    USHORT count = CaptureStackBackTrace(1, 32, frames, NULL);
+    USHORT i;
+    int used = 0;
+    line[0] = 0;
+    for (i = 0; i < count; i++)
+        used += snprintf(line + used, sizeof(line) - used, " 0x%lx", (unsigned long)((char *)frames[i] - base));
+    diagnosticLog("stack (rva):%s", line);
+}
+
+#ifdef _DEBUG
+#include <crtdbg.h>
+// Los carteles de Debug (assert, "Run-Time Check Failure") no son excepciones no
+// manejadas: ProcDump no los vuelca y el proceso sale con codigo 3 al abortar.
+static int logCrtReport(int type, char *message, int *returnValue)
+{
+    diagnosticLog("CRT REPORT type=%d: %s", type, message ? message : "");
+    logStack();
+    return FALSE;
+}
+
+static int logCrtReportW(int type, wchar_t *message, int *returnValue)
+{
+    char narrow[1024];
+    WideCharToMultiByte(CP_ACP, 0, message ? message : L"", -1, narrow, sizeof(narrow), NULL, NULL);
+    return logCrtReport(type, narrow, returnValue);
+}
+#endif
+
+static void logAbort(int signal)
+{
+    diagnosticLog("SIGABRT");
+    logStack();
+}
+
 static LONG WINAPI logUnhandledException(EXCEPTION_POINTERS *exception)
 {
     // Best effort only: heap corruption / fail-fast may bypass this handler.
@@ -77,6 +118,11 @@ void diagnosticInit(void)
         fprintf(stderr, "Cannot create diagnostic log (Windows error %lu)\n", GetLastError());
     }
     SetUnhandledExceptionFilter(logUnhandledException);
+    signal(SIGABRT, logAbort);
+#ifdef _DEBUG
+    _CrtSetReportHook2(_CRT_RPTHOOK_INSTALL, logCrtReport);
+    _CrtSetReportHookW2(_CRT_RPTHOOK_INSTALL, logCrtReportW);
+#endif
 #else
     mkdir("logs", 0755);
     snprintf(path, sizeof(path), "logs/session-%lld-%ld.log", (long long)now, (long)getpid());
