@@ -6965,17 +6965,9 @@ int recalculateRaceCarWithOrientation()
   char v41; // c0@71
   double v42; // st7@72
   double v44; // st7@75
-  unsigned __int8 v45; // c0@75
-  unsigned __int8 v46; // c2@75
   double v48; // st7@78
-  unsigned __int8 v49; // c0@78
-  unsigned __int8 v50; // c2@78
   double v52; // st7@81
-  unsigned __int8 v53; // c0@81
-  unsigned __int8 v54; // c2@81
   double v56; // st7@84
-  unsigned __int8 v57; // c0@84
-  unsigned __int8 v58; // c2@84
   double v59; // st7@87
   double v60; // st7@89
   int v61; // ebp@94
@@ -7009,9 +7001,6 @@ int recalculateRaceCarWithOrientation()
   int v89; // [sp+30h] [bp-Ch]@0
   int v90; // [sp+38h] [bp-4h]@7
 
-  if(debug==1) v11=40;
-  if(debug==1) v35=0;
-  if(debug==1) v41=0;
   v0 = numberOfParticipants_508D24;
   if ( numberOfParticipants_508D24 > 0 )
   {
@@ -7259,6 +7248,9 @@ LABEL_118:
         v31 = raceParticipantIngame[v5].absolutePositionX_4A7DB4;
         v32 = raceParticipantIngame[v75].absolutePositionX_4A7DB4;
         v34 = raceParticipantIngame[v5].absolutePositionX_4A7DB4;
+        //c0 de un fcomp que IDA perdio: v5 esta a la izquierda de v75. Estaba fijo a 0,
+        //asi que el empuje metia un coche dentro del otro cuando v5 quedaba a la izquierda.
+        v35 = raceParticipantIngame[v5].absolutePositionX_4A7DB4 < raceParticipantIngame[v75].absolutePositionX_4A7DB4;
         if ( v35 )
         {
           raceParticipantIngame[v5].absolutePositionX_4A7DB4 = v34 - 0.6;
@@ -7274,6 +7266,8 @@ LABEL_118:
         v37 = raceParticipantIngame[v5].absolutePositionY_4A7DB8;
         v38 = raceParticipantIngame[v75].absolutePositionY_4A7DB8;
         v40 = raceParticipantIngame[v5].absolutePositionY_4A7DB8;
+        //Igual que v35, en el eje Y.
+        v41 = raceParticipantIngame[v5].absolutePositionY_4A7DB8 < raceParticipantIngame[v75].absolutePositionY_4A7DB8;
         if ( v41 )
         {
           raceParticipantIngame[v5].absolutePositionY_4A7DB8 = v40 - 0.6;
@@ -7287,32 +7281,18 @@ LABEL_118:
         raceParticipantIngame[v75].absolutePositionY_4A7DB8 = v42;
       }
       v73 = raceParticipantIngame[v5].carAngle_4A7DAC - raceParticipantIngame[v75].carAngle_4A7DAC;
-      v44 = v73;
-	  v46=0;//TODO FIX puesto por mi
-	  v45=0;
-	  v49=0;
-	  v50=0;
-	  v53=0;
-	  v54=0;
-	  v57=0;
-	  v58=0;
-     if ( v45 | v46 )
-        v44 = -v44;
+      //IDA dejo cada "if (c0|c2) x = -x" con las banderas del fcomp perdidas, y
+      //estaban fijas a 0. Es un valor absoluto: el angulo relativo sin signo.
+      v44 = fabs(v73);
       if ( v44 < 315.0 )
       {
-        v48 = v73;
-        if ( v49 | v50 )
-          v48 = -v48;
+        v48 = fabs(v73);
         if ( v48 > 45.0 )
         {
-          v52 = v73;
-          if ( v53 | v54 )
-            v52 = -v52;
+          v52 = fabs(v73);
           if ( v52 < 135.0 )
             goto LABEL_119;
-          v56 = v73;
-          if ( v57 | v58 )
-            v56 = -v56;
+          v56 = fabs(v73);
           if ( v56 > 225.0 )
           {
 LABEL_119:
