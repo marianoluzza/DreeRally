@@ -7638,7 +7638,7 @@ v27 = raceParticipantIngame[v1].participantBpkOffser_4A7D10;
       raceParticipantIngame[currentDriverSelectedIndex_503518].spriteBurnOffset_4A7EDC = v31;
       if ( !((unsigned __int8)(v32 ^ __OFSUB__(v31, 7)) | (v31 == 7)) )
         raceParticipantIngame[currentDriverSelectedIndex_503518].spriteBurnOffset_4A7EDC = 0;
-      lastUserTicks_4A7EE0[216 * currentDriverSelectedIndex_503518] = refreshScreenWithDelay();
+      lastUserTicks_4A7EE0[currentDriverSelectedIndex_503518] = refreshScreenWithDelay();
     }
   }
   result = numberOfParticipants_508D24;
@@ -7667,7 +7667,7 @@ v27 = raceParticipantIngame[v1].participantBpkOffser_4A7D10;
 		//if ( v40 > -8 && v40 < raceEffectiveHeight_445018 + 8 && dword_4A6898[37 * v34] <= 0 )
         {
           drawCarFire_43AFC0(v39, v40, raceParticipantIngame[v34].spriteBurnOffset_4A7EDC << 8);
-          v41 = 216 * currentDriverSelectedIndex_503518;
+          v41 = currentDriverSelectedIndex_503518;
           if ( refreshScreenWithDelay() < (unsigned int)(lastUserTicks_4A7EE0[v41] + 3) )
           {
             v34 = currentDriverSelectedIndex_503518;
@@ -7938,7 +7938,7 @@ LABEL_69:
           dword_4AA3E4 = v69 + dword_4A6AD8;
 
 		  activeWeapon = raceParticipant2[v32].activeWeapon_4A68E0;
-          dword_4A7EAC[216 * v32] = 3 * raceParticipant2[currentDriverSelectedIndex_503518].weaponFlameType[activeWeapon] + 1;
+          dword_4A7EAC[v32] = 3 * raceParticipant2[currentDriverSelectedIndex_503518].weaponFlameType[activeWeapon] + 1;
           goto LABEL_39;
         }
       }
@@ -7961,7 +7961,7 @@ LABEL_41:
       v74 = 130;
 	  activeWeapon = raceParticipant2[v32].activeWeapon_4A68E0;
 	  
-      dword_4A7EAC[216 * v32] = 3 * raceParticipant2[currentDriverSelectedIndex_503518].weaponFlameType[activeWeapon] + 1;
+      dword_4A7EAC[v32] = 3 * raceParticipant2[currentDriverSelectedIndex_503518].weaponFlameType[activeWeapon] + 1;
     }
     if ( !isMultiplayerGame )
     {
@@ -8074,8 +8074,8 @@ int drawGunFlames_40E960()
   //flame1bpk  flame6bpk dependiendo del weaponflametype
 
   v0 = currentDriverSelectedIndex_503518;
-  v1 = 216 * currentDriverSelectedIndex_503518;
-  if ( drawFlames_4A7EB8[216 * currentDriverSelectedIndex_503518] )
+  v1 = currentDriverSelectedIndex_503518;
+  if ( drawFlames_4A7EB8[currentDriverSelectedIndex_503518] )
   {
 	  //posicion y a pintar!!
     v2 = leftMenuInRaceWidth_456AA0 + dword_4A7ED4[v1] - circuitImageOffsetX_456ABC; //x position
@@ -8136,7 +8136,7 @@ int drawGunFlames_40E960()
       }
       while ( v9 + 1 < 8 );
     }
-    drawFlames_4A7EB8[216 * v0] = 0;
+    drawFlames_4A7EB8[v0] = 0;
   }
   v11 = 37 * v0;
   v12 = raceParticipant2[v0].activeWeapon_4A68E0 + 1;
@@ -8200,8 +8200,8 @@ int drawShots_40EBC0()
   char v47; // al@67
   char v48; // al@69
 
-  result = 216 * currentDriverSelectedIndex_503518;
-  v1 = dword_4A7EB4[216 * currentDriverSelectedIndex_503518];
+  result = currentDriverSelectedIndex_503518;
+  v1 = dword_4A7EB4[currentDriverSelectedIndex_503518];
   //if(debug==1)v1=1;
   if ( v1 > 0 )
   {
@@ -8247,8 +8247,8 @@ int drawShots_40EBC0()
       }
       while ( v4 < 64 );
     }
-    result = 216 * currentDriverSelectedIndex_503518;
-    dword_4A7EB4[216 * currentDriverSelectedIndex_503518] = 0;
+    result = currentDriverSelectedIndex_503518;
+    dword_4A7EB4[currentDriverSelectedIndex_503518] = 0;
   }
   if ( dword_4A7EB0[result] > 0 )
   {
@@ -8296,8 +8296,8 @@ int drawShots_40EBC0()
       }
       while ( v22 < 64 );
     }
-    result = 216 * currentDriverSelectedIndex_503518;
-    dword_4A7EB4[result] = dword_4A7EB0[216 * currentDriverSelectedIndex_503518] + 1;
+    result = currentDriverSelectedIndex_503518;
+    dword_4A7EB4[result] = dword_4A7EB0[currentDriverSelectedIndex_503518] + 1;
     dword_4A7EB0[result] = 0;
   }
   if ( dword_4A7EAC[result] > 0 )
@@ -8346,8 +8346,8 @@ int drawShots_40EBC0()
       }
       while ( v39 < 64 );
     }
-    result = 216 * currentDriverSelectedIndex_503518;
-    dword_4A7EB0[result] = dword_4A7EAC[216 * currentDriverSelectedIndex_503518] + 1;
+    result = currentDriverSelectedIndex_503518;
+    dword_4A7EB0[result] = dword_4A7EAC[currentDriverSelectedIndex_503518] + 1;
     dword_4A7EAC[result] = 0;
   }
   return result * 4;
@@ -8478,7 +8478,7 @@ int drawRocket_40F450()
         while ( v23 );
         LODWORD(v1) = refreshScreenWithDelay();
         v0 = currentDriverSelectedIndex_503518;
-        if ( (unsigned int)v1 >= lastUserTicks_4A7EE0[216 * currentDriverSelectedIndex_503518] + 4 )
+        if ( (unsigned int)v1 >= lastUserTicks_4A7EE0[currentDriverSelectedIndex_503518] + 4 )
         {
           v21 = __OFSUB__(dword_456AFC + 1, 1);
           v19 = dword_456AFC == 0;
@@ -9937,9 +9937,9 @@ int sub_413500()
       }*/
       v6 = raceParticipant2[v1].carType;
       v12 = (v6 > 1) + 33;
-      if ( v2 != 1 || (v7 = 216 * v1, raceParticipantIngame[v1].hasFinishedTheRace_4A7E0C) )
+      if ( v2 != 1 || (v7 = v1, raceParticipantIngame[v1].hasFinishedTheRace_4A7E0C) )
       {
-        v11 = &dword_4A8058[216 * v1];
+        v11 = &dword_4A8058[v1];
         if ( *v11 == 1 )
         {
           *v11 = 0;
