@@ -10454,7 +10454,6 @@ void   startRace(int a1, int numberOfParticipants)
   int v62; // eax@211
   int v63; // ecx@211
   int v64; // edi@214
-  int v65; // esi@214
   unsigned __int64 v66; // rax@218
   int v67; // esi@223
   signed int v68; // ecx@226
@@ -10921,32 +10920,30 @@ LABEL_213:
         currentDriverSelectedIndex_503518 = 0;
         if ( v50 > 0 )
         {
-			v64 = (int)raceParticipant2[0].damageBar_4A6898;
-          v65 = (int)dword_4A7E98;
+          //Dano por choque. Recorria los participantes con offsets crudos (+864, +148)
+          //desde v64 = el valor de damageBar (no su direccion) y v65 = el array global
+          //dword_4A7E98, siempre a 0: la condicion nunca se cumplia y no habia dano.
           currentDriverSelectedIndex_503518 = v50;
-          do
+          for ( v64 = 0; v64 < v50; ++v64 )
           {
-            if ( (*(_DWORD *)(v65 - 4) == 2 || *(_DWORD *)v65 == 2) && !*(_DWORD *)(v65 - 140) )
+            if ( (raceParticipantIngame[v64].dword_4A7E94 == 2 || raceParticipantIngame[v64].dword_4A7E98 == 2)
+              && !raceParticipantIngame[v64].hasFinishedTheRace_4A7E0C )
             {
-              v66 = (unsigned __int64)((*(float *)(v65 - 156) * *(float *)(v65 - 156)
-                                      + *(float *)(v65 - 152) * *(float *)(v65 - 152))
-                                     * (double)(1024 - *(_DWORD *)(v64 + 4)));
+              v66 = (unsigned __int64)(((double)raceParticipantIngame[v64].unk_4A7DFC * raceParticipantIngame[v64].unk_4A7DFC
+                                      + (double)raceParticipantIngame[v64].unk_4A7E00 * raceParticipantIngame[v64].unk_4A7E00)
+                                     * (double)(1024 - raceParticipant2[v64].efectiveArmour_4A689C));
               dword_50B2B0 = v66;
               if ( (signed int)v66 > 10000 )
               {
                 LODWORD(v66) = 10000;
                 dword_50B2B0 = 10000;
               }
-              v93 = *(_DWORD *)v64 - (signed int)v66 < 0;
-              *(_DWORD *)v64 -= v66;
-              if ( v93 )
-                *(_DWORD *)v64 = 0;
+              raceParticipant2[v64].damageBar_4A6898 -= (signed int)v66;
+              if ( raceParticipant2[v64].damageBar_4A6898 < 0 )
+                raceParticipant2[v64].damageBar_4A6898 = 0;
             }
-            v65 += 864;
-            v64 += 148;
-            --v50;
           }
-          while ( v50 );
+          v50 = 0;
         }
         v67 = userRaceOrder_4A9EA8;
         if ( ! raceParticipantIngame[userRaceOrder_4A9EA8].dword_4A7D14 && !raceParticipantIngame[userRaceOrder_4A9EA8].dword_4A7D18 && !raceParticipantIngame[userRaceOrder_4A9EA8].dword_4A7D1C )

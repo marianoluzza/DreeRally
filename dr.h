@@ -9,6 +9,12 @@
 int __SETS__(int x);
 int __OFSUB__(int x, int y);
 
+//Sin estos prototipos, los llamadores que pasan un unsigned __int64 (p. ej. el porcentaje
+//de dano en leftBar.c) empujan 8 bytes y corren todos los argumentos siguientes.
+int drawSprite_402590(int baseImage, int width, int height, signed int a4, int spriteNumber, int a6, int a7, int a8);
+int drawImageInRace_43B240(int filename, int width, int height, int offset);
+int drawInRaceImageToBuffer_43B160(int a1, int a2, int a3, int a4);
+
 extern char byte_463E00[256]; // weak
 extern _UNKNOWN unk_462096; // weak
 
