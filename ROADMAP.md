@@ -112,6 +112,42 @@ Pendiente, en orden sugerido:
 6. **Deuda restante del gate**: 5 `C4739` en `ui/menu.c` (escritura fuera del
    almacenamiento de una variable) y 2 `C4700` en `ui/hallOfFame.c`.
 
+### Sesión del 26/09
+
+Tres carreras seguidas (easy, medium, hard) con tienda entre medio. Resuelto, otra vez
+todo en la traducción del decompilado:
+
+| Síntoma | Causa | Dónde |
+| --- | --- | --- |
+| Coches pegados tras chocar | Banderas `c0`/`c2` de `fcomp` perdidas y fijadas a 0: el empuje ignoraba qué coche estaba a cada lado | `recalculateRaceCarWithOrientation` |
+| Cierre al empezar la 2ª carrera | Bucle de copia residual pisaba `"TRn"` con una tabla local sin inicializar | `previewRaceScreen` |
+| Daño por choque siempre 0 | Bucle con offsets crudos desde el valor (no la dirección) de `damageBar` | `startRace` |
+| El HUD solo mostraba `%` | `drawSprite_402590` sin prototipo recibía un `__int64` y corría los argumentos | `leftBar.c`, `dr.h` |
+| Cartel de salida/llegada invisible y cierre al salir | `malloc(4)` para pedazos de 16 bytes; `&unk_460000` usado como constante `0x460000` (70 en 16.16) | `dr.c`, `dr.h` |
+| Fuego del disparo en un solo coche | Globales por participante indexadas con la zancada `216 * i` (y fuera de `int[256]`) | `drawGunFlames`, `drawShots`, otros |
+| Cierre al salir de una carrera media | Textos armados sobre locales supuestamente contiguos en la pila | `drawStadistics` |
+| Colores cruzados en resultados, coche oscuro en la tienda | Prototipo `float` contra definición `double`; rampa en `a1-16` en lugar de `a1` | `sub_424240`, `sub_418B00` |
+| Cierre al cargar con drogas en pista | Valor de `posX` usado como puntero | `generateBigPowerUps` |
+| Cierre al salir del juego | Falta `end.bmp` | `showEndScreen` |
+
+Infraestructura: `diagnostics.c` registra los carteles del CRT de Debug con la pila, y el
+gate trata `C4028` (parámetro distinto de la declaración) como peligroso.
+
+Pendiente, en orden sugerido:
+
+1. **Resultados de tu carrera.** La tabla de la carrera propia muestra al jugador y a
+   Jane Honda repetida tres veces; los puntos y la posición del ranking no se actualizan
+   bien.
+2. **Estadísticas.** "Races won 9" tras dos carreras, "Position 20", y los ingresos de la
+   carrera en `$0`.
+3. **Tipos de la física** (`unk_4A7DFC`, `unk_4A7E00`, ...): el impulso truncado a `int`
+   hace que el daño por choque casi nunca sume. De a un grupo, con `sanitizeValue`.
+4. **Iluminación.** Sectores oscuros de la pista y el haz de luz de los coches se ven con
+   un tramado de puntos.
+5. **Tienda.** Verificar los colores del coche tras el arreglo de `sub_418B00`; los logos
+   de los sponsors también salen oscuros.
+6. Buffer de teclas `dword_4A7D20` a `int[16]` y apagar `debug` (pasos 2 y 3 del plan).
+
 Método que funcionó y conviene repetir: lanzar el juego con
 `scripts/Start-Diagnostics.ps1`, que Mariano pruebe y reporte con capturas, y resolver cada
 volcado con símbolos antes de tocar código. Un cambio de comportamiento por vuelta, para
