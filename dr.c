@@ -781,7 +781,7 @@ int dword_45FD04[256]; // weak
 int dword_45FD08[256]; // weak*/
 
 _UNKNOWN unk_45FF44; // weak
-_UNKNOWN unk_460000; // weak
+#define RACE_POPUP_FRAMES_FIXED (70 << 16)
 _UNKNOWN unk_460004; // weak
 _UNKNOWN unk_4600C4; // weak
 _UNKNOWN unk_460244; // weak
@@ -3989,6 +3989,17 @@ int sub_4055A0()
   return result;
 }
 
+//Dibuja un pedazo de 4x4 del cartel en Memory (320x200). Igual que sub_406330, no dibuja
+//fuera de 0..316 x 0..196: una posicion mala escribia fuera del buffer y corrompia el heap.
+static void drawRacePopupPiece(int piece)
+{
+  int x = (racePopupMemory[piece].unk_479EE0 + 0x8000) >> 16;
+  int y = (racePopupMemory[piece].unk_479EE4 + 0x8000) >> 16;
+  if ( x < 0 || x > 316 || y < 0 || y > 196 )
+    return;
+  sub_43AE80((int)((char *)Memory + 320 * y + x), (int)racePopupMemory[piece].unk_479EF0, 320, 4);
+}
+
 //----- (00406100) --------------------------------------------------------
 char drawRacepopupEffect_406100()
 {
@@ -4025,14 +4036,16 @@ char drawRacepopupEffect_406100()
         result = v3;
         if ( v3 < 20 )
         {
-			sub_43AE80(racePopupMemory[v0].unk_479EF0, (int)((char *)inRaceMessagePopup_479690 + 204 * dword_464F18 + dword_503220), 4, 204); //puntero pantalla, inicio del puntero de la imagen, algo y ancho //dword_464F18 largo popup 72 para pausa
+			sub_43AE80((int)racePopupMemory[v0].unk_479EF0, (int)((char *)inRaceMessagePopup_479690 + 204 * dword_464F18 + dword_503220), 4, 204); //puntero pantalla, inicio del puntero de la imagen, algo y ancho //dword_464F18 largo popup 72 para pausa
 		  v4 = (int)racePopupMemory2[dword_479268].dword_50E560 << 16;
           v5 = (((leftMenuInRaceWidth_456AA0 >> 1) + dword_503220 + 57) << 16) - v4;
           v6 = dword_464F18 + 64;
 		  racePopupMemory[v0].unk_479EE0 = v4;
 		  racePopupMemory[v0].unk_479EE4 = 12845056;
-          racePopupMemory[v0].unk_479EE8 = colorToPaletteEntry(v5, (signed int)&unk_460000);
-          racePopupMemory[v0].unk_479EEC = colorToPaletteEntry((v6 << 16) - racePopupMemory[v0].unk_479EE4, (signed int)&unk_460000);
+          //0x460000 es 70 en punto fijo 16.16 (los 70 cuadros de la animacion), no una direccion:
+          //IDA lo mostro como &unk_460000 y la velocidad de cada pedazo salia de la direccion de una variable.
+          racePopupMemory[v0].unk_479EE8 = colorToPaletteEntry(v5, RACE_POPUP_FRAMES_FIXED);
+          racePopupMemory[v0].unk_479EEC = colorToPaletteEntry((v6 << 16) - racePopupMemory[v0].unk_479EE4, RACE_POPUP_FRAMES_FIXED);
           dword_481E08 += 4;
           v7 = dword_464F18 + 4;
           v8 = dword_464F18 == 72;
@@ -4065,11 +4078,7 @@ char drawRacepopupEffect_406100()
         }
         racePopupMemory[v0].unk_479F00 = 70;
 LABEL_13:
-        sub_43AE80(
-          (int)((char *)Memory + 320 * ((racePopupMemory[v0].unk_479EE4 + 0x8000) >> 16) + ((racePopupMemory[v0].unk_479EE0 + 0x8000) >> 16)),
-		  racePopupMemory[v0].unk_479EF0,
-          320,
-          4);
+        drawRacePopupPiece(v0);
         result = dword_479270++ + 1;
         goto LABEL_14;
       }
@@ -4080,11 +4089,7 @@ LABEL_13:
         racePopupMemory[v0].unk_479EE0 += v11 * racePopupMemory[v0].unk_479EE8;
         racePopupMemory[v0].unk_479EE4 = v12 + v11 * racePopupMemory[v0].unk_479EEC;
       }
-      sub_43AE80(
-        (int)((char *)Memory + 320 * (((racePopupMemory[v0].unk_479EE4 + 0x8000) >> 16)) + ((racePopupMemory[v0].unk_479EE0 + 0x8000) >> 16)),
-        racePopupMemory[v0].unk_479EF0,
-        320,
-        4);
+      drawRacePopupPiece(v0);
       result = racePopupMemory[v0].unk_479F00;
       if ( racePopupMemory[v0].unk_479F00 >= 0x46u )
         goto LABEL_13;
@@ -4148,7 +4153,7 @@ int sub_406330()
 	  v10 = (racePopupMemory[v2].unk_479EE4 + 0x8000) >> 16;
       if ( v10 <= 196 )
       {
-		  sub_43AE80((int)((char *)Memory + 320 * v10 + ((racePopupMemory[v2].unk_479EE0 + 0x8000) >> 16)),racePopupMemory[v2].unk_479EF0, 320, 4);
+		  sub_43AE80((int)((char *)Memory + 320 * v10 + ((racePopupMemory[v2].unk_479EE0 + 0x8000) >> 16)),(int)racePopupMemory[v2].unk_479EF0, 320, 4);
         v0 = dword_5034F0;
       }
       else
@@ -4278,7 +4283,6 @@ signed int   racePauseMenu_4064A0(int a1)
 	  racePopupMemory[v7].unk_479EE4 = 0;
 	  racePopupMemory[v7].unk_479EEC = 0;
 	  racePopupMemory[v7].unk_479EE8 = 0;
-	  racePopupMemory[v7].unk_479EF0 = malloc(4); ///TODO FIX puesto por mi
     v7 += 1;
   }
   while ( v7 < 969);
@@ -4368,7 +4372,7 @@ signed int   racePauseMenu_4064A0(int a1)
     v18 = inRaceMessagePopup_479690;
     v19 = 204 * dword_464F18;
 	racePopupMemory[v16].unk_479EE8 = (v17 - 2) << 16;
-	sub_43AE80(racePopupMemory[v16].unk_479EF0, (int)((char *)v18 + v19 + dword_503220), 4, 204);
+	sub_43AE80((int)racePopupMemory[v16].unk_479EF0, (int)((char *)v18 + v19 + dword_503220), 4, 204);
     dword_464F18 += 4;
     if ( dword_464F18 == 76 )
     {
@@ -11431,7 +11435,9 @@ LABEL_318:
       while ( v93 ^ v94 );
 	  //SOUND_RACE_OVER
       loadMenuSoundEffect(2u, 5, 0, 0x10000, 327680);
-	  inRaceMessagePopup_479690 = malloc(0x3C90u);//estaba a nulo
+	  //Ya se reserva al cargar la carrera; reservarlo otra vez perdia el bloque anterior.
+	  if ( !inRaceMessagePopup_479690 )
+	    inRaceMessagePopup_479690 = malloc(0x3C90u);
       memcpy(inRaceMessagePopup_479690, genmesBpk, 0x3C90u);
       drawTextInRaceScreen(0, 0, "                                ");
       drawTextInRaceScreen(0, 1, "                                ");

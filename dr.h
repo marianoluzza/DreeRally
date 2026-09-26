@@ -267,10 +267,10 @@ typedef struct RacePopupMemory
 	int unk_479EE4; // weak  -28 posicion y donde pintar
 int unk_479EE8; // weak 24
 int unk_479EEC; // weak 20
-int * unk_479EF0; // weak 16 puntero que contiene la imagen a mostras :)
-int unk_479EF4; // weak 12
-int unk_479EF8; // weak 8
-int unk_479EFC; // weak 4
+//Pedazo de 4x4 pixeles del cartel, guardado dentro del struct (0x479EF0..0x479EFF).
+//Estaba tipado como puntero con malloc(4): sub_43AE80 copia 16 bytes y desbordaba el heap
+//en cada uno de los 969 pedazos (basura en el cartel y cierre al liberar al terminar).
+int unk_479EF0[4];
 
 char unk_479F00; // weak
 
