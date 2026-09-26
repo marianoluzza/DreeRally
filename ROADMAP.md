@@ -144,8 +144,8 @@ Pendiente, en orden sugerido:
    hace que el daño por choque casi nunca sume. De a un grupo, con `sanitizeValue`.
 4. **Iluminación.** Sectores oscuros de la pista y el haz de luz de los coches se ven con
    un tramado de puntos.
-5. **Tienda.** Verificar los colores del coche tras el arreglo de `sub_418B00`; los logos
-   de los sponsors también salen oscuros.
+5. **Tienda.** Los logos de los sponsors salen oscuros (el color del coche ya quedó bien
+   con el arreglo de `sub_418B00`, verificado el 26/09).
 6. Buffer de teclas `dword_4A7D20` a `int[16]` y apagar `debug` (pasos 2 y 3 del plan).
 
 Método que funcionó y conviene repetir: lanzar el juego con
