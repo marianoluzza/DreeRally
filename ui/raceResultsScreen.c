@@ -64,7 +64,9 @@ int v14 = 0;
 	  do
 	  {
 		  v19 = (int)((char *)screenBuffer + v2 + 55709);
-		  if (v20 == driverId)
+		  //dr.exe (0x4259B6) compara el contador de fila con driverId; v20 nunca avanzaba y la fila
+		  //del jugador solo se resaltaba si era el primero.
+		  if (indexDriver == driverId)
 		  {
 			  drawImageWithPosition((int)graphicsGeneral.prankBpk, 31, 18, v19);
 			  drawImageWithPosition((int)graphicsGeneral.pnameBpk, 101, 18, (int)((char *)screenBuffer + v2 + 55741));

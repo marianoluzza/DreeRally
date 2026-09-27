@@ -345,12 +345,15 @@ void enterShop()
       while ( 2 )
       {
         v46 = 170 * v45 + 123097;
-        updateCursor(0);//this is a menuType we dont have now
+        //Aqui habia un updateCursor(0) que no esta en dr.exe (0x437998): dibujaba la rueda del
+        //menu principal, que queda debajo del cartel, encima de la segunda linea.
         refreshAndCheckConnection_42A570();
         refreshAndCheckConnection_42A570();
         drawMenuAnimation(16, 141, carAnimCurrentFrame_45FBA0, getCarBpkById(actualCarSelected), (int)&carAnimFrameSize_45FBA0[64 * actualCarSelected]);
         drawKeyCursor(90256, (char *)screenBuffer + 90256, 0x60u, 64);
-		carAnimCurrentFrame_45FBA0 = carAnimCurrentFrame_45FBA0 % 64;
+		//dr.exe (0x4379EE) avanza el cuadro del coche y el de la rueda en cada vuelta; aqui se
+		//habian quedado solo los modulos y la rueda giraba gracias a un updateCursor que no va.
+		carAnimCurrentFrame_45FBA0 = (carAnimCurrentFrame_45FBA0 + 1) % 64;
         v50 = 0;
         do
         {
@@ -365,7 +368,8 @@ void enterShop()
         while ( v50 < 12800 );
         drawImageWithPosition((int)((char *)graphics2.cursorBpk + 400 * cursorBpkFrame), 20, 20, (int)((char *)screenBuffer + v46));
         drawKeyCursor(123045, (char *)screenBuffer + 123045, 0x14Fu, 28);
-		cursorBpkFrame = cursorBpkFrame % 48;
+		if ( ++cursorBpkFrame > 49 )
+		  cursorBpkFrame = 0;
         v52 = eventDetected();
         if ( v52 == 21 )
         {
@@ -548,7 +552,7 @@ void enterShop()
 				  getCarBpkById(actualCarSelected),
                 (int)&carAnimFrameSize_45FBA0[64 * actualCarSelected]);
               drawKeyCursor(90256, (char *)screenBuffer + 90256, 0x60u, 64);
-			  carAnimCurrentFrame_45FBA0 = carAnimCurrentFrame_45FBA0 % 64;
+			  carAnimCurrentFrame_45FBA0 = (carAnimCurrentFrame_45FBA0 + 1) % 64;
             }
             while ( v59 != 28 );
             diagnosticLog("shop: color elegido, mostrando coche comprado");
