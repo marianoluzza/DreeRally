@@ -6139,7 +6139,10 @@ LABEL_97:
   v47 = raceParticipantIngame[v0].timeToDeployMine_4A7EA4;
   if ( v47 > 0 )
     raceParticipantIngame[v0].timeToDeployMine_4A7EA4 = v47 - 1;
-  v48 = raceParticipantIngame[v0].carAngle_4A7DAC + 180.0 * 0.01745329251994444;
+  //Puntos a 20, 50 y 80 delante del coche (carAngle + 180 es el frente, como en los sensores
+  //de arriba). Faltaban los parentesis: se sumaba pi a un angulo en grados y la IA disparaba
+  //a coches en cualquier direccion, tambien a los que venian detras.
+  v48 = (raceParticipantIngame[v0].carAngle_4A7DAC + 180.0) * 0.01745329251994444;
   v69 = (unsigned __int64)(sin(v48) * 20.0 +  raceParticipantIngame[v0].absolutePositionX_4A7DB4);
   v74 = (unsigned __int64)(cos(v48) * 20.0 + raceParticipantIngame[v0].absolutePositionY_4A7DB8);
   v49 = 0;
@@ -6167,7 +6170,7 @@ LABEL_97:
     }
     while ( v49 < numberOfParticipants_508D24 );
   }
-  v53 = raceParticipantIngame[v0].carAngle_4A7DAC + 180.0 * 0.01745329251994444;
+  v53 = (raceParticipantIngame[v0].carAngle_4A7DAC + 180.0) * 0.01745329251994444;
   v70 = (unsigned __int64)(sin(v53) * 50.0 +  raceParticipantIngame[v0].absolutePositionX_4A7DB4);
   v75 = (unsigned __int64)(cos(v53) * 50.0 + raceParticipantIngame[v0].absolutePositionY_4A7DB8);
   v54 = 0;
@@ -6195,7 +6198,7 @@ LABEL_97:
     }
     while ( v54 < numberOfParticipants_508D24 );
   }
-  v58 = raceParticipantIngame[v0].carAngle_4A7DAC + 180.0 * 0.01745329251994444;
+  v58 = (raceParticipantIngame[v0].carAngle_4A7DAC + 180.0) * 0.01745329251994444;
   v71 = (unsigned __int64)(sin(v58) * 80.0 +  raceParticipantIngame[v0].absolutePositionX_4A7DB4);
   v59 = currentDriverSelectedIndex_503518;
   v76 = (unsigned __int64)(cos(v58) * 80.0 + raceParticipantIngame[v0].absolutePositionY_4A7DB8);
@@ -11491,10 +11494,16 @@ LABEL_318:
     }
     v90 = dword_4A9EA4;
 	
-	if(raceParticipantIngame[0].mushroomPendingTime_4A8050>0) raceParticipantIngame[0].mushroomPendingTime_4A8050 =-dword_4A9EA4;
-	if(raceParticipantIngame[1].mushroomPendingTime_4A8050>0) raceParticipantIngame[1].mushroomPendingTime_4A8050 =-dword_4A9EA4;
-	if(raceParticipantIngame[2].mushroomPendingTime_4A8050>0) raceParticipantIngame[2].mushroomPendingTime_4A8050 =-dword_4A9EA4;
-	if(raceParticipantIngame[3].mushroomPendingTime_4A8050>0) raceParticipantIngame[3].mushroomPendingTime_4A8050 =-dword_4A9EA4;
+	//Era "=-" (asignar el negativo) en vez de restar: el efecto del hongo duraba un cuadro.
+	for (v89 = 0; v89 < 4; ++v89)
+	{
+	  if (raceParticipantIngame[v89].mushroomPendingTime_4A8050 > 0)
+	  {
+	    raceParticipantIngame[v89].mushroomPendingTime_4A8050 -= dword_4A9EA4;
+	    if (raceParticipantIngame[v89].mushroomPendingTime_4A8050 < 0)
+	      raceParticipantIngame[v89].mushroomPendingTime_4A8050 = 0;
+	  }
+	}
     currentDriverSelectedIndex_503518 = 4;
     
     v92 = raceEffectiveWidth_445010;

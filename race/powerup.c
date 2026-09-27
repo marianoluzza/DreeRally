@@ -4,6 +4,9 @@
 #include "../defs.h"
 #include <SDL_stdinc.h>
 #include <math.h>
+#include <string.h>
+#include <stdio.h>
+#include "../diagnostics.h"
 
 Powerup powerups[16];
 int dword_456AC4 = 0; // weak
@@ -15,9 +18,6 @@ void powerUpTaken_410050()
     signed int* v1; // esi@1
     int v2; // ebp@4
     int v3; // ebx@4
-    unsigned int v4; // eax@9
-    char* v5; // esi@9
-    void* v6; // edi@9
     char v7; // cl@10
     char* v8; // edi@12
     char v9; // al@13
@@ -25,7 +25,6 @@ void powerUpTaken_410050()
     int v11; // [sp+14h] [bp-14h]@1
     char DstBuf[20]; // [sp+18h] [bp-10h]@9
     char v13; // [sp+1Fh] [bp-9h]@9
-    __int16 v14; // [sp+20h] [bp-8h]@9
     int index = 0;
     v0 = Val;
     //v1 = (signed int)&unk_501BB4;
@@ -41,32 +40,21 @@ void powerUpTaken_410050()
             {
                 switch (powerups[index].lastPowerUp_ID_501BB8)
                 {
+                //Como en dr.exe (0x410050): "$60" / "$600" con el simbolo delante y "30%" detras, en
+                //(y << 9) + x + 0x60. La traduccion ponia el $ detras, escribia desde &v14 (un local
+                //sin inicializar: fila de 0xCC en Debug) y habia perdido los 96 pixeles del final.
                 case POWERUP_SMALL_MONEY:
-                    SDL_itoa(v0, &DstBuf, 10);
-                    strcat(&DstBuf, "$");
-                    v6 = DstBuf;
-                    v5 = &DstBuf;
-                    v4 = strlen(&DstBuf);
+                    sprintf(DstBuf, "$%d", v0);
                     goto LABEL_17;
                 case POWERUP_SMALL_REPAIR:
                 case POWERUP_BIG_REPAIR:
-                    SDL_itoa(powerups[index].repairpercentage_501BBC, &DstBuf, 10);
-                    strcat(&DstBuf, "%");
-                    v6 = DstBuf;
-                    v5 = &DstBuf;
-                    v4 = strlen(&DstBuf);
+                    sprintf(DstBuf, "%d%%", powerups[index].repairpercentage_501BBC);
                     goto LABEL_17;
 
                 case POWERUP_BIG_MONEY:
-                    SDL_itoa(10 * v0, &DstBuf, 10);
-                    strcat(&DstBuf, "$");
-                    v6 = DstBuf;
-                    v5 = &DstBuf;
-                    v4 = strlen(&DstBuf);
+                    sprintf(DstBuf, "$%d", 10 * v0);
                 LABEL_17:
-                    //esta pintando en mal posicion
-                    memcpy(v6, v5, v4);
-                    writeTextInRace_402510((v3 << 9) + v2, (const char*)&v14);
+                    writeTextInRace_402510((v3 << 9) + v2 + 0x60, DstBuf);
                     //v1 = v11;
                 LABEL_18:
                     v0 = Val;
@@ -192,24 +180,16 @@ int generatePowerUps()
     {
         v9 = 0;
         // v10 = (signed int)&unk_501CC8;
-        v10 = 0;
-        do
+        //Cuantos power-ups hay en pista (se permiten 4). El bucle traducido miraba 6 por vuelta
+        //avanzando de 5 en 5 hasta 16: leia powerups[16..20], fuera del array, y con basura
+        //alli contaba 4 o mas y no volvia a generar ninguno.
+        for (v10 = 0; v10 < 16; ++v10)
         {
             if (powerups[v10].powerUp_ID_501BA8 > 0)
                 ++v9;
-            if (powerups[v10 + 1].powerUp_ID_501BA8 > 0)
-                ++v9;
-            if (powerups[v10 + 2].powerUp_ID_501BA8 > 0)
-                ++v9;
-            if (powerups[v10 + 3].powerUp_ID_501BA8 > 0)
-                ++v9;
-            if (powerups[v10 + 4].powerUp_ID_501BA8 > 0)
-                ++v9;
-            if (powerups[v10 + 5].powerUp_ID_501BA8 > 0)
-                ++v9;
-            v10 += 5;
-        } while (v10 < 16);
-        v63[0] = 0;
+        }
+        //v63 marca los huecos ya probados; en el original eran 12 bytes a cero (v63..v65).
+        memset(v63, 0, sizeof(v63));
         v64 = 0;
         v61 = v9;
         v65 = 0;
@@ -293,6 +273,9 @@ int generatePowerUps()
                     LABEL_76:
                         v17 = circuitMatrixHxW_5034F8;
                         ++v61;
+                        diagnosticLog("powerup: aparece id=%d hueco=%d x=%d y=%d en pista=%d",
+                                      powerups[v11].powerUp_ID_501BA8, v11,
+                                      powerups[v11].posX_501BA0, powerups[v11].posY_501BA4, v61);
 
                         //esto lo he eliminado
                         //powerups[v11].posX_501BA0 = 0;
