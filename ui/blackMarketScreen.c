@@ -64,7 +64,7 @@ char aThisIsABusines[35] = "This is a business, not a charity."; // weak
 char aWeDonTInvestIn[33] = "We don't invest in unproven wild"; // weak
 char aCards_SoBuzzOf[25] = "cards. So buzz off, bug."; // weak
 _UNKNOWN unk_452AA0; // weak
-char byte_452AC8[] = { '[' }; // weak
+char byte_452AC8[] = "[Pay back $"; // texto completo del dr.exe original (antes un '[' sin terminador)
 _UNKNOWN unk_452AF0; // weak
 char aPetrolBrainYou[32] = "Petrol brain, you owe me. You'd"; // weak
 char aBetterBeHereTo[34] = "better be here to pay me back, or"; // weak
@@ -370,15 +370,7 @@ int drawLoanShark()
   int v2; // edi@3
   int v3; // esi@4
   int result; // eax@4
-  int v5; // ecx@5
-  char v6; // dl@6
-  unsigned int v7; // eax@17
-  void *v8; // edi@17
-  char v9; // cl@18
-  char *v10; // edi@19
-  char v11; // al@20
   char *DstBuf=malloc(100); // [sp+4h] [bp-60h]@8
-  char v13; // [sp+13h] [bp-51h]@17
   char v14[80]; // [sp+14h] [bp-50h]@6
 
   createPopup(144, 114, 384, 119, 1);
@@ -394,13 +386,6 @@ int drawLoanShark()
   }
   else
   {
-    v5 = 0;
-    do
-    {
-      v6 = byte_452AC8[v5];
-      v14[v5++] = v6;
-    }
-    while ( v6 );
     if ( drivers[driverId].loanType == LOAN_DELIVERATOR)
       SDL_itoa((unsigned __int64)((double)(drivers[driverId].loanRaces - 1) * 0.3333333333333333 * 6000.0 + 12000.0), DstBuf, 10);
     if (drivers[driverId].loanType == LOAN_WRAIGHT )
@@ -423,20 +408,8 @@ int drawLoanShark()
         (unsigned __int64)((double)(drivers[driverId].loanRaces - 1) * 0.3333333333333333 * 750.0 + 1500.0),
         DstBuf,
         10);
-    v7 = strlen(DstBuf) + 1;
-    v8 = &v13;
-    do
-    {
-      v9 = *((int8*)v8 + 1);
-      v8 = (char *)v8 + 1;
-    }
-    while ( v9 );
-    memcpy(v8, DstBuf, v7);
-    v10 = &v13;
-    do
-      v11 = (v10++)[1];
-    while ( v11 );
-    *(_WORD *)v10 = 46;
+    //El original concatenaba sobre v13/v14, contiguos en su pila: la linea salia sin el importe.
+    sprintf(v14, "%s%s.", byte_452AC8, DstBuf);
     writeTextInScreen(v14, 79530);
     writeTextInScreen("", 89770);
     writeTextInScreen(aPetrolBrainYou, 100010);
