@@ -1069,14 +1069,22 @@ int dword_481E4C; // weak
 int dword_481E50; // weak
 int dword_481E54; // weak
 int dword_481E58; // weak*/
-_UNKNOWN unk_481F20; // weak
-_UNKNOWN unk_488020; // weak
-_UNKNOWN unk_48E420; // weak
-_UNKNOWN unk_48E620; // weak
-_UNKNOWN unk_48E720; // weak
-_UNKNOWN unk_48E760; // weak
-_UNKNOWN unk_491820; // weak
-_UNKNOWN unk_491920; // weak
+//En dr.exe 0x481F20..0x48E720 es un unico buffer de 200 lineas de 256 (efecto del hongo,
+//sub_405430) y los demas unk_ son posiciones dentro de el o a continuacion. Aqui eran bytes
+//sueltos: cada cuadro con el hongo copiaba 51200 bytes encima de las globales vecinas.
+//sub_405430 tambien lee hasta 256 bytes antes del comienzo, por eso la region arranca en 0x481E20.
+//0x491820..0x4A1220 es la copia de la pantalla (64000 bytes) que guarda el menu de pausa (0x4087C1)
+//y se restaura al volver a la carrera (0x409200).
+static BYTE mushroomRegion_481E20[0x4A1220 - 0x481E20];
+#define MUSHROOM_AT(address) (mushroomRegion_481E20[(address) - 0x481E20])
+#define unk_481F20 MUSHROOM_AT(0x481F20)
+#define unk_488020 MUSHROOM_AT(0x488020)
+#define unk_48E420 MUSHROOM_AT(0x48E420)
+#define unk_48E620 MUSHROOM_AT(0x48E620)
+#define unk_48E720 MUSHROOM_AT(0x48E720)
+#define unk_48E760 MUSHROOM_AT(0x48E760)
+#define unk_491820 MUSHROOM_AT(0x491820)
+#define unk_491920 MUSHROOM_AT(0x491920)
 
 
 void *dword_4A6854; // idb
@@ -2738,7 +2746,9 @@ char *sub_404730()
         v19 = v14 + (*(_DWORD *)&result[4 * v16] << 8);
         v20 = *(_DWORD *)&result[4 * (v17 >> 10) + 1440];
         v17 += v29;
-        v21 = *(_DWORD *)&result[4 * (v19 >> 10) + 1440] >> 7;
+        //sar en dr.exe (0x404871): con _DWORD (sin signo) la mitad negativa de la onda daba
+        //desplazamientos enormes y esos bloques se pintaban de negro.
+        v21 = *(int *)&result[4 * (v19 >> 10) + 1440] >> 7;
         v22 = v20 >> 8;
         if ( v17 >= 368640 )
           v17 -= 368640;
@@ -4505,8 +4515,9 @@ int keyMenuInRace_407330()
   //unk_491820= malloc ( 0xFA00u);
 
   //esto guarda la ultima imagen para ponerla mas tarde despues del menu
-  //memcpy(&unk_491820, (const void *)screenPtr, 0xFA00u);
-  //esto estab acon puntero pero se cargaba otras cosas
+  //Se habia comentado porque pisaba otras cosas: unk_491820 era un byte suelto. Ahora es la
+  //region de 64000 bytes del original, y la restauracion de mas abajo ya no lee basura.
+  memcpy(&unk_491820, (const void *)screenPtr, 0xFA00u);
  // memcpy(&circuitPalette_4B4020, loadCircuitPalette, 0x300u);
  // loadCircuitPalette();
   dword_456AF8 = 0;
@@ -7542,10 +7553,10 @@ int drawCarInRace_40D920()
 	iluminateTriangle_43D530(
       raceParticipantIngame[v2].inScreenPositionX_4A7D04,
       raceParticipantIngame[v2].inScreenPositionY_4A7D08,
-      raceParticipantIngame[v2].inScreenPositionX_4A7D04 - (unsigned __int64)(sin(v10) * -40.0),
-      raceParticipantIngame[v2].inScreenPositionY_4A7D08 - (unsigned __int64)(cos(v10) * -33.33332),
-      raceParticipantIngame[v2].inScreenPositionX_4A7D04 - (unsigned __int64)(sin(v9) * -40.0),
-      raceParticipantIngame[v2].inScreenPositionY_4A7D08 - (unsigned __int64)(cos(v9) * -33.33332),
+      raceParticipantIngame[v2].inScreenPositionX_4A7D04 - (int)(sin(v10) * -40.0),
+      raceParticipantIngame[v2].inScreenPositionY_4A7D08 - (int)(cos(v10) * -33.33332),
+      raceParticipantIngame[v2].inScreenPositionX_4A7D04 - (int)(sin(v9) * -40.0),
+      raceParticipantIngame[v2].inScreenPositionY_4A7D08 - (int)(cos(v9) * -33.33332),
       (int)&trxLITTab_4A9EE0);
     v11 = (raceParticipantIngame[currentDriverSelectedIndex_503518].carAngle_4A7DAC + 190.0) * 0.01745329251994444;
     v12 = (raceParticipantIngame[currentDriverSelectedIndex_503518].carAngle_4A7DAC + 198.0) * 0.01745329251994444;
@@ -7553,10 +7564,10 @@ int drawCarInRace_40D920()
 	 iluminateTriangle_43D530(
       raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04,
       raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08,
-      raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04 - (unsigned __int64)(sin(v12) * -36.0),
-      raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08 - (unsigned __int64)(cos(v12) * -29.999988),
-      raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04 - (unsigned __int64)(sin(v11) * -40.0),
-      raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08 - (unsigned __int64)(cos(v11) * -33.33332),
+      raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04 - (int)(sin(v12) * -36.0),
+      raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08 - (int)(cos(v12) * -29.999988),
+      raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04 - (int)(sin(v11) * -40.0),
+      raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08 - (int)(cos(v11) * -33.33332),
       (int)&trxLITTab_4A9EE0);
     v13 = (raceParticipantIngame[currentDriverSelectedIndex_503518].carAngle_4A7DAC - 18.0 + 180.0) * 0.01745329251994444;
     v14 = (raceParticipantIngame[currentDriverSelectedIndex_503518].carAngle_4A7DAC - 10.0 + 180.0) * 0.01745329251994444;
@@ -7565,10 +7576,10 @@ int drawCarInRace_40D920()
 	iluminateTriangle_43D530(
       raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04,
       raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08,
-      raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04 - (unsigned __int64)(sin(v14) * -40.0),
-      raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08 - (unsigned __int64)(cos(v14) * -33.33332),
-      raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04 - (unsigned __int64)(sin(v13) * -36.0),
-      raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08 - (unsigned __int64)(cos(v13) * -29.999988),
+      raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04 - (int)(sin(v14) * -40.0),
+      raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08 - (int)(cos(v14) * -33.33332),
+      raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04 - (int)(sin(v13) * -36.0),
+      raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08 - (int)(cos(v13) * -29.999988),
       (int)&trxLITTab_4A9EE0);
     v1 = userRaceOrder_4A9EA8;
   }
@@ -7595,30 +7606,30 @@ int drawCarInRace_40D920()
           iluminateTriangle_43D530(
             raceParticipantIngame[v16].inScreenPositionX_4A7D04,
             v18,
-            raceParticipantIngame[v16].inScreenPositionX_4A7D04 - (unsigned __int64)(sin(v22) * -40.0),
-            v18 - (unsigned __int64)(cos(v22) * -33.33332),
-            raceParticipantIngame[v16].inScreenPositionX_4A7D04 - (unsigned __int64)(sin(v21) * -40.0),
-            v18 - (unsigned __int64)(cos(v21) * -33.33332),
+            raceParticipantIngame[v16].inScreenPositionX_4A7D04 - (int)(sin(v22) * -40.0),
+            v18 - (int)(cos(v22) * -33.33332),
+            raceParticipantIngame[v16].inScreenPositionX_4A7D04 - (int)(sin(v21) * -40.0),
+            v18 - (int)(cos(v21) * -33.33332),
             (int)&trxLITTab_4A9EE0);
           v23 = (raceParticipantIngame[currentDriverSelectedIndex_503518].carAngle_4A7DAC + 190.0) * 0.01745329251994444;
           v24 = (raceParticipantIngame[currentDriverSelectedIndex_503518].carAngle_4A7DAC + 198.0) * 0.01745329251994444;
           iluminateTriangle_43D530(
             raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04,
             raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08,
-            raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04 - (unsigned __int64)(sin(v24) * -36.0),
-            raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08 - (unsigned __int64)(cos(v24) * -29.999988),
-            raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04 - (unsigned __int64)(sin(v23) * -40.0),
-            raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08 - (unsigned __int64)(cos(v23) * -33.33332),
+            raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04 - (int)(sin(v24) * -36.0),
+            raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08 - (int)(cos(v24) * -29.999988),
+            raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04 - (int)(sin(v23) * -40.0),
+            raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08 - (int)(cos(v23) * -33.33332),
             (int)&trxLITTab_4A9EE0);
           v25 = (raceParticipantIngame[currentDriverSelectedIndex_503518].carAngle_4A7DAC - 18.0 + 180.0) * 0.01745329251994444;
           v26 = (raceParticipantIngame[currentDriverSelectedIndex_503518].carAngle_4A7DAC - 10.0 + 180.0) * 0.01745329251994444;
           iluminateTriangle_43D530(
             raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04,
             raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08,
-            raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04- (unsigned __int64)(sin(v26) * -40.0),
-            raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08- (unsigned __int64)(cos(v26) * -33.33332),
-            raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04- (unsigned __int64)(sin(v25) * -36.0),
-            raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08 - (unsigned __int64)(cos(v25) * -29.999988),
+            raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04- (int)(sin(v26) * -40.0),
+            raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08- (int)(cos(v26) * -33.33332),
+            raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionX_4A7D04- (int)(sin(v25) * -36.0),
+            raceParticipantIngame[currentDriverSelectedIndex_503518].inScreenPositionY_4A7D08 - (int)(cos(v25) * -29.999988),
             (int)&trxLITTab_4A9EE0);
           v15 = currentDriverSelectedIndex_503518;
         }
