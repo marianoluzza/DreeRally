@@ -9796,7 +9796,10 @@ int recalculateRacePositions_413380()
    // v2 = (int)racePosition_4A7E09;//raceParticipantIngame[0]racePosition_4A7E09;
 	v2 = 0; ;
    // v19 = (int)racePosition_4A7E09;
-	v19 = raceParticipantIngame[0].racePosition_4A7E09;
+	//v19 era la direccion del puesto del participante v1, igual que v2 (IDA la dejo en otra
+	//variable). La traduccion arrancaba con el valor del puesto, que se usaba como indice:
+	//con el participante 0 cuarto leia raceParticipantIngame[4] y dejaba puestos repetidos.
+	v19 = 0;
 	v18 = 0;//(int)raceParticipant2[0].damageBar_4A6898;
 	//ordenacion burbuja
     do
@@ -9876,7 +9879,7 @@ LABEL_37:
           {
             --result;
             if ( v13 < result )
-              memcpy((void *)(dword_4A7CE0[v13]), (const void *)(dword_4A7CE0[1+v13]), 4 * (result - v13));
+              memmove(&dword_4A7CE0[v13], &dword_4A7CE0[v13 + 1], 4 * (result - v13)); //la traduccion usaba los valores como punteros
             dword_4A7CE0[result] = -1;
           }
         }
@@ -13372,14 +13375,16 @@ int   sub_423C90(int a1, int a2)
   int v7; // edx@3
   int result; // eax@4
   int v9; // edx@5
-  char *v10; // edx@12
   bool v11; // zf@12
   signed int v12; // eax@13
   int v13; // ecx@14
-  char *v14; // edx@19
   bool v15; // sf@20
   unsigned __int8 v16; // of@20
   int v17; // [sp+10h] [bp-4h]@1
+  //El original intercambiaba a traves de unk_4611E0, que aqui es un unico byte: los 108
+  //bytes del piloto (y los 84 del participante) se escribian sobre las globales vecinas.
+  Driver swapDriver;
+  RaceParticipant swapParticipant;
 
   while ( 1 )
   {
@@ -13423,11 +13428,10 @@ int   sub_423C90(int a1, int a2)
       {
         driverId = v5;
       }
-      memcpy(&unk_4611E0, &drivers[v5].name, 0x6Cu);
-      v10 = &drivers[v17].name;
+      swapDriver = drivers[v5];
       v11 = isMultiplayerGame == 0;
-      memcpy(&drivers[v5].name, v10, 0x6Cu);
-      memcpy(v10, &unk_4611E0, 0x6Cu);
+      drivers[v5] = drivers[v17];
+      drivers[v17] = swapDriver;
       if ( !v11 )
       {
         v12 = 0;
@@ -13445,10 +13449,9 @@ int   sub_423C90(int a1, int a2)
           ++v12;
         }
         while ( v12 < 4 );
-        memcpy(&unk_4611E0, raceParticipant[v5].name, 0x54u);
-        v14 = raceParticipant[v17].name;
-        memcpy(raceParticipant[v5].name, v14, 0x54u);
-        memcpy(v14, &unk_4611E0, 0x54u);
+        swapParticipant = raceParticipant[v5];
+        raceParticipant[v5] = raceParticipant[v17];
+        raceParticipant[v17] = swapParticipant;
       }
       v2 = a1;
       ++v5;
@@ -13474,59 +13477,39 @@ int   sub_423C90(int a1, int a2)
 //----- (00423E20) --------------------------------------------------------
 void   recalcRank(int a1)
 {
-	void *v1 = malloc(0x870u); // eax@1
   int v2; // ebx@1
-  int v3; // ebp@2
-  int v4; // edx@2
   int v5; // ecx@4
-  signed int v6; // eax@5
-  int v7; // edx@8
-  void *v8=malloc(0x870u); // eax@12
+  void *v8; // eax@12
   int v9; // edx@13
   void *v10; // ebp@13
   int v11; // eax@13
   const void *v12; // esi@14
   void *v13; // edi@14
   void *v14; // [sp+14h] [bp+4h]@12
+  Driver ascending[20];
 
-  //allocateMemory(0x870u);
+  //sub_423C90 deja a los pilotos de menos a mas puntos; aqui se invierten para que el
+  //primero del ranking quede en drivers[0]. La traduccion copiaba drivers sobre si mismo
+  //en lugar de desde la copia, asi que la segunda mitad pisaba a la primera.
   v2 = a1;
-  memcpy(v1, drivers, 0x870u);
-  if ( a1 > 0 )
-  {
-    v3 = 0;
-	v4 = a1 - 1;
-    do
-    {
-      memcpy(&drivers[v3], &drivers[v4], sizeof(drivers[v3]));
-      v4 = v4-1;
-	  v3 = v3 + 1;
-      --a1;
-    }
-    while ( a1 );
-  }
-  free(v1);
-  v5 = 0;
+  memcpy(ascending, drivers, sizeof(ascending));
+  for ( v5 = 0; v5 < v2; ++v5 )
+    drivers[v5] = ascending[v2 - 1 - v5];
   driverId = v2 - driverId - 1;
-  if ( v2 > 0 )
+  //Mismos puntos que el anterior, mismo puesto. El original recorria &dword_460888 (el
+  //rank del piloto 0) de 108 en 108; la traduccion partia del valor del rank, no de su direccion.
+  for ( v5 = 0; v5 < v2; ++v5 )
   {
-    v6 = (signed int)drivers[0].rank;
-    do
-    {
-      if ( *(_DWORD *)(v6 - 4) != *(_DWORD *)(v6 - 112) || v6 <= drivers[0].rank )
-        v7 = v5 + 1;
-      else
-        v7 = *(_DWORD *)(v6 - 108);
-      *(_DWORD *)v6 = v7;
-      ++v5;
-      v6 += 108;
-    }
-    while ( v5 < v2 );
+    if ( v5 == 0 || drivers[v5].points != drivers[v5 - 1].points )
+      drivers[v5].rank = v5 + 1;
+    else
+      drivers[v5].rank = drivers[v5 - 1].rank;
   }
   //al no haber multiplayer pasamos
   if ( isMultiplayerGame )
   {
     //allocateMemory(0x870u);
+    v8 = malloc(0x870u);
     v14 = v8;
     memcpy(v8, byte_460840, 0x870u);
     if ( v2 > 0 )

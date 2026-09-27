@@ -382,8 +382,13 @@ int   postRaceMain(int argc, const char **argv, const char **envp)
     }
     while ( !eventDetected() );
   }
-  //sub_423C90(0, 19); //modiffica una variable de adversary pero no se que hace
-  //recalcRank(20);  //QUITADO porque solo hace multiplayer
+  //Reordena drivers[] por puntos (el ranking es el propio orden del array, driverId sigue
+  //al jugador) y recalcula los puestos. Estaba quitado: solo la ultima parte es multijugador.
+  sub_423C90(0, 19);
+  recalcRank(20);
+  diagnosticLog("ranking: jugador=%d puesto=%d puntos=%d ganadas=%d carreras=%d ingresos=%d+%d",
+                driverId, drivers[driverId].rank, drivers[driverId].points, drivers[driverId].racesWon,
+                drivers[driverId].totalRaces, userLasRacePriceIncome_456BDC, userLastRaceIncomeNoPrice_456BE0);
   drawStadistics();
   writeDriverList(20);
   refreshAllScreen();

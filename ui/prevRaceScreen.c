@@ -364,8 +364,6 @@ void   previewRaceScreen(signed int participants)
   int v127; // ebx@207
   int v128; // eax@207
   int v129; // eax@207
-  signed int v130; // edx@207
-  int v131; // ecx@207
   int v132; // edx@224
   signed int v133; // edx@226
   int v134; // eax@226
@@ -375,8 +373,6 @@ void   previewRaceScreen(signed int participants)
   int v138; // edx@267
   int v139; // ecx@267
   int v140; // ebp@267
-  signed int v141; // ecx@267
-  int v142; // eax@267
   int v143; // ebx@291
   int v144; // eax@291
  // signed int v145; // esi@291
@@ -1332,49 +1328,27 @@ LABEL_534:
   if (userRaceOrder_45FC20 < 0) //TODO remove this condition
       userRaceOrder_45FC20 = 1;
   startRace(userRaceOrder_45FC20, numberOfParticipants);
-  if ( isMultiplayerGame && dword_45E0A8 == 2 )
+  //Aqui habia un if multijugador cuyo cuerpo (setBackgroundRefreshFunction_43C7B0) quedo
+  //comentado: la asignacion de v126 paso a ser su cuerpo y nunca se ejecutaba. v126 es el
+  //orden del jugador con el que el calculo de ingresos reconoce su fila (Race/Bonus income).
+  //if ( isMultiplayerGame && dword_45E0A8 == 2 )
     //setBackgroundRefreshFunction_43C7B0((int (*)(void))multiplayer_4181B0);
   v126 = userRaceOrder_45FC20;
   v127 = driverId;
   v244 = 84 * userRaceOrder_45FC20;
+  diagnosticLog("carrera: jugador=%d orden=%d pilotos=%d,%d,%d,%d puestos=%d,%d,%d,%d dano=%d,%d,%d,%d",
+                driverId, userRaceOrder_45FC20,
+                raceIdParticipants[0], raceIdParticipants[1], raceIdParticipants[2], raceIdParticipants[3],
+                raceParticipant[0].racePosition, raceParticipant[1].racePosition,
+                raceParticipant[2].racePosition, raceParticipant[3].racePosition,
+                raceParticipant[0].damage, raceParticipant[1].damage,
+                raceParticipant[2].damage, raceParticipant[3].damage);
   v128 = raceParticipant[userRaceOrder_45FC20].racePosition;
   userRacePosition_456B50 = v128;
   dword_456BD8 = v128;
-  v129 = 0;
-  v130 = 2;
-  v131 = (int)dword_4608F0;//bucle puntos piloto
-  do
-  {
-    if ( *(_DWORD *)(v131 - 108) > v129 )
-    {
-      v126 = userRaceOrder_45FC20;
-      if ( v130 - 2 != driverId )
-        v129 = *(_DWORD *)(v131 - 108);
-    }
-    if ( *(_DWORD *)v131 > v129 )
-    {
-      v126 = userRaceOrder_45FC20;
-      if ( v130 - 1 != driverId )
-        v129 = *(_DWORD *)v131;
-    }
-    if ( *(_DWORD *)(v131 + 108) > v129 && v130 != driverId )
-      v129 = *(_DWORD *)(v131 + 108);
-    if ( *(_DWORD *)(v131 + 216) > v129 )
-    {
-      v126 = userRaceOrder_45FC20;
-      if ( v130 + 1 != driverId )
-        v129 = *(_DWORD *)(v131 + 216);
-    }
-    if ( *(_DWORD *)(v131 + 324) > v129 )
-    {
-      v126 = userRaceOrder_45FC20;
-      if ( v130 + 2 != driverId )
-        v129 = *(_DWORD *)(v131 + 324);
-    }
-    v130 += 5;
-    v131 += 540;
-  }
-  while ( v130 - 2 < 20 );
+  //Maximo de puntos entre los demas pilotos. El original recorria dword_4608F0 (los puntos
+  //del piloto 1 dentro de drivers[]); aqui es un array suelto a cero, asi que daba siempre 0.
+  v129 = getMaxDriverPoints(driverId);
   v132 = drivers[driverId].points;
   v245 =  driverId;
   if ( v132 <= v129 || isMultiplayerGame )
@@ -1447,68 +1421,8 @@ LABEL_534:
   drivers[raceIdParticipants[3]].lastRaceIncome = 0;
   userLastRaceIncomeNoPrice_456BE0 = 0;
   userLasRacePriceIncome_456BDC = 0;
-  v246 = 0;
-  v141 = 2;
-  v142 = (int)dword_4608F0; //bucle puntos de polotos
-  do
-  {
-    if ( *(_DWORD *)(v142 - 108) > v140 )
-    {
-      if ( v141 - 2 == v127 )
-      {
-        v140 = v246;
-      }
-      else
-      {
-        v140 = *(_DWORD *)(v142 - 108);
-        v246 = *(_DWORD *)(v142 - 108);
-      }
-    }
-    if ( *(_DWORD *)v142 > v140 )
-    {
-      if ( v141 - 1 == v127 )
-      {
-        v140 = v246;
-      }
-      else
-      {
-        v140 = *(_DWORD *)v142;
-        v246 = *(_DWORD *)v142;
-      }
-    }
-    if ( *(_DWORD *)(v142 + 108) > v140 && v141 != v127 )
-    {
-      v140 = *(_DWORD *)(v142 + 108);
-      v246 = *(_DWORD *)(v142 + 108);
-    }
-    if ( *(_DWORD *)(v142 + 216) > v140 )
-    {
-      if ( v141 + 1 == v127 )
-      {
-        v140 = v246;
-      }
-      else
-      {
-        v140 = *(_DWORD *)(v142 + 216);
-        v246 = *(_DWORD *)(v142 + 216);
-      }
-    }
-    if ( *(_DWORD *)(v142 + 324) > v140 )
-    {
-      if ( v141 + 2 == v127 )
-      {
-        v140 = v246;
-      }
-      else
-      {
-        v140 = *(_DWORD *)(v142 + 324);
-        v246 = *(_DWORD *)(v142 + 324);
-      }
-    }
-    v141 += 5;
-    v142 += 540;
-  }
-  while ( v141 - 2 < 20 );
+  //Mismo maximo que arriba (el mismo recorrido sobre dword_4608F0).
+  v140 = getMaxDriverPoints(v127);
   if ( isMultiplayerGame )
   {
    /* v156 = unk_461EC2;
@@ -1960,7 +1874,8 @@ LABEL_348:
     if (drivers[v245].points > v140 )
     {
       v155 = raceIdParticipants[userRaceOrder_45FC20];
-      userLastRaceIncomeNoPrice_456BE0 = 400 * *(int *)((char *)&dword_4A7A6C + v244);
+      //&dword_4A7A6C + 84*orden era raceParticipant[orden].moneyPicked; aqui dword_4A7A6C es un entero suelto.
+      userLastRaceIncomeNoPrice_456BE0 = 400 * raceParticipant[userRaceOrder_45FC20].moneyPicked;
       drivers[v155].lastRaceIncome = userLastRaceIncomeNoPrice_456BE0;
     }
   }
@@ -1980,7 +1895,9 @@ LABEL_348:
         v217 = raceParticipant[v214].damage;
         ++v214;
        // v215 += 21;
-        drivers[v216].racesWon = v217;
+        //El original escribia en dword_46084C (el dano del coche en drivers[]); la traduccion
+        //lo puso en racesWon: "Races won" mostraba el dano y el dano nunca llegaba a la tienda.
+        drivers[v216].damage = v217;
       }
       while ( v214 < participants);
     }
@@ -1990,8 +1907,8 @@ LABEL_348:
   else
   {
     ++drivers[v245].totalRaces;
-	drivers[v213].damage = dword_4A7AC4;
-    //*(int *)((char *)dword_46084C + v213) = dword_4A7AC4;
+    //dword_4A7AC4 era raceParticipant[1].damage (el jugador contra el Adversary); aqui es un entero suelto.
+	drivers[v213].damage = raceParticipant[1].damage;
   }
   sub_4279C0();//parece que abre el popup de terminar porque no tienes pasta
 LABEL_477:
@@ -2053,6 +1970,8 @@ LABEL_477:
       }
       //while ( HIBYTE(word_461EB4) < 4u || (unsigned __int8)byte_461EB6 < 4u );
 	  while (participantsRace[0] < 4u || participantsRace[2] < 4u);
+      //Str[0..3] marca las posiciones ya sorteadas. El original llegaba a Str como &v246 + 4
+      //(eran contiguos en su pila); aqui no lo son y se leia basura.
       *(_DWORD *)Str = 0;
 	   indexRaceParticipant = 0;
       //v234 = (signed int)dword_4A7AA0;
@@ -2061,13 +1980,13 @@ LABEL_477:
         do
         {
           v235 = rand() % 4;
-          v236 = *((BYTE *)&v246 + v235 + 4);
+          v236 = Str[v235];
           v237 = v235 + 1;
           raceParticipant[indexRaceParticipant].racePosition = v237;
         }
         while ( v236 );
         //v234 += 84;
-        *((BYTE *)&v246 + v237 + 3) = 1;
+        Str[v235] = 1;
 		indexRaceParticipant++;
       }
       while (indexRaceParticipant < 4 );

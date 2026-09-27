@@ -14,6 +14,9 @@ int __OFSUB__(int x, int y);
 int drawSprite_402590(int baseImage, int width, int height, signed int a4, int spriteNumber, int a6, int a7, int a8);
 int drawImageInRace_43B240(int filename, int width, int height, int offset);
 int drawInRaceImageToBuffer_43B160(int a1, int a2, int a3, int a4);
+//Ranking: ordena drivers[] por puntos y recalcula los puestos.
+int sub_423C90(int a1, int a2);
+void recalcRank(int a1);
 
 extern char byte_463E00[256]; // weak
 extern _UNKNOWN unk_462096; // weak
