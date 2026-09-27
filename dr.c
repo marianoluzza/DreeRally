@@ -1568,8 +1568,11 @@ int initParticipantValues_401060()
   int result; // eax@45
   int indexRaceParticipantt; // [sp+Ch] [bp-4F0h]@1
 
-  int arrayv35[24]= {360,370,430,460,510,440,450,460,470,520,510,520,530,580,600,240,280,330,380,440,120,130,140,230};
-  int arrayv59[24] = {300,350,130,135,140,230,300,350,150,160,230,300,350,150,190,240,290,360,400};
+  //Tablas verificadas contra dr.exe (0x401060). arrayv59 estaba corrida cuatro posiciones: sus
+  //primeros valores habian quedado al final de arrayv35 y cada coche recibia el blindaje de
+  //otro (un Vagabond en facil sumaba 300 en vez de 120).
+  int arrayv35[20]= {360,370,430,460,510,440,450,460,470,520,510,520,530,580,600,240,280,330,380,440};
+  int arrayv59[24] = {120,130,140,230,300,350,130,135,140,230,300,350,150,155,160,230,300,350,150,190,240,290,360,400};
 	  //todo esto son posiciones de memoria :S
   //car sizes
   double arrayv29[6] ={8.3,9.7,9,10.5,8.5,9.2};
@@ -1634,7 +1637,7 @@ int initParticipantValues_401060()
 	 // if(debug==1) v11=1.75;
       v12 = arrayv59[v6];//24 posiciones  //era v55 asi que no se
 	 /// if(debug==1) v12=0x96;
-	  raceParticipant2[indexRaceParticipantt].efectiveTire_4A688C = arrayv223[v10];//23*5 + 4 posiciones=119
+	  raceParticipant2[indexRaceParticipantt].efectiveTire_4A688C = (float)arrayv223[v10];//23*5 + 4 posiciones=119
 	 // if(debug==1)  raceParticipant2[indexRaceParticipantt].efectiveTire_4A688C=1;
       v13 = v12 + arrayv35[ 5 * raceParticipant[indexRaceParticipantt].difficulty + raceParticipant[indexRaceParticipantt].armour];
       //if(debug==1) v13=0x186;
@@ -1765,11 +1768,12 @@ LABEL_36:
     v17 = arrayv79[ 6 * raceParticipant[1].difficulty+1];//18 posiciones maximo (12)
     v18 = arrayv35[ 5 * raceParticipant[1].difficulty+4];//15 posiciones maximo (10) //v39
 	raceParticipant2[0].damageBar_4A6898 = (100 - raceParticipant[0].damage) << 10;
-    v19 = arrayv59[6 * raceParticipant[1].difficulty+4] + v18; //era v55
+    //En dr.exe (0x40208B) es la columna del coche 5, no la 4.
+    v19 = arrayv59[6 * raceParticipant[1].difficulty+5] + v18; //era v55
 	raceParticipant2[0].efectiveTire_4A688C = 0;
 	raceParticipant2[0].efectiveArmour_4A689C = v19;
 	raceParticipant2[0].steeringCapacity_4A6894 = sanitizeValue(
-		3.75 / (v17 - (double)raceParticipant[0].engine * 0.05), 3.75, "steeringCapacity0");///comprobar si es 0 o 1 el indice
+		3.75 / (v17 - (double)raceParticipant[1].engine * 0.05), 3.75, "steeringCapacity0");//dr.exe lee el motor del participante 1 (0x402066)
 	// if(debug==1)  raceParticipant2[indexRaceParticipantt].steeringCapacity_4A6894  =1;
     if ( v19 > 900 )
 		raceParticipant2[0].efectiveArmour_4A689C = 900;
@@ -6519,8 +6523,9 @@ LABEL_33:
 							 * (raceParticipant2[v0].efectiveTire_4A688C
 							 / raceParticipant2[v0].efectiveEngine_4A6884), 0.0, "deslizamientoLateral");
     v16 = raceParticipantIngame[v0].dword_4A7DBC;
-	//ahora son float: el "|" bit a bit ya no compila, y lo que se queria era esta comparacion
-	if(raceParticipantIngame[v0].dword_4A7DC0 != 0.0f || raceParticipantIngame[v0].dword_4A7DC4 != 0.0f)
+	//c0/c2 de comparar el deslizamiento con 0 (0x40BCDE): es un fabs. La version anterior
+	//miraba DC0/DC4 y no importaba porque las gomas en int dejaban el deslizamiento en 0.
+	if ( v16 < 0.0 )
 		v16 = -v16;
 	//if(debug==1) v17=1;if(debug==1)v18=1;
 	//if ( v17 | v18 )
@@ -6611,8 +6616,10 @@ LABEL_64:
 	v31 = raceParticipantIngame[ currentDriverSelectedIndex_503518].carVelocity_4A7DB0;
 	//if(raceParticipantIngame[currentDriverSelectedIndex_503518].absolutePositionX_4A7DB4!=0.0 | raceParticipantIngame[currentDriverSelectedIndex_503518].absolutePositionY_4A7DB8 !=0.0)
 		///v31 = -v31;
-	/*if ( v32 | v33 )
-      v31 = -v31;*/
+	//c0/c2 de comparar la velocidad con 0 (0x40C006): fabs, para que marcha atras el avance
+	//conserve el signo de sin/cos * velocidad.
+	if ( v31 < 0.0 )
+      v31 = -v31;
     v34 = sanitizeValue(v31 / sqrt(v28), 1.0, "normalizacionAvance");
   }
   dword_4AA924 = 0;

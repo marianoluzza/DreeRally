@@ -55,7 +55,7 @@ typedef struct RaceParticipant2 {
 	int carType;
 	float efectiveEngine_4A6884;
 	float efectiveEngineBackup_4A6888;//backup del motor porque cambia en medio de carrera
-	int efectiveTire_4A688C;
+	float efectiveTire_4A688C;//float en dr.exe (0x401E00): como int, 0.5/0.3/0.1 quedaban en 0 y ningun coche derrapaba
 	float carSize_4A6890;
 	float steeringCapacity_4A6894;//parece que es la oposicin al giro del coche (cuanto peor coche es mas alto)
 	int damageBar_4A6898;
