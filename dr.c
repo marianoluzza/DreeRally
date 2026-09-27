@@ -2384,6 +2384,45 @@ int loadCarsImages()
 
 
 //----- (004032F0) --------------------------------------------------------
+//Diagnostico temporal: copia de la tabla de luz al cargarla, para detectar quien la pisa.
+BYTE litTableAtLoad[256];
+int litTableCorruptionLogged;
+
+char driverNamesAtLoad[20][12];
+int driverNamesCorruptionLogged;
+
+void checkLitTable(const char *where)
+{
+  const BYTE *lit = (const BYTE *)trxLITTab_4A9EE0;
+  int first, last, k;
+  if ( !driverNamesCorruptionLogged )
+  {
+    for ( k = 0; k < 20; ++k )
+    {
+      if ( memcmp(drivers[k].name, driverNamesAtLoad[k], 12) )
+      {
+        driverNamesCorruptionLogged = 1;
+        diagnosticLog("pilotos: NOMBRE PISADO en %s piloto=%d era=%.12s ahora=%02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X",
+                      where, k, driverNamesAtLoad[k],
+                      (BYTE)drivers[k].name[0], (BYTE)drivers[k].name[1], (BYTE)drivers[k].name[2], (BYTE)drivers[k].name[3],
+                      (BYTE)drivers[k].name[4], (BYTE)drivers[k].name[5], (BYTE)drivers[k].name[6], (BYTE)drivers[k].name[7],
+                      (BYTE)drivers[k].name[8], (BYTE)drivers[k].name[9], (BYTE)drivers[k].name[10], (BYTE)drivers[k].name[11]);
+        break;
+      }
+    }
+  }
+  if ( litTableCorruptionLogged || !memcmp(lit, litTableAtLoad, 256) )
+    return;
+  for ( first = 0; lit[first] == litTableAtLoad[first]; ++first )
+    ;
+  for ( last = 255; lit[last] == litTableAtLoad[last]; --last )
+    ;
+  litTableCorruptionLogged = 1;
+  diagnosticLog("luz: TABLA PISADA en %s bytes %d..%d (esperado %d, hay %d)", where, first, last, litTableAtLoad[first], lit[first]);
+  for ( k = first; k <= last && k < first + 32; k += 8 )
+    diagnosticLog("luz:   [%3d] %02X %02X %02X %02X %02X %02X %02X %02X", k, lit[k], lit[k + 1], lit[k + 2], lit[k + 3], lit[k + 4], lit[k + 5], lit[k + 6], lit[k + 7]);
+}
+
 int loadCircuitTabFiles()
 {
 //  int v0; // eax@1
@@ -2453,6 +2492,19 @@ int loadCircuitTabFiles()
   strcpy((char *)v14, raceFilePrefix_45EA50);
   strcat((char *)v14, "-LIT.TAB");
   extractFromBpa(circuitSelectedTR_464F50, &trxLITTab_4A9EE0, (char *)v14);
+  {
+    //Huella de la tabla de luz de los faros: cuantas entradas quedan igual y un par de muestras.
+    const BYTE *lit = (const BYTE *)trxLITTab_4A9EE0;
+    int same = 0, k;
+    for ( k = 0; k < 256; ++k )
+      same += lit[k] == k;
+    diagnosticLog("luz: %s identidad=%d lit[144]=%d lit[200]=%d lit[250]=%d", (char *)v14, same, lit[144], lit[200], lit[250]);
+    memcpy(litTableAtLoad, lit, 256);
+    litTableCorruptionLogged = 0;
+    for ( k = 0; k < 20; ++k )
+      memcpy(driverNamesAtLoad[k], drivers[k].name, 12);
+    driverNamesCorruptionLogged = 0;
+  }
   return extractFromBpa("ENGINE.BPA", &trxVARJOTab_466F00, "VARJO.TAB");
 }
 
@@ -7462,6 +7514,9 @@ LABEL_6:
 
 
 //----- (0040D920) --------------------------------------------------------
+void checkLitTable(const char *where);
+//Faros: los vertices del cono usan _ftol (con signo) en dr.exe. Con (unsigned __int64) el
+//seno o coseno negativo no tiene conversion definida y el cono se deformaba segun el angulo.
 int drawCarInRace_40D920()
 {
   double v0; // st7@1
@@ -10586,6 +10641,19 @@ void   startRace(int a1, int numberOfParticipants)
   }*/
     dword_47968C = 0;
   
+  {
+    //Prueba: DREERALLY_FORCE_TRACK=TR4 fuerza ese circuito (TR4R, invertido) en todas las carreras.
+    const char *forcedTrack = getenv("DREERALLY_FORCE_TRACK");
+    if ( forcedTrack && strlen(forcedTrack) >= 3 && strlen(forcedTrack) <= 4 && forcedTrack[0] == 'T' && forcedTrack[1] == 'R' )
+    {
+      raceFilePrefix_45EA50[0] = 'T';
+      raceFilePrefix_45EA50[1] = 'R';
+      raceFilePrefix_45EA50[2] = forcedTrack[2];
+      raceFilePrefix_45EA50[3] = 0;
+      isCircuitReversed_456AA8 = forcedTrack[3] == 'R';
+      raceParticipant[0].isCircuitReversed_4A7AA8 = isCircuitReversed_456AA8;
+    }
+  }
   diagnosticLog("race loading: circuit=%s reversed=%d participants=%d", raceFilePrefix_45EA50, isCircuitReversed_456AA8, numberOfParticipants);
   setBackgroundRefreshFunction_43C7B0((int (*)(void))sub_4138A0);
   loadCircuitInfFile();
@@ -11096,11 +11164,15 @@ LABEL_248:
         dword_445034 = (unsigned __int64)((double)(5 * dword_4A7EA0[ userRaceOrder_4A9EA8]) * v73
                                         + (double)(dword_4A7E9C[ userRaceOrder_4A9EA8] + 163840));
        //TODO FIX SONIDO  sub_43C1B0(1u, 0x10000, dword_445034);
+        checkLitTable("antes de recalculateCarBoundary");
         recalculateCarBoundary_411D10(); //esto peta creo que calcula posiciones con velocidad y tal.
+        checkLitTable("recalculateCarBoundary");
         checkVaiZones_412DF0();
+        checkLitTable("checkVaiZones");
         v74 = isMultiplayerGame;
         if ( !isMultiplayerGame || !dword_4A6B04 )
 			recalculateRacePositions_413380();
+		checkLitTable("recalculateRacePositions");
 			
 		if ( !v74 && (raceParticipantIngame[userRaceOrder_4A9EA8].hasFinishedTheRace_4A7E0C || raceParticipant2[ userRaceOrder_4A9EA8].damageBar_4A6898 <= 0) )
           ++framesAfterEndRaceOrCrash_4AA508;
@@ -11386,16 +11458,20 @@ LABEL_318:
 
     if ( !isMultiplayerGame )
       LOBYTE(v84) = drawShotPedestrian_4111F0();
+    checkLitTable("drawShotPedestrian");
     for ( currentDriverSelectedIndex_503518 = 0; currentDriverSelectedIndex_503518 < numberOfParticipants_508D24; ++currentDriverSelectedIndex_503518 )
     {
 		//draw smoke
       showSmoke_40F070(v84);
       v84 = currentDriverSelectedIndex_503518 + 1;
     }
+    checkLitTable("showSmoke");
 	drawCarInRace_40D920();
+    checkLitTable("drawCarInRace");
     //TODO FIXdrawExplosion_40FE20();
    if ( raceShowShadows_445030 )
       drawShadows_40D7B0();
+    checkLitTable("drawShadows");
     v85 = numberOfParticipants_508D24;
     for ( currentDriverSelectedIndex_503518 = 0; currentDriverSelectedIndex_503518 < numberOfParticipants_508D24; ++currentDriverSelectedIndex_503518 )
     {
@@ -11416,11 +11492,16 @@ LABEL_318:
     }
 
 	
+    checkLitTable("llamas y cohetes");
 	sub_4156B0();
+    checkLitTable("sub_4156B0");
     draw3dElements_4116D0();// esto falla
+    checkLitTable("draw3dElements");
     for ( currentDriverSelectedIndex_503518 = 0; currentDriverSelectedIndex_503518 < numberOfParticipants_508D24; ++currentDriverSelectedIndex_503518 )
       	drawShots_40EBC0(); //pinta disparos
+    checkLitTable("drawShots");
     powerUpTaken_410050();
+    checkLitTable("powerUpTaken");
     if ( !isMultiplayerGame )
       checkPokes_4136C0();
     if ( raceFrame_481E14 < 290 )

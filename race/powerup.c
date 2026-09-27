@@ -5,6 +5,7 @@
 #include <SDL_stdinc.h>
 #include <math.h>
 #include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include "../diagnostics.h"
 
@@ -274,6 +275,9 @@ int generatePowerUps()
                     if (v15 ^ v16)
                     {
                     LABEL_76:
+                        //Prueba: DREERALLY_FORCE_MUSHROOM=1 convierte en hongo cada power-up chico que aparece.
+                        if (getenv("DREERALLY_FORCE_MUSHROOM") && *getenv("DREERALLY_FORCE_MUSHROOM") == '1')
+                            powerups[v11].powerUp_ID_501BA8 = POWERUP_DRUNK;
                         v17 = circuitMatrixHxW_5034F8;
                         ++v61;
                         diagnosticLog("powerup: aparece id=%d hueco=%d x=%d y=%d en pista=%d",

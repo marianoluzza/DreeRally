@@ -121,6 +121,8 @@ int v14 = 0;
 }
 
 //----- (0042B290) --------------------------------------------------------
+void checkLitTable(const char *where);
+
 int   postRaceMain(int argc, const char **argv, const char **envp)
 {
   diagnosticLog("pantalla: postRaceMain");
@@ -214,6 +216,7 @@ int   postRaceMain(int argc, const char **argv, const char **envp)
   int v90; // eax@97
   char v91; // [sp+Fh] [bp-65h]@22
   char Filename; // [sp+10h] [bp-64h]@21
+  checkLitTable("entrada a postRaceMain");
 
   v3 = 0;
   showEndAnim_463DF8 = 0;
