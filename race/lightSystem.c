@@ -13,6 +13,7 @@ int trxSHA3Bpk_479280[4096]; // weak
 int trxSHA2Bpk_501A80; // weak
 //_UNKNOWN unk_4669C0; // weak
 int trxVARJOTab_466F00[257]; // weak
+extern int trxSHA1Bpk_50E718; //vertices de la malla de sombras
 
 //----- (0043D530) --------------------------------------------------------
 int   iluminateTriangle_43D530(int pos1x, int pos1y, int pos2x, int pos2y, int pos3x, int pos3y, int a7)
@@ -266,8 +267,11 @@ int drawShadows_40D7B0()
             v4 = trxSHA8Bpk_46E8E0[v1];
             //v2 *= 4;
 
-            //TODO FIX 
-            if (v2 > 200) v2 = 0;
+            //Aqui habia un "if (v2 > 200) v2 = 0": en los diez SHA.BPK todos los indices son menores
+            //que el numero de vertices, y el parche unia al vertice 0 las caras con un indice mayor a
+            //200 (hasta 42 por pista), que se estiraban por la pantalla oscureciendo lo que tapaban.
+            if (v2 < 0 || v2 >= trxSHA1Bpk_50E718 || v3 < 0 || v3 >= trxSHA1Bpk_50E718 || v4 < 0 || v4 >= trxSHA1Bpk_50E718)
+                goto nextFace;
             v5 = trxSHA3Bpk_479280[v3] - circuitImageOffsetX_456ABC;
             v6 = trxSHA3Bpk_479280[v2] - circuitImageOffsetX_456ABC;
             v7 = trxSHA3Bpk_479280[v4] - circuitImageOffsetX_456ABC;
@@ -288,6 +292,7 @@ int drawShadows_40D7B0()
                     || abs(dword_46ECE4 - raceEffectiveHalfHeight_44501C) < raceEffectiveHalfHeight_44501C))
                 iluminateTriangle_43D530(v5 + leftMenuInRaceWidth_456AA0, v8, leftMenuInRaceWidth_456AA0 + v6, v9, leftMenuInRaceWidth_456AA0 + v7, dword_46ECE4, (int)&trxVARJOTab_466F00);
 
+        nextFace:
             result = dword_481BE8++ + 1;
             if (dword_481BE8 >= trxSHA2Bpk_501A80)
                 break;

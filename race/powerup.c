@@ -150,6 +150,8 @@ int generatePowerUps()
         v1 = dword_456AC4 - dword_4A9EA4;
     dword_456AC4 = v1;
     //v2 = (signed int)dword_501BB0;
+    //Solo los huecos 0..11 caducan (dr.exe recorre 501BB0..502930): 12..15 son los power-ups grandes
+    //y la droga, que se quedan hasta que alguien los recoge. Con 16 parpadeaban y se esfumaban.
     v2 = 0;
     do
     {
@@ -174,7 +176,7 @@ int generatePowerUps()
           *(_DWORD *)(v2 + 1440) = v0 + v7;
         v2 = v2+1;
         */
-    } while (v2 < 16);
+    } while (v2 < 12);
     v8 = rand;
     if (!v1 && !isRaceFinish_456AC8)
     {
@@ -182,8 +184,9 @@ int generatePowerUps()
         // v10 = (signed int)&unk_501CC8;
         //Cuantos power-ups hay en pista (se permiten 4). El bucle traducido miraba 6 por vuelta
         //avanzando de 5 en 5 hasta 16: leia powerups[16..20], fuera del array, y con basura
-        //alli contaba 4 o mas y no volvia a generar ninguno.
-        for (v10 = 0; v10 < 16; ++v10)
+        //alli contaba 4 o mas y no volvia a generar ninguno. Son los huecos 0..11 (dr.exe recorre
+        //501CC8..502A48): la droga y los grandes de 12..15 no cuentan para el limite.
+        for (v10 = 0; v10 < 12; ++v10)
         {
             if (powerups[v10].powerUp_ID_501BA8 > 0)
                 ++v9;
@@ -521,7 +524,7 @@ LABEL_95:
             powerups[v33].dword_501BAC = (unsigned __int64)(v59 % 200) + 300;
         }
         v33 += 1;
-    } while (v33 < 16);//864 );
+    } while (v33 < 12); //dr.exe 0x410B76: 12 huecos de 0x120, los grandes no parpadean ni caducan
     return result;
 }
 
@@ -855,7 +858,8 @@ int generateBigPowerUps()
     {
         //v8 = 72 * (rand() % 2 + 12);
         v8 = (rand() % 2 + 12);
-        result = powerups[v8].dword_501BAC;
+        //dr.exe mira la posicion del hueco (501BA0), no su tiempo.
+        result = powerups[v8].posX_501BA0;
         //result = dword_501BA0[v8];
         //if(debug)result=1;
         if (result > 0)
