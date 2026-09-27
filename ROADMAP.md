@@ -181,6 +181,57 @@ Pendiente, en orden sugerido:
 4. **Pintura del coche en la tienda** mal hasta que aparece el primer cartel.
 5. Iluminación, logos de sponsors y buffer de teclas/`debug` (puntos 4 a 6 anteriores).
 
+### Sesión del 27/09
+
+Todo verificado por Mariano en pantalla, salvo lo marcado. Otra vez, errores de la traducción;
+lo del Dervish (10000 en vez de 12000) parecía un error del original y no lo era.
+
+| Síntoma | Causa | Dónde |
+| --- | --- | --- |
+| Coche del jugador "con todas las mejoras", casi sin daño | `arrayv59` (blindaje por coche) corrida cuatro lugares | `initParticipantValues_401060` |
+| Ningún coche derrapaba | `efectiveTire` era `int` (0,5/0,3/0,1 → 0); dos `fabs` perdidos en `c0`/`c2` | idem, `0x40BAB0` |
+| Hitman, drogas, sabotaje y préstamo sin nombre ni importe | Líneas armadas sobre locales contiguos en la pila; objetivo de `dword_45EB50` | `popup.c`, `blackMarketScreen.c` |
+| El contrato del hitman fallaba siempre | Búsqueda del objetivo en `dword_45EB50`, que ya no se llena | `previewRaceScreen` |
+| Sabotaje: cierre al aparecer | `drivers[108 * id]` | `sabotageScreen` |
+| Oferta y pago de premios distintos | Constante del Dervish mal leída; ahora una tabla compartida | `popup.c` |
+| Rueda de más sobre el cartel de compra; luego quieta | `updateCursor(0)` que no está en el original; faltaban los incrementos de cuadro | `enterShop` |
+| Recuadros de menú de 2576 px | Tres altos mal copiados | `dword_445704` |
+| Tu fila no se resaltaba en el ranking | Contador que no avanzaba | `writeDriverList` |
+| Sombras estiradas por la pantalla | Parche `if (v2 > 200) v2 = 0` sobre índices válidos | `drawShadows_40D7B0` |
+| Drogas y power-ups grandes parpadeaban y se esfumaban | Los huecos 12..15 no caducan en el original (solo 0..11) | `powerup.c` |
+| Conos de luz con puntos cian/negro/color de coche | `BYTE` con signo en `defs.h`: píxeles ≥ 128 leían antes de la tabla | `iluminateTriangle_43D530` |
+| Hongo: franjas negras | Onda de senos desplazada como `_DWORD` sin signo | `sub_404730` |
+| Hongo: 50 KB pisados por cuadro; pausa restauraba basura | `unk_481F20`..`unk_491920` eran bytes sueltos de un único buffer | `dr.c` |
+
+Herramientas nuevas (fuera de Git, en `.local/`):
+
+- `original-exe/dr.asm`: desensamblado completo; `tools/origtables.py` y `stackinit.py`
+  reconstruyen tablas locales de una función; `tools/sym.py <diagnostic-*> <rva...>` resuelve
+  la pila de un volcado con dbghelp.
+- `probe/`: sondas que descifran BPK/paletas/sombras con el `decryptTexture` del juego.
+- Mapa del linker: `LINK=/MAP:<ruta sin espacios>` antes de `Build.ps1`.
+- Variables de prueba: `DREERALLY_FORCE_EVENTS=1` (un cartel por carrera: hitman, drogas,
+  sabotaje), `DREERALLY_FORCE_TRACK=TR4` (`TR4R` invertido) y `DREERALLY_FORCE_MUSHROOM=1`.
+  Circuitos: `TRn` con n = (índice % 9) + 1, invertido si el índice > 8 (TR4 = Rock Zone,
+  TR6 = Oasis de día).
+
+Pendiente para la próxima sesión, en orden sugerido:
+
+1. **Corrupción de `drivers[]` (cierre del 27/09 en `drawRightPositions`).** Bloques escritos
+   cada 150 bytes y nombres corridos; no se reprodujo con los canarios puestos (tabla de luz y
+   nombres, 14 puntos por cuadro y al entrar a resultados). Pasó con la pista forzada, que se
+   cambia después de armar la carrera: descartar eso primero. Quitar los canarios al resolverlo.
+2. **`BYTE` con signo.** `defs.h` lo define `char` salvo que se incluya `windows.h`, así que
+   cambia de significado según el archivo. Pasarlo a `uint8` en una vuelta propia.
+3. **Polígonos 3D del escenario.** El tipo se lee como `char` en vez de `dword` (0x4118BF):
+   los casos 0x80–0x8A no se ejecutan y esas caras salen planas. Sus tablas (`unk_46ED00`,
+   `unk_4A7BC0`, `unk_4AA400`) son 256 bytes en el original, no un byte. Puede explicar el
+   ancho del cono según la zona.
+4. **Animación de largada** (`sub_404C30`, comentada): el ángulo `dword_4450A0` queda en 1°.
+5. Tipos de la física, coches trabados tras un choque, distancia del sonido de la IA, pintura
+   del coche en la tienda, logos de sponsors, buffer de teclas y `debug`.
+6. `hallOfFame.c`: cuatro cadenas de un carácter sin terminador (`{ 'A' }`, …).
+
 Método que funcionó y conviene repetir: lanzar el juego con
 `scripts/Start-Diagnostics.ps1`, que Mariano pruebe y reporte con capturas, y resolver cada
 volcado con símbolos antes de tocar código. Un cambio de comportamiento por vuelta, para
@@ -224,6 +275,9 @@ Prioridad P2; después de la base estable.
 - [ ] Rutas de datos y guardados configurables, con mensajes claros.
 - [ ] Mejorar organización e idioma de menús sin alterar reglas.
 - [ ] Evaluar migración de SDL/audio con comparaciones de jugabilidad.
+- [ ] Evento especial "todos hongos": cada power-up chico aparece como hongo. Ya existe como
+      prueba (`DREERALLY_FORCE_MUSHROOM=1`) y, según Mariano, es muy divertido; darle un lugar
+      en el juego (carrera especial u opción).
 
 Multijugador, motor nuevo, conversión a 64 bits y contenido adicional quedan para una etapa posterior; no son condiciones del primer hito.
 

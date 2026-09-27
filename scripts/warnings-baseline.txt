@@ -63,7 +63,6 @@
 5	dr.c: warning C4024: 'drawMenuAnimation': tipos distintos para el par├ímetro formal y el par├ímetro real 5
 1	dr.c: warning C4024: 'drawRaceCharInMenu_43B1A0': tipos distintos para el par├ímetro formal y el par├ímetro real 1
 1	dr.c: warning C4024: 'regenerateRacePalette': tipos distintos para el par├ímetro formal y el par├ímetro real 1
-1	dr.c: warning C4047: '=': 'char *' es distinto en los niveles de direccionamiento indirecto de 'char (*)[12]'
 3	dr.c: warning C4047: '=': 'char *' es distinto en los niveles de direccionamiento indirecto de 'int'
 1	dr.c: warning C4047: '=': 'int *' es distinto en los niveles de direccionamiento indirecto de 'int'
 1	dr.c: warning C4047: '=': 'int' es distinto en los niveles de direccionamiento indirecto de 'BYTE *'
@@ -214,7 +213,7 @@
 1	dr.c: warning C4244: '+=': conversi├│n de '__int64' a 'uint32'; posible p├⌐rdida de datos
 212	dr.c: warning C4244: '=': conversi├│n de 'double' a 'float'; posible p├⌐rdida de datos
 2	dr.c: warning C4244: '=': conversi├│n de 'double' a 'GLfloat'; posible p├⌐rdida de datos
-47	dr.c: warning C4244: '=': conversi├│n de 'double' a 'int'; posible p├⌐rdida de datos
+46	dr.c: warning C4244: '=': conversi├│n de 'double' a 'int'; posible p├⌐rdida de datos
 1	dr.c: warning C4244: '=': conversi├│n de 'double' a 'unsigned __int64'; posible p├⌐rdida de datos
 68	dr.c: warning C4244: '=': conversi├│n de 'float' a 'int'; posible p├⌐rdida de datos
 5	dr.c: warning C4244: '=': conversi├│n de 'float' a 'unsigned __int64'; posible p├⌐rdida de datos
@@ -227,7 +226,7 @@
 8	dr.c: warning C4244: '=': conversi├│n de 'unsigned __int64' a 'uint32'; posible p├⌐rdida de datos
 1	dr.c: warning C4244: '=': conversi├│n de 'unsigned __int64' a 'unsigned int'; posible p├⌐rdida de datos
 8	dr.c: warning C4244: 'funci├│n': conversi├│n de 'unsigned __int64' a 'char'; posible p├⌐rdida de datos
-26	dr.c: warning C4244: 'funci├│n': conversi├│n de 'unsigned __int64' a 'int'; posible p├⌐rdida de datos
+2	dr.c: warning C4244: 'funci├│n': conversi├│n de 'unsigned __int64' a 'int'; posible p├⌐rdida de datos
 16	dr.c: warning C4244: 'funci├│n': conversi├│n de 'unsigned __int64' a 'unsigned char'; posible p├⌐rdida de datos
 2	dr.c: warning C4244: 'return': conversi├│n de '__int64' a 'int'; posible p├⌐rdida de datos
 3	dr.c: warning C4244: 'return': conversi├│n de 'unsigned __int64' a 'int'; posible p├⌐rdida de datos
@@ -310,12 +309,6 @@
 2	race\pedestrian.c: warning C4244: '=': conversi├│n de 'unsigned __int64' a 'int'; posible p├⌐rdida de datos
 1	race\powerup.c: warning C4013: 'loadMenuSoundEffect' sin definir; se supone que extern devuelve como resultado int
 1	race\powerup.c: warning C4013: 'writeTextInRace_402510' sin definir; se supone que extern devuelve como resultado int
-3	race\powerup.c: warning C4024: 'itoa': tipos distintos para el par├ímetro formal y el par├ímetro real 2
-3	race\powerup.c: warning C4024: 'strcat': tipos distintos para el par├ímetro formal y el par├ímetro real 1
-3	race\powerup.c: warning C4024: 'strlen': tipos distintos para el par├ímetro formal y el par├ímetro real 1
-3	race\powerup.c: warning C4047: '=': 'char *' es distinto en los niveles de direccionamiento indirecto de 'char (*)[20]'
-6	race\powerup.c: warning C4047: 'funci├│n': 'char *' es distinto en los niveles de direccionamiento indirecto de 'char (*)[20]'
-3	race\powerup.c: warning C4047: 'funci├│n': 'const char *' es distinto en los niveles de direccionamiento indirecto de 'char (*)[20]'
 2	race\powerup.c: warning C4101: 'v1': variable local sin referencia
 1	race\powerup.c: warning C4101: 'v10': variable local sin referencia
 1	race\powerup.c: warning C4101: 'v11': variable local sin referencia
@@ -337,7 +330,6 @@
 1	race\powerup.c: warning C4102: 'LABEL_18': etiqueta sin referencia
 4	race\powerup.c: warning C4244: '=': conversi├│n de 'float' a 'int'; posible p├⌐rdida de datos
 1	race\powerup.c: warning C4244: '=': conversi├│n de 'unsigned __int64' a 'int'; posible p├⌐rdida de datos
-3	race\powerup.c: warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _itoa. See online help for details.
 1	savegame.c: warning C4013: 'fileExists' sin definir; se supone que extern devuelve como resultado int
 1	savegame.c: warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _itoa. See online help for details.
 1	sfx\minifmod\soundSystem.c: warning C4013: 'FMUSIC_UpdateXMEffects_43EDC0' sin definir; se supone que extern devuelve como resultado int
@@ -602,7 +594,6 @@
 1	ui\prevRaceScreen.c: warning C4013: 'sub_43B080' sin definir; se supone que extern devuelve como resultado int
 1	ui\prevRaceScreen.c: warning C4013: 'sub_43C4B0' sin definir; se supone que extern devuelve como resultado int
 1	ui\prevRaceScreen.c: warning C4013: 'waitWithRefresh' sin definir; se supone que extern devuelve como resultado int
-10	ui\prevRaceScreen.c: warning C4018: '>': no coinciden signed/unsigned
 1	ui\prevRaceScreen.c: warning C4024: 'drawImageWithPosition2': tipos distintos para el par├ímetro formal y el par├ímetro real 1
 2	ui\prevRaceScreen.c: warning C4024: 'memset': tipos distintos para el par├ímetro formal y el par├ímetro real 2
 2	ui\prevRaceScreen.c: warning C4047: 'funci├│n': 'int' es distinto en los niveles de direccionamiento indirecto de 'char [2]'
@@ -718,7 +709,6 @@
 1	ui\selectRaceScreen.c: warning C4024: '_itoa': tipos distintos para el par├ímetro formal y el par├ímetro real 2
 3	ui\selectRaceScreen.c: warning C4024: 'drawImageWithPosition2': tipos distintos para el par├ímetro formal y el par├ímetro real 1
 2	ui\selectRaceScreen.c: warning C4024: 'strlen': tipos distintos para el par├ímetro formal y el par├ímetro real 1
-1	ui\selectRaceScreen.c: warning C4047: '=': 'int' es distinto en los niveles de direccionamiento indirecto de 'int *'
 1	ui\selectRaceScreen.c: warning C4047: '==': 'char *' es distinto en los niveles de direccionamiento indirecto de 'int'
 1	ui\selectRaceScreen.c: warning C4047: 'funci├│n': 'char *' es distinto en los niveles de direccionamiento indirecto de 'char **'
 2	ui\selectRaceScreen.c: warning C4047: 'funci├│n': 'const char *' es distinto en los niveles de direccionamiento indirecto de 'char **'
@@ -753,7 +743,6 @@
 1	ui\shopScreen.c: warning C4013: 'setUndergroundMarketPrices' sin definir; se supone que extern devuelve como resultado int
 1	ui\shopScreen.c: warning C4013: 'sub_4224E0' sin definir; se supone que extern devuelve como resultado int
 1	ui\shopScreen.c: warning C4013: 'sub_42C4A0' sin definir; se supone que extern devuelve como resultado int
-1	ui\shopScreen.c: warning C4013: 'updateCursor' sin definir; se supone que extern devuelve como resultado int
 1	ui\shopScreen.c: warning C4013: 'waitWithRefresh' sin definir; se supone que extern devuelve como resultado int
 10	ui\shopScreen.c: warning C4018: '>': no coinciden signed/unsigned
 1	ui\shopScreen.c: warning C4024: '_itoa': tipos distintos para el par├ímetro formal y el par├ímetro real 2
@@ -791,7 +780,7 @@
 3	ui\util\anim.c: warning C4047: 'funci├│n': 'char *' es distinto en los niveles de direccionamiento indirecto de 'char (*)[100]'
 9	ui\util\anim.c: warning C4047: 'funci├│n': 'int *' es distinto en los niveles de direccionamiento indirecto de 'int'
 2	ui\util\anim.c: warning C4101: 'v2': variable local sin referencia
-10	ui\util\anim.c: warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _itoa. See online help for details.
+9	ui\util\anim.c: warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _itoa. See online help for details.
 1	ui\util\carRightSide.c: warning C4013: 'getSceneCarBpkById' sin definir; se supone que extern devuelve como resultado int
 1	ui\util\carRightSide.c: warning C4013: 'setPaletteValueWithFloats' sin definir; se supone que extern devuelve como resultado int
 1	ui\util\carRightSide.c: warning C4024: 'itoa': tipos distintos para el par├ímetro formal y el par├ímetro real 1
@@ -818,8 +807,6 @@
 1	ui\util\popup.c: warning C4013: 'SDL_GetTicks' sin definir; se supone que extern devuelve como resultado int
 1	ui\util\popup.c: warning C4013: 'stopSoundChannel_43C3E0' sin definir; se supone que extern devuelve como resultado int
 1	ui\util\popup.c: warning C4013: 'sub_418090' sin definir; se supone que extern devuelve como resultado int
-2	ui\util\popup.c: warning C4133: '=': tipos incompatibles, de 'Driver *' a 'char *'
-1	ui\util\popup.c: warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _itoa. See online help for details.
 1	ui\util\raceResults.c: warning C4013: 'convertColorToPaletteColor' sin definir; se supone que extern devuelve como resultado int
 1	ui\util\raceResults.c: warning C4013: 'drawRightPositions' sin definir; se supone que extern devuelve como resultado int
 1	ui\util\raceResults.c: warning C4013: 'refreshAllScreen' sin definir; se supone que extern devuelve como resultado int
