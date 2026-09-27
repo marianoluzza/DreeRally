@@ -12,6 +12,7 @@
 #include "../graphics.h"
 #include "../config.h"
 #include "blackMarketScreen.h"
+#include "util/originalTexts.h"
 #include "../variables.h"
 #include "../imageUtil.h"
 #include "util/menus.h"
@@ -254,13 +255,12 @@ int loadAcceptedText()
   if ( !drivers[driverId].carType )
     v0 = 4;
   createPopup(144, 114, 384, 119, 1);
-  v1 = 240 * (unsigned __int8)v0;
-  writeTextInScreen(&aLoanOf12000Gra[v1], 79530);
-  writeTextInScreen(&byte_452550[v1], 89770);
-  writeTextInScreen(&aYouHave3RacesT[v1], 100010);
-  writeTextInScreen(&a18000_FairIsFa[v1], 110250);
-  writeTextInScreen(&byte_4525C8[v1], 120490);
-  return writeTextInScreen(&aPressEscToGoBa[v1], 130730);
+  //Las lineas de los recuadros se leian como &cadena[240 * n] o &unk_XXXX + 240 * n: en el
+  //original eran filas de una tabla por tipo de prestamo; aqui eran cadenas sueltas y el
+  //indice se salia (texto cortado o basura). Ahora salen de la tabla del original.
+  for ( v1 = 0; v1 < 5; ++v1 )
+    writeTextInScreen(loanGrantedTexts[(unsigned __int8)v0][v1], 79530 + 10240 * v1);
+  return writeTextInScreen(loanGrantedTexts[(unsigned __int8)v0][5], 130730);
 }
 
 //----- (00422810) --------------------------------------------------------
@@ -270,34 +270,34 @@ int   getBlackMarketElementText(int a1)
 
   if (a1+1 == MINES) {
       writeTextInScreen(blackMarketMessages.minesMessage[0].infoMessage.title, 79530);
-      writeTextInScreen((const char*)&unk_453400 + 240 * a1, 89770);
+      writeTextInScreen("", 89770);
       writeTextInScreen(blackMarketMessages.minesMessage[0].infoMessage.line1, 100010);
       writeTextInScreen(blackMarketMessages.minesMessage[0].infoMessage.line2, 110250);
       writeTextInScreen(blackMarketMessages.minesMessage[0].infoMessage.line3, 120490);
   }
   else if (a1 + 1 == SPIKES) {
       writeTextInScreen(blackMarketMessages.spikesMessage[0].infoMessage.title, 79530);
-      writeTextInScreen((const char*)&unk_453400 + 240 * a1, 89770);
+      writeTextInScreen("", 89770);
       writeTextInScreen(blackMarketMessages.spikesMessage[0].infoMessage.line1, 100010);
       writeTextInScreen(blackMarketMessages.spikesMessage[0].infoMessage.line2, 110250);
       writeTextInScreen(blackMarketMessages.spikesMessage[0].infoMessage.line3, 120490);
   }
   else if (a1 + 1 == ROCKET) {
       writeTextInScreen(blackMarketMessages.rocketMessage[0].infoMessage.title, 79530);
-      writeTextInScreen((const char*)&unk_453400 + 240 * a1, 89770);
+      writeTextInScreen("", 89770);
       writeTextInScreen(blackMarketMessages.rocketMessage[0].infoMessage.line1, 100010);
       writeTextInScreen(blackMarketMessages.rocketMessage[0].infoMessage.line2, 110250);
       writeTextInScreen(blackMarketMessages.rocketMessage[0].infoMessage.line3, 120490);
   }
   else if (a1 + 1 == SABOTAGE) {
       writeTextInScreen(blackMarketMessages.sabotageMessage[0].infoMessage.title, 79530);
-      writeTextInScreen((const char*)&unk_453400 + 240 * a1, 89770);
+      writeTextInScreen("", 89770);
       writeTextInScreen(blackMarketMessages.sabotageMessage[0].infoMessage.line1, 100010);
       writeTextInScreen(blackMarketMessages.sabotageMessage[0].infoMessage.line2, 110250);
       writeTextInScreen(blackMarketMessages.sabotageMessage[0].infoMessage.line3, 120490);
   }
   
-  return writeTextInScreen(&byte_4534A0[240 * a1], 130730);
+  return writeTextInScreen("", 130730);
 }
 
 //----- (004228A0) --------------------------------------------------------
@@ -306,7 +306,7 @@ int   getBlackMarketElementPurchasedText(int a1)
   createPopup(144, 114, 384, 119, 1);
   if (a1 + 1 == MINES) {
       writeTextInScreen(blackMarketMessages.minesMessage[0].boughMessage.title, 79530);
-      writeTextInScreen((const char*)&unk_453A90 + 240 * a1, 89770);
+      writeTextInScreen("", 89770);
       writeTextInScreen(blackMarketMessages.minesMessage[0].boughMessage.line1, 100010);
       writeTextInScreen(blackMarketMessages.minesMessage[0].boughMessage.line2, 110250);
       writeTextInScreen(blackMarketMessages.minesMessage[0].boughMessage.line3, 120490);
@@ -314,28 +314,28 @@ int   getBlackMarketElementPurchasedText(int a1)
   }
   else if (a1 + 1 == SPIKES) {
       writeTextInScreen(blackMarketMessages.spikesMessage[0].boughMessage.title, 79530);
-      writeTextInScreen((const char*)&unk_453A90 + 240 * a1, 89770);
+      writeTextInScreen("", 89770);
       writeTextInScreen(blackMarketMessages.spikesMessage[0].boughMessage.line1, 100010);
       writeTextInScreen(blackMarketMessages.spikesMessage[0].boughMessage.line2, 110250);
       writeTextInScreen(blackMarketMessages.spikesMessage[0].boughMessage.line3, 120490);
   }
   else if (a1 + 1 == ROCKET) {
       writeTextInScreen(blackMarketMessages.rocketMessage[0].boughMessage.title, 79530);
-      writeTextInScreen((const char*)&unk_453A90 + 240 * a1, 89770);
+      writeTextInScreen("", 89770);
       writeTextInScreen(blackMarketMessages.rocketMessage[0].boughMessage.line1, 100010);
       writeTextInScreen(blackMarketMessages.rocketMessage[0].boughMessage.line2, 110250);
       writeTextInScreen(blackMarketMessages.rocketMessage[0].boughMessage.line3, 120490);
   }
   else if (a1 + 1 == SABOTAGE) {
       writeTextInScreen(blackMarketMessages.sabotageMessage[0].boughMessage.title, 79530);
-      writeTextInScreen((const char*)&unk_453A90 + 240 * a1, 89770);
+      writeTextInScreen("", 89770);
       writeTextInScreen(blackMarketMessages.sabotageMessage[0].boughMessage.line1, 100010);
       writeTextInScreen(blackMarketMessages.sabotageMessage[0].boughMessage.line2, 110250);
       writeTextInScreen(blackMarketMessages.sabotageMessage[0].boughMessage.line3, 120490);
   }
 
   
-  return writeTextInScreen(&byte_453B30[240 * a1], 130730);
+  return writeTextInScreen("", 130730);
 }
 
 //----- (00422930) --------------------------------------------------------
@@ -343,11 +343,11 @@ int outOfStockPopup_422930()
 {
   createPopup(144, 114, 384, 119, 1);
   writeTextInScreen(blackMarketMessages.outOfStockMessage.title, 79530);
-  writeTextInScreen((const char *)&unk_4538B0, 89770);
+  writeTextInScreen("", 89770);
   writeTextInScreen(blackMarketMessages.outOfStockMessage.line1, 100010);
   writeTextInScreen(blackMarketMessages.outOfStockMessage.line2, 110250);
   writeTextInScreen(blackMarketMessages.outOfStockMessage.line3, 120490);
-  return writeTextInScreen((const char *)&unk_453950, 130730);
+  return writeTextInScreen("", 130730);
 }
 
 //----- (004229B0) --------------------------------------------------------
@@ -355,11 +355,11 @@ int blackMarketSharewarePopup_4229B0()
 {
   createPopup(144, 114, 384, 119, 1);
   writeTextInScreen(blackMarketMessages.sharewareMessage.title, 79530);
-  writeTextInScreen((const char *)&unk_4539A0, 89770);
+  writeTextInScreen("", 89770);
   writeTextInScreen(blackMarketMessages.sharewareMessage.line1, 100010);
   writeTextInScreen(blackMarketMessages.sharewareMessage.line2, 110250);
   writeTextInScreen(blackMarketMessages.sharewareMessage.line3, 120490);
-  return writeTextInScreen((const char *)&unk_453A40, 130730);
+  return writeTextInScreen("", 130730);
 }
 
 //----- (00422A30) --------------------------------------------------------
@@ -388,13 +388,9 @@ int drawLoanShark()
   v2 = drivers[driverId].loanRaces;
   if ( v2 == -1 )
   {
-    v3 = 240 * (unsigned __int8)v1;
-    writeTextInScreen(&aBorrow12000Pay[v3], 79530);
-    writeTextInScreen(&byte_4520A0[v3], 89770);
-    writeTextInScreen(&aWithBetterGear[v3], 100010);
-    writeTextInScreen(&aOnTheTopEh_SoH[v3], 110250);
-    writeTextInScreen(&aShortTermLoanO[v3], 120490);
-    result = writeTextInScreen(&byte_452140[v3], 130730);
+    for ( v3 = 0; v3 < 5; ++v3 )
+      writeTextInScreen(loanOfferTexts[(unsigned __int8)v1][v3], 79530 + 10240 * v3);
+    result = writeTextInScreen(loanOfferTexts[(unsigned __int8)v1][5], 130730);
   }
   else
   {
@@ -442,11 +438,11 @@ int drawLoanShark()
     while ( v11 );
     *(_WORD *)v10 = 46;
     writeTextInScreen(v14, 79530);
-    writeTextInScreen((const char *)&unk_452AF0, 89770);
+    writeTextInScreen("", 89770);
     writeTextInScreen(aPetrolBrainYou, 100010);
     writeTextInScreen(aBetterBeHereTo, 110250);
     writeTextInScreen(aElseWeHaveNoth, 120490);
-    result = writeTextInScreen((const char *)&unk_452B90, 130730);
+    result = writeTextInScreen("", 130730);
   }
   return result;
 }
@@ -456,11 +452,11 @@ int loanDeniedVagabondPopUp()
 {
   createPopup(144, 114, 384, 119, 1);
   writeTextInScreen(aLoanDeniedVaga, 79530);
-  writeTextInScreen((const char *)&unk_452A00, 89770);
+  writeTextInScreen("", 89770);
   writeTextInScreen(aThisIsABusines, 100010);
   writeTextInScreen(aWeDonTInvestIn, 110250);
   writeTextInScreen(aCards_SoBuzzOf, 120490);
-  return writeTextInScreen((const char *)&unk_452AA0, 130730);
+  return writeTextInScreen("", 130730);
 }
 
 //----- (00422D80) --------------------------------------------------------
@@ -468,11 +464,11 @@ int loanReturnPopup_422D80()
 {
   createPopup(144, 114, 384, 119, 1);
   writeTextInScreen(aLoanPaidBack_, 79530);
-  writeTextInScreen((const char *)&unk_452BE0, 89770);
+  writeTextInScreen("", 89770);
   writeTextInScreen(aItSAllHere_IKn, 100010);
   writeTextInScreen(aTheStartThatIC, 110250);
   writeTextInScreen(aLetSDoThisAgai, 120490);
-  return writeTextInScreen((const char *)&unk_452C80, 130730);
+  return writeTextInScreen("", 130730);
 }
 
 //----- (00422E00) --------------------------------------------------------
@@ -684,11 +680,11 @@ int drawBlackMarketElement3()
     {
       createPopup(144, 114, 384, 119, 1);
       writeTextInScreen(blackMarketMessages.noSabotageMessage.title, 79530);
-      writeTextInScreen((const char *)&unk_4537C0, 89770);
+      writeTextInScreen("", 89770);
       writeTextInScreen(blackMarketMessages.noSabotageMessage.line1, 100010);
       writeTextInScreen(blackMarketMessages.noSabotageMessage.line2, 110250);
       writeTextInScreen(blackMarketMessages.noSabotageMessage.line3, 120490);
-      result = writeTextInScreen((const char *)&unk_453860, 130730);
+      result = writeTextInScreen("", 130730);
     }
   }
   if ( sabotageAvailable_45EFFC == -1 )
@@ -705,10 +701,10 @@ void drawBlackMarketContinue()
   drawImageWithPosition2((int)bases45Bpk, 96, 96, (int)((char *)screenBuffer + 162352));
   createPopup(144, 114, 384, 119, 1);
   writeTextInScreen(blackMarketMessages.continueMessage.title, 79530);
-  writeTextInScreen((const char *)&unk_454B70, 89770);
+  writeTextInScreen("", 89770);
   writeTextInScreen(blackMarketMessages.continueMessage.line1, 100010);
   writeTextInScreen(blackMarketMessages.continueMessage.line2, 110250);
-  writeTextInScreen((const char *)&unk_454BE8, 120490);
+  writeTextInScreen("", 120490);
   writeTextInScreen(blackMarketMessages.continueMessage.line3, 130730);
   drawMenuAnimation(432, 269, continueAnimCurrentFrame_4611D0, (int)contaniBpk, continueAnimFramesSize_4611D0);
 }
@@ -1028,7 +1024,7 @@ LABEL_48:
       {
         createPopup(144, 114, 384, 119, 1);
         writeTextInScreen("[Repair your car first.", 79530);
-        writeTextInScreen((const char *)&unk_444160, 89770);
+        writeTextInScreen("", 89770);
         writeTextInScreen("What'cha gonna do with that pile of", 100010);
         writeTextInScreen("junk, carry it around? Let me spell", 110250);
         writeTextInScreen("this to you: R-E-P-A-I-R.", 120490);

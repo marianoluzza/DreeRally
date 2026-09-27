@@ -164,45 +164,7 @@ void enterShop()
   int v3; // esi@2
   int v4; // edi@4
   int v5; // ebx@6
-  unsigned int v6; // eax@9
-  char *v7; // edi@9
-  char v8; // cl@10
-  char *v9; // edi@11
-  char v10; // al@12
-  int v11; // ST44_4@13
-  int v12; // eax@13
-  char *v13; // edi@13
-  char v14; // al@14
-  unsigned int v15; // eax@15
-  char *v16; // edi@15
-  char v17; // cl@16
-  int v18; // ST44_4@17
-  char *v19; // eax@17
-  char v20; // dl@18
-  unsigned int v21; // eax@19
-  char *v22; // edi@19
-  char v23; // cl@20
-  char *v24; // edi@21
-  char v25; // al@22
-  int v26; // ST44_4@23
-  unsigned int v27; // eax@25
-  char *v28; // edi@25
-  char v29; // cl@26
-  char *v30; // edi@27
-  char v31; // al@28
-  int v32; // ST44_4@29
   int v33; // ecx@29*
-  char *v34; // eax@29
-  char *v35; // esi@29
-  char v36; // dl@30
-  char *v37; // edi@31
-  char v38; // al@32
-  char *v39; // edi@33
-  char v40; // al@34
-  unsigned int v41; // eax@35
-  char *v42; // edi@35
-  char v43; // cl@36
-  int v44; // ST44_4@37
   signed int v45; // ebp@38
   int v46; // esi@39
 //  bool v47; // zf@39
@@ -258,12 +220,12 @@ void enterShop()
   int v96; // [sp+8h] [bp-68h]@7
   int v99[50]; // [sp+34h] [bp-3Ch]@9   8//coger 100 101 102 103 y juntarlo
   char DstBuf[100]; // [sp+20h] [bp-50h]@6
+  char tradeLine[80];
   signed int v97; // [sp+1Ch] [bp-54h]@70
   
   int v100; // [sp+38h] [bp-38h]@9
   int v101; // [sp+3Ch] [bp-34h]@9
   int v102; // [sp+40h] [bp-30h]@9
-  __int16 v103; // [sp+44h] [bp-2Ch]@9
   
   DstBuf[0] = "\0";
   if (getModIntEntry("FEATURE_SKIP_SHOP_SCREEN", 0) == 1) {
@@ -349,76 +311,16 @@ void enterShop()
           return;
         loadMenuSoundEffect(1u, 28, 0, configuration.effectsVolume, dword_4451A0);
         createPopup(144, 114, 384, 119, 1);
-        ///v101 = 1701257316;//d eg	
-        v99[0] = 544567129;//you
-        v100 = 1819635575;//woul
-        v102 = 543236212;//t a
-        v103 = 36;
-        _itoa(v5, DstBuf, 10);
-        v27 = strlen(DstBuf) + 1;
-        v28 = &DstBuf[19];
-        do
-          v29 = (v28++)[1];
-        while ( v29 );
-        memcpy(v28, DstBuf, v27);
-        v30 = &DstBuf[19];
-        do
-          v31 = (v30++)[1];
-        while ( v31 );
-        *(_DWORD *)v30 = 1717924384;
-        v32 = (int)graphicsGeneral.fsma3cBpk;
-        *((_DWORD *)v30 + 1) = 6581877;
-        
-        youcould = "You could get a $";
-        _itoa(v5, DstBuf, 10);
-        strcat(youcould, DstBuf);
-        strcat(youcould, " refund");
-        drawTextWithFont(v32, (int)&letterSpacing_4458B0, youcould, 79530);
-        memcpy(&v99, "from your old car and upgrades.", 0x20u);
-        drawTextWithFont((int)graphicsGeneral.fsma3cBpk, (int)&letterSpacing_4458B0, (const char *)&v99, 89770);
-        //v33 = 1760 * actualCarSelected;
-        v34 = &aVagabond[1760 * actualCarSelected];
-        v35 = (char *)((char *)&v99 - v34);
-        do
-        {
-          v36 = *v34;
-          v34[(_DWORD)v35] = *v34;
-          ++v34;
-        }
-        while ( v36 );
-        v37 = &DstBuf[19];
-        do
-          v38 = (v37++)[1];
-        while ( v38 );
-        *(_DWORD *)v37 = 1970239264;
-        *((_DWORD *)v37 + 1) = 1663067244;
-        *((_DWORD *)v37 + 2) = 544502639;
-        v37[12] = 0;
-        _itoa((cars[actualCarSelected].cost) - v5, DstBuf, 10);
-        v39 = &DstBuf[19];
-        do
-          v40 = (v39++)[1];
-        while ( v40 );
-        *(_WORD *)v39 = 36;
-        v41 = strlen(DstBuf) + 1;
-        v42 = &DstBuf[19];
-        do
-          v43 = (v42++)[1];
-        while ( v43 );
-        memcpy(v42, DstBuf, 4 * (v41 >> 2));
-        v44 = (int)graphicsGeneral.fsma3cBpk;
-        memcpy(&v42[4 * (v41 >> 2)], &DstBuf[4 * (v41 >> 2)], v41 & 3);
-
-        youcould = cars[actualCarSelected].name;
-        strcat(youcould, " would cost $\0");
-        _itoa((cars[actualCarSelected].cost) - v5, DstBuf, 10);
-        strcat(youcould, DstBuf);
-        drawTextWithFont(v44, (int)&letterSpacing_4458B0, youcould, 100010);
-        v100 = 1702060392;
-        //v101 = 544500000;
-        v99[0] = 1668445520;
-        LOWORD(v102) = 63;
-        drawTextWithFont((int)graphicsGeneral.fsma3cBpk, (int)&letterSpacing_4458B0, "purchase it ?", 110250);
+        //El original armaba cada linea escribiendo enteros sobre v99..v103 y concatenando
+        //detras de DstBuf[19], contando con locales contiguos en su pila. La traduccion hacia
+        //strcat sobre el literal "You could get a $" y sobre cars[].name: el importe se
+        //acumulaba entre compras y el nombre del coche quedaba con "would cost..." pegado.
+        sprintf(tradeLine, "You would get a $%d refund", v5);
+        drawTextWithFont((int)graphicsGeneral.fsma3cBpk, (int)&letterSpacing_4458B0, tradeLine, 79530);
+        drawTextWithFont((int)graphicsGeneral.fsma3cBpk, (int)&letterSpacing_4458B0, "from your old car and upgrades.", 89770);
+        sprintf(tradeLine, "%s would cost $%d", cars[actualCarSelected].name, cars[actualCarSelected].cost - v5);
+        drawTextWithFont((int)graphicsGeneral.fsma3cBpk, (int)&letterSpacing_4458B0, tradeLine, 100010);
+        drawTextWithFont((int)graphicsGeneral.fsma3cBpk, (int)&letterSpacing_4458B0, "Purchase it ?", 110250);
       }
       else
       {
@@ -426,70 +328,15 @@ void enterShop()
           return;
         loadMenuSoundEffect(1u, 28, 0, configuration.effectsVolume, dword_4451A0);
         createPopup(144, 114, 384, 119, 1);
-        //v101 = 1701257316;
-        v99[0] = 544567129;
-        v100 = 1819635575;
-        v102 = 543236212;
-        v103 = 36;
-        _itoa(v5, DstBuf, 10);
-        v6 = strlen(DstBuf) + 1;
-        v7 = &DstBuf[19];
-        do
-          v8 = (v7++)[1];
-        while ( v8 );
-        memcpy(v7, DstBuf, v6);
-        v9 = &DstBuf[19];
-        do
-          v10 = (v9++)[1];
-        while ( v10 );
-        *(_DWORD *)v9 = 1717924384;
-        v11 = (int)graphicsGeneral.fsma3cBpk;
-        *((_DWORD *)v9 + 1) = 6581877;
-        drawTextWithFont(v11, (int)&letterSpacing_4458B0, (const char *)&v99, 79530);
-        memcpy(&v99, "from your old car and upgrades.", 0x20u);
-        drawTextWithFont((int)graphicsGeneral.fsma3cBpk, (int)&letterSpacing_4458B0, (const char *)&v99, 89770);
-        v99[0] = 1701736269;
-        v102 = 540697701;
-        v12 = cars[actualCarSelected].cost;
-        //v101 = 1852994932;
-        v100 = 1701978233;
-        LOBYTE(v103) = 0;
-        _itoa(abs(v12 - v5), DstBuf, 10);
-        v13 = &DstBuf[19];
-        do
-          v14 = (v13++)[1];
-        while ( v14 );
-        *(_WORD *)v13 = 36;
-        v15 = strlen(DstBuf) + 1;
-        v16 = &DstBuf[19];
-        do
-          v17 = (v16++)[1];
-        while ( v17 );
-        memcpy(v16, DstBuf, 4 * (v15 >> 2));
-        v18 = (int)graphicsGeneral.fsma3cBpk;
-        memcpy(&v16[4 * (v15 >> 2)], &DstBuf[4 * (v15 >> 2)], v15 & 3);
-        drawTextWithFont(v18, (int)&letterSpacing_4458B0, (const char *)&v99, 100010);
-        BYTE2(v100) = 0;
-        v19 = &aVagabond[1760 * actualCarSelected];
-        v99[0] = 544830786; //buy
-        LOWORD(v100) = 8289;
-        do
-          v20 = *v19++;
-        while ( v20 );
-        v21 = v19 - &aVagabond[1760 * actualCarSelected];
-        v22 = &DstBuf[19];
-        do
-          v23 = (v22++)[1];
-        while ( v23 );
-        memcpy(v22, &aVagabond[1760 * actualCarSelected], v21);
-        v24 = &DstBuf[19];
-        do
-          v25 = (v24++)[1];
-        while ( v25 );
-        *(_WORD *)v24 = 16160;
-        v26 = (int)graphicsGeneral.fsma3cBpk;
-        v24[2] = 0;
-        drawTextWithFont(v26, (int)&letterSpacing_4458B0, (const char *)&v99, 110250);
+        //Mismo caso: "Money returned: $" y "Buy a <coche> ?" se armaban sobre v99..v103, y el
+        //nombre salia de &aVagabond + 1760 * coche, fuera de esa cadena suelta.
+        sprintf(tradeLine, "You would get a $%d refund", v5);
+        drawTextWithFont((int)graphicsGeneral.fsma3cBpk, (int)&letterSpacing_4458B0, tradeLine, 79530);
+        drawTextWithFont((int)graphicsGeneral.fsma3cBpk, (int)&letterSpacing_4458B0, "from your old car and upgrades.", 89770);
+        sprintf(tradeLine, "Money returned: $%d", abs(cars[actualCarSelected].cost - v5));
+        drawTextWithFont((int)graphicsGeneral.fsma3cBpk, (int)&letterSpacing_4458B0, tradeLine, 100010);
+        sprintf(tradeLine, "Buy a %s ?", cars[actualCarSelected].name);
+        drawTextWithFont((int)graphicsGeneral.fsma3cBpk, (int)&letterSpacing_4458B0, tradeLine, 110250);
       }
       drawTextWithFont((int)graphicsGeneral.fbig3aBpk, (int)&bigLetterSpacing_445848, getLanguageEntry("yes"), 118640);
       drawTextWithFont((int)graphics2.fbig3bBpk, (int)&bigLetterSpacing_445848, getLanguageEntry("no"), 118810);
@@ -919,7 +766,7 @@ LABEL_154:
       {
         createPopup(144, 114, 384, 119, 1);
         writeTextInScreen("[Repair your car first.", 79530);
-        writeTextInScreen((const char *)&unk_444160, 89770);
+        writeTextInScreen("", 89770);
         writeTextInScreen("What'cha gonna do with that pile of", 100010);
         writeTextInScreen("junk, carry it around? Let me spell", 110250);
         writeTextInScreen("this out for you: R-E-P-A-I-R.", 120490);
@@ -1590,8 +1437,8 @@ LABEL_219:
         v48 = drivers[ driverId].points + 10;
       }
       *v47 = v48;
-      //sub_423C90(0, 19);  //modiffica una variable de adversary pero no se que hace
-     // recalcRank(20); //QUITADO porque solo hace multiplayer
+      sub_423C90(0, 19);
+      recalcRank(20);
       goto LABEL_219;
     }
     drivers[driverId].money += 1000;
@@ -1764,13 +1611,13 @@ void shopScreenMoveDown_421DF0()
 //----- (004210C0) --------------------------------------------------------
 int showCarBought()
 {
-  unsigned int v0; // eax@1
 //  void *v1; // edi@1
 //  char v2; // cl@2
   //int v3; // eax@3
-  char * v5; // [sp-1h] [bp-29h]@1
   __int16 v6; // [sp+0h] [bp-28h]@1
   char DstBuf[100] = ""; // [sp+14h] [bp-14h]@1
+  char price[101];
+  Message *bought;
 
   drawImageWithPosition2((int)carbas2Bpk, 96, 96, (int)((char *)screenBuffer + 80016));
   drawImageWithPosition2((int)((char *)carnameBpk + 1536 * actualCarSelected), 96, 16, (int)((char *)screenBuffer + 80016));
@@ -1788,22 +1635,22 @@ int showCarBought()
   memcpy(v1, &DstBuf, v0);*/
 
    
-  v0 = strlen(DstBuf) + 1;
+  //malloc(strlen(DstBuf) + 1) no dejaba sitio para el "$": un byte fuera del bloque, que el
+  //CRT de Debug detectaba al liberarlo (cierre al comprar un coche).
+  strcpy(price, "$");
+  strcat(price, DstBuf);
+  v6 = getBoxTextOffset(price);//get small text size
 
-  v5 = malloc(v0); //coste + el $
-strcpy(v5,"$"); /* copy name into the new var */
-	strcat(v5, DstBuf);
-	v6 = getBoxTextOffset(v5);//get small text size
-
-  drawInGamePrices(v5, v6 + 132496);
-  free(v5);
+  drawInGamePrices(price, v6 + 132496);
   createPopup(144, 114, 384, 119, 1);
-  writeTextInScreen(&aVagabondBought[1760 * drivers[driverId].carType], 79530);
-  writeTextInScreen((const char *)&unk_44E168 + 1760 * drivers[driverId].carType, 89770);
-  writeTextInScreen(&aFaceItNotTheHo[1760 * drivers[driverId].carType], 100010);
-  writeTextInScreen(&aAroundButSheLl[1760 * drivers[driverId].carType], 110250);
-  writeTextInScreen(&aOnHerOwnSweetT[1760 * drivers[driverId].carType], 120490);
-  writeTextInScreen((const char *)&unk_44E208 + 1760 * drivers[driverId].carType, 130730);
+  //El original leia los textos de la tabla de coches (&aVagabondBought + 1760 * tipo); aqui
+  //son cadenas sueltas y el indice se salia de ellas. Mismos textos, desde shopMessages.
+  bought = useWeapons ? &shopMessages.carMessage[drivers[driverId].carType].boughMessage
+                      : &shopMessages.carMessageNoWeapons[drivers[driverId].carType].boughMessage;
+  writeTextInScreen(bought->title, 79530);
+  writeTextInScreen(bought->line1, 100010);
+  writeTextInScreen(bought->line2, 110250);
+  writeTextInScreen(bought->line3, 120490);
   drawImageWithPosition((int)arrows1dBpk, 16, 64, (int)((char *)screenBuffer + 90240));
   return drawImageWithPosition((int)((char *)arrows1dBpk + 1024), 16, 64, (int)((char *)screenBuffer + 90352));
 }

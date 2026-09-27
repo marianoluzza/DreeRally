@@ -521,7 +521,9 @@ strcpy(v1,"$"); /* copy name into the new var */
   {
 	  //todo fix
 	  writeTextInScreen(shopMessages.carMessage[actualCarSelected].infoMessage.title, 89770-(100010- 89770));
-    writeTextInScreen((const char *)&unk_44E078 + 1760 * actualCarSelected, 89770);
+    //Las lineas en blanco de los recuadros se leian como &unk_XXXX + 240*n o &byte_XXXX[800*n]: en el
+    //original eran filas vacias de una tabla, aqui cadenas sueltas y el indice se salia (basura en pantalla).
+    writeTextInScreen("", 89770);
     writeTextInScreen(shopMessages.carMessage[actualCarSelected].infoMessage.line1, 100010);
     writeTextInScreen(shopMessages.carMessage[actualCarSelected].infoMessage.line2, 110250);
     writeTextInScreen(shopMessages.carMessage[actualCarSelected].infoMessage.line3, 120490);
@@ -530,7 +532,7 @@ strcpy(v1,"$"); /* copy name into the new var */
   else
   {
 	  writeTextInScreen(shopMessages.carMessageNoWeapons[actualCarSelected].infoMessage.title, 89770 - (100010 - 89770));
-    writeTextInScreen((const char *)&unk_44DF88 + 1760 * actualCarSelected, 89770);
+    writeTextInScreen("", 89770);
     writeTextInScreen(shopMessages.carMessageNoWeapons[actualCarSelected].infoMessage.line1, 100010);
     writeTextInScreen(shopMessages.carMessageNoWeapons[actualCarSelected].infoMessage.line2, 110250);
     writeTextInScreen(shopMessages.carMessageNoWeapons[actualCarSelected].infoMessage.line3, 120490);
@@ -567,11 +569,11 @@ int reloadEngineAnimation2()
     drawImageWithPosition2((int)((char *)maxi1fBpk + 6144 * v0 - 6144), 96, 64, (int)((char *)screenBuffer + 172176));
     createPopup(144, 114, 384, 119, 1);
     writeTextInScreen(shopMessages.engineMessageNoMoreUpgrades.title, 79530);
-    writeTextInScreen((const char *)&unk_450B10, 89770);
+    writeTextInScreen("", 89770);
     writeTextInScreen(shopMessages.engineMessageNoMoreUpgrades.line1, 100010);
     writeTextInScreen(shopMessages.engineMessageNoMoreUpgrades.line2, 110250);
     writeTextInScreen(shopMessages.engineMessageNoMoreUpgrades.line3, 120490);
-    result = writeTextInScreen((const char *)&unk_450BB0, 130730);
+    result = writeTextInScreen("", 130730);
   }
   else
   {
@@ -595,16 +597,12 @@ strcpy(v3,"$"); /* copy name into the new var */
     drawInGamePrices(v3, v5 + 214416);
     createPopup(144, 114, 384, 119, 1);
     writeTextInScreen(shopMessages.engineMessage[drivers[driverId].engine].infoMessage.title, 79530);
-    writeTextInScreen(
-      (const char *)&unk_44E258 + 1760 * drivers[driverId].carType + 240 * drivers[driverId].engine,
+    writeTextInScreen("",
       89770);
     writeTextInScreen(shopMessages.engineMessage[drivers[driverId].engine].infoMessage.line1, 100010);
     writeTextInScreen(shopMessages.engineMessage[drivers[driverId].engine].infoMessage.line2, 110250);
     writeTextInScreen(shopMessages.engineMessage[drivers[driverId].engine].infoMessage.line3, 120490);
-    result = writeTextInScreen(
-               (const char *)&unk_44E2F8
-             + 1760 * drivers[driverId].carType
-             + 240 * drivers[driverId].engine,
+    result = writeTextInScreen("",
                130730);
   }
   return result;
@@ -632,11 +630,11 @@ int reloadTireAnimation2()
     drawImageWithPosition2((int)((char *)maxi1fBpk + 2048 * (3 * v0 + 9)), 96, 64, (int)((char *)screenBuffer + 172280));
     createPopup(144, 114, 384, 119, 1);
 	writeTextInScreen(shopMessages.tireMessageNoMoreUpgrades.title, 79530);
-    writeTextInScreen((const char *)&unk_450C00, 89770);
+    writeTextInScreen("", 89770);
     writeTextInScreen(shopMessages.tireMessageNoMoreUpgrades.line1, 100010);
     writeTextInScreen(shopMessages.tireMessageNoMoreUpgrades.line2, 110250);
     writeTextInScreen(shopMessages.tireMessageNoMoreUpgrades.line3, 120490);
-    result = writeTextInScreen((const char *)&unk_450CA0, 130730);
+    result = writeTextInScreen("", 130730);
   }
   else
   {
@@ -659,11 +657,11 @@ strcpy(v3,"$"); /* copy name into the new var */
     drawInGamePrices(v3, v5 + 214520);
     createPopup(144, 114, 384, 119, 1);
 	writeTextInScreen(shopMessages.tireMessage[drivers[driverId].tire].infoMessage.title, 79530);
-    writeTextInScreen((const char *)&unk_4511A0 + 240 * drivers[driverId].tire, 89770);
+    writeTextInScreen("", 89770);
     writeTextInScreen(shopMessages.tireMessage[drivers[driverId].tire].infoMessage.line1, 100010);
     writeTextInScreen(shopMessages.tireMessage[drivers[driverId].tire].infoMessage.line2, 110250);
     writeTextInScreen(shopMessages.tireMessage[drivers[driverId].tire].infoMessage.line3, 120490);
-    result = writeTextInScreen(&byte_451240[240 * drivers[driverId].tire], 130730);
+    result = writeTextInScreen("", 130730);
   }
   return result;
 }
@@ -690,11 +688,11 @@ int reloadArmourAnimation2()
     drawImageWithPosition2((int)((char *)maxi1fBpk + 2048 * (3 * v0 + 21)), 96, 64, (int)((char *)screenBuffer + 172384));
     createPopup(144, 114, 384, 119, 1);
 	writeTextInScreen(shopMessages.armorMessageNoMoreUpgrades.title, 79530);
-    writeTextInScreen((const char *)&unk_450CF0, 89770);
+    writeTextInScreen("", 89770);
 	writeTextInScreen(shopMessages.armorMessageNoMoreUpgrades.line1, 100010);
     writeTextInScreen(shopMessages.armorMessageNoMoreUpgrades.line2, 110250);
     writeTextInScreen(shopMessages.armorMessageNoMoreUpgrades.line3, 120490);
-    result = writeTextInScreen((const char *)&unk_450D90, 130730);
+    result = writeTextInScreen("", 130730);
   }
   else
   {
@@ -717,11 +715,11 @@ strcpy(v3,"$"); /* copy name into the new var */
     drawInGamePrices(v3, v5 + 214624);
     createPopup(144, 114, 384, 119, 1);
     writeTextInScreen(shopMessages.armorMessage[drivers[ driverId].armour].infoMessage.title, 79530);
-    writeTextInScreen((const char *)&unk_451920 + 240 * drivers[driverId].armour, 89770);
+    writeTextInScreen("", 89770);
     writeTextInScreen(shopMessages.armorMessage[drivers[ driverId].armour].infoMessage.line1, 100010);
     writeTextInScreen(shopMessages.armorMessage[drivers[ driverId].armour].infoMessage.line2, 110250);
     writeTextInScreen(shopMessages.armorMessage[drivers[ driverId].armour].infoMessage.line3, 120490);
-    result = writeTextInScreen(&byte_4519C0[240 * drivers[driverId].armour], 130730);
+    result = writeTextInScreen("", 130730);
   }
   return result;
 }
@@ -732,70 +730,43 @@ int reloadRepairAnimation()
   int v0; // eax@1
   int v1; // eax@2
   int v2; // eax@2
-  __int64 v3; // rax@3
   int v4; // eax@3
-  unsigned int v5; // eax@5
-  char *v6; // edx@5
-  void *v7; // edi@5
-//  char v8; // cl@6
-  int v9; // eax@8
-  int v10; // eax@8
-  char v11; // cl@11
   int v12; // eax@12
   int v13; // eax@12
   signed int v14; // esi@12
   bool v15; // sf@12
   unsigned __int8 v16; // of@12
-  int v17; // esi@36
-  char *DstBuf =malloc(100); // [sp+8h] [bp-28h]@2
-  char v20; // [sp+1Bh] [bp-15h]@5
-  __int16 v21; // [sp+1Ch] [bp-14h]@5
+  char DstBuf[16]; // [sp+8h] [bp-28h]@2
+  char percent[16];
+  char price[20];
 
   drawImageWithPosition2((int)bases44Bpk, 96, 96, (int)((char *)screenBuffer + 162248));
   drawMenuAnimation(328, 269, repairAnimCurrentFrame_45EEAC, (int)repaaniBpk, (int)&repairAnimFrameSize_446308);
+  //Cada reparacion quita un 10% (o lo que quede). El original tomaba "10" de unk_4433D4,
+  //que aqui es un byte suelto (no se veia), y con menos de un 10% armaba el precio con
+  //strcpy sobre un literal "" (memoria de solo lectura). Mismos importes que en REPAIR.
+  //El simbolo % ya esta en el grafico del recuadro: solo se escribe el numero.
   v0 = drivers[driverId].damage;
+  v2 = drivers[driverId].carType;
   if ( v0 >= 10 )
   {
-    v9 = getBoxTextSize((const char *)&unk_4433D4);
-    drawTextWithFont((int)graphicsGeneral.fmed1aBpk, (int)&unk_445928, (const char *)&unk_4433D4, 163610 - v9);
-    v10 = cars[drivers[driverId].carType].repairCost;
-    if ( useWeapons )
-      v10 /= 2;
-    SDL_itoa(v10, DstBuf, 10);
-    v21 = 36;
-    v6 = DstBuf;
-    v5 = strlen(DstBuf) + 1;
-    v7 = &v20;
-    do
-    {
-      v11 = *((int8*)v7 + 1);
-      v7 = (char *)v7 + 1;
-    }
-    while ( v11 );
+    strcpy(percent, "10");
+    v4 = cars[v2].repairCost;
   }
   else
   {
-    SDL_itoa(v0, DstBuf, 10);
-    v1 = getBoxTextSize(DstBuf);
-    drawTextWithFont((int)graphicsGeneral.fmed1aBpk, (int)&unk_445928, DstBuf, 163610 - v1);
-    v2 = drivers[driverId].carType;
-    if ( useWeapons )
-    {
-      v3 = cars[v2].repairCost / 10;
-      v4 = ((signed int)v3 - HIDWORD(v3)) >> 1;
-    }
-    else
-    {
-      v4 = cars[v2].repairCost / 10;
-    }
-    SDL_itoa(drivers[driverId].damage * v4, DstBuf, 10);
-	v6= "";
-	strcpy(v6,"$"); /* copy name into the new var */
-	strcat(v6, DstBuf);
+    SDL_itoa(v0, percent, 10);
+    v4 = v0 * (cars[v2].repairCost / 10);
   }
-//  memcpy(v7, v6, v5);
-  v12 = getBoxTextOffset(v6);
-  drawInGamePrices(v6, v12 + 214728);
+  if ( useWeapons )
+    v4 /= 2;
+  v1 = getBoxTextSize(percent);
+  drawTextWithFont((int)graphicsGeneral.fmed1aBpk, (int)&unk_445928, percent, 163610 - v1);
+  SDL_itoa(v4, DstBuf, 10);
+  strcpy(price, "$");
+  strcat(price, DstBuf);
+  v12 = getBoxTextOffset(price);
+  drawInGamePrices(price, v12 + 214728);
   v13 = drivers[driverId].damage;
   v14 = 0;
   v16 = __OFSUB__(v13, 100);
@@ -828,13 +799,14 @@ int reloadRepairAnimation()
   if ( !v13 )
     v14 = 11;
   createPopup(144, 114, 384, 119, 1);
-  v17 = 240 * v14;
+  //byte_453E50/byte_453EF0 + 240 * v14 eran las lineas en blanco de la tabla original;
+  //byte_453E50 tiene 40 bytes y el indice se salia (basura en la segunda linea).
   writeTextInScreen(shopMessages.repairMessage[v14-1].title, 79530);
-  writeTextInScreen(&byte_453E50[v17], 89770);
+  writeTextInScreen("", 89770);
   writeTextInScreen(shopMessages.repairMessage[v14-1].line1, 100010);
   writeTextInScreen(shopMessages.repairMessage[v14-1].line2, 110250);
   writeTextInScreen(shopMessages.repairMessage[v14-1].line3, 120490);
-  return writeTextInScreen(&byte_453EF0[v17], 130730);
+  return writeTextInScreen("", 130730);
 }
 
 //----- (00428FD0) --------------------------------------------------------
@@ -850,19 +822,19 @@ int reloadContinueAnimation()
   if ( useWeapons && v0 )
   {
     writeTextInScreen(shopMessages.continueMessage.title, 79530);
-    writeTextInScreen((const char *)&unk_454A80, 89770);
+    writeTextInScreen("", 89770);
 	writeTextInScreen(shopMessages.continueMessage.line1, 100010);
     writeTextInScreen(shopMessages.continueMessage.line2, 110250);
-    writeTextInScreen((const char *)&unk_454AF8, 120490);
+    writeTextInScreen("", 120490);
     v2 = shopMessages.continueMessage.line3;
   }
   else
   {
     writeTextInScreen(shopMessages.continueMessageNoWeapons.title, 79530);
-    writeTextInScreen((const char *)&unk_454990, 89770);
+    writeTextInScreen("", 89770);
     writeTextInScreen(shopMessages.continueMessageNoWeapons.line1, 100010);
     writeTextInScreen(shopMessages.continueMessageNoWeapons.line2, 110250);
-    writeTextInScreen((const char *)&unk_454A08, 120490);
+    writeTextInScreen("", 120490);
     v2 = shopMessages.continueMessageNoWeapons.line3;
   }
   writeTextInScreen(v2, 130730);
@@ -903,11 +875,11 @@ int reloadEngineAnimation()
   }
   createPopup(144, 114, 384, 119, 1);
   writeTextInScreen(shopMessages.engineMessage[drivers[driverId].engine].boughMessage.title, 79530);
-  writeTextInScreen((const char *)&unk_450DE0 + 240 * drivers[driverId].engine, 89770);
+  writeTextInScreen("", 89770);
   writeTextInScreen(shopMessages.engineMessage[drivers[driverId].engine].boughMessage.line1, 100010);
   writeTextInScreen(shopMessages.engineMessage[drivers[driverId].engine].boughMessage.line2, 110250);
   writeTextInScreen(shopMessages.engineMessage[drivers[driverId].engine].boughMessage.line3, 120490);
-  return writeTextInScreen(&byte_450E80[240 * drivers[driverId].engine], 130730);
+  return writeTextInScreen("", 130730);
 }
 
 //----- (00421520) --------------------------------------------------------
@@ -945,11 +917,11 @@ int reloadTireAnimation()
   }
   createPopup(144, 114, 384, 119, 1);
   writeTextInScreen(shopMessages.tireMessage[drivers[driverId].tire].boughMessage.title, 79530);
-  writeTextInScreen((const char *)&unk_451560 + 240 * drivers[driverId].tire+1, 89770);
+  writeTextInScreen("", 89770);
   writeTextInScreen(shopMessages.tireMessage[drivers[driverId].tire].boughMessage.line1, 100010);
   writeTextInScreen(shopMessages.tireMessage[drivers[driverId].tire].boughMessage.line2, 110250);
   writeTextInScreen(shopMessages.tireMessage[drivers[driverId].tire].boughMessage.line3, 120490);
-  return writeTextInScreen(&byte_451600[240 * drivers[driverId].tire], 130730);
+  return writeTextInScreen("", 130730);
 }
 
 //----- (00421750) --------------------------------------------------------
@@ -988,10 +960,10 @@ int reloadArmourAnimation()
   }
   createPopup(144, 114, 384, 119, 1);
   writeTextInScreen(shopMessages.armorMessage[drivers[ driverId].armour].boughMessage.title, 79530);
-  writeTextInScreen((const char *)&unk_451CE0 + 240 * drivers[driverId].armour, 89770);
+  writeTextInScreen("", 89770);
   writeTextInScreen(shopMessages.armorMessage[drivers[ driverId].armour].boughMessage.line1, 100010);
   writeTextInScreen(shopMessages.armorMessage[drivers[ driverId].armour].boughMessage.line2, 110250);
   writeTextInScreen(shopMessages.armorMessage[drivers[ driverId].armour].boughMessage.line3, 120490);
-  return writeTextInScreen(&byte_451D80[240 * drivers[driverId].armour], 130730);
+  return writeTextInScreen("", 130730);
 }
 

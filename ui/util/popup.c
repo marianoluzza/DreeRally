@@ -14,15 +14,16 @@
 #include "../../config.h"
 #include "../../variables.h"
 #include "popup.h"
+#include "originalTexts.h"
 
 char aASlickSteroidR[30] = "[A slick steroid run, anyone?"; // weak
 _UNKNOWN unk_452DE8; // weak
-char byte_452E38[] = { '[' }; // weak
+char byte_452E38[] = "[Extra $"; // texto completo del dr.exe original (antes solo el primer caracter)
 _UNKNOWN unk_452D70; // weak
 
 char aMoneyTalksAndT[32] = "Money talks, and [the damage is"; // weak
-char byte_452CD0[] = { '[' }; // weak
-char byte_452CF8[] = { '[' }; // weak
+char byte_452CD0[] = "[done, "; // texto completo del dr.exe original (antes solo el primer caracter)
+char byte_452CF8[] = "["; // texto completo del dr.exe original (antes solo el primer caracter)
 char aDown_ThatSDoug[34] = "down. That's dough baked luck for"; // weak
 char aYou_AndLuckShe[34] = "you. And luck, she ain't no lady."; // weak
 
@@ -31,9 +32,9 @@ _UNKNOWN unk_453108; // weak
 char aWannaGetRichTo[31] = "Wanna get rich, tough guy? OK."; // weak
 char aHereSTheDeal_I[35] = "[Here's the deal{. I have put some"; // weak
 char aMajorFundsOnTh[34] = "major funds on this race, betting"; // weak
-char byte_453248[] = { 't' }; // weak
+char byte_453248[] = "that ["; // texto completo del dr.exe original (antes solo el primer caracter)
 char aFinishLine_Mak[34] = "[finish line{. Make me right, and"; // weak
-char byte_4532E8[] = { '[' }; // weak
+char byte_4532E8[] = "[it'll pay you $"; // texto completo del dr.exe original (antes solo el primer caracter)
 _UNKNOWN unk_453338; // weak
 _UNKNOWN unk_453388; // weak
 char byte_447388[80] =
@@ -117,7 +118,7 @@ char aThereWasThatMu[33] = "there was that much smoke in the"; // weak
 char aWholeBurningHe[32] = "whole burning hell, and through"; // weak
 char aItAllBearingGi[32] = "it all, bearing gifts like some"; // weak
 char aBlessedBeastYo[35] = "blessed beast, you came. And [this"; // weak
-char byte_44ADF8[] = { '[' }; // weak
+char byte_44ADF8[] = "[here is prime stuff! $"; // texto completo del dr.exe original (antes solo el primer caracter)
 _UNKNOWN unk_44AE48; // weak
 _UNKNOWN unk_44AE98; // weak
 char aWhereReMyStero[23] = "[Where're my steroids?"; // weak
@@ -136,8 +137,8 @@ char aAKillerRaceThe[36] = "A killer race! The bullets took the"; // weak
 char aSkyLikeCloudsO[32] = "sky like clouds of locusts, and"; // weak
 char aTheScreamsOfMo[29] = "the screams of motors were a"; // weak
 char aBansheeWail_De[32] = "banshee wail. [Death!{ You were"; // weak
-char byte_44B3E8[] = { 'b' }; // weak
-char byte_44B438[] = { '[' }; // weak
+char byte_44B3E8[] = "beautiful, ["; // texto completo del dr.exe original (antes solo el primer caracter)
+char byte_44B438[] = "[coffin grave. $"; // texto completo del dr.exe original (antes solo el primer caracter)
 _UNKNOWN unk_44B488; // weak
 _UNKNOWN unk_44B4D8; // weak
 char aYourHitMissed[18] = "[Your hit missed!"; // weak
@@ -249,10 +250,10 @@ char noCollectPopup_42E6F0()
 {
   createPopup(33, 131, 497, 230, 1);
   drawImageWithPosition((int)spons1bBpk, 104, 128, (int)((char *)screenBuffer + 107565));
-  writeTextInScreen((const char *)&unk_44CE28, 87201);
-  writeTextInScreen((const char *)&unk_44CE78, 97441);
+  writeTextInScreen("", 87201);
+  writeTextInScreen("", 97441);
   writeTextInScreen(aTooSlowNoDough, 107681);
-  writeTextInScreen((const char *)&unk_44CF18, 117921);
+  writeTextInScreen("", 117921);
   writeTextInScreen(aDeathRallyIsFo, 128161);
   writeTextInScreen(aTotallyLostThi, 138401);
   writeTextInScreen(aBonusYouCollec, 148641);
@@ -442,7 +443,7 @@ int sabotageScreen()
       writeTextInScreen(v47, 151781);
       writeTextInScreen(aDown_ThatSDoug, 162021);
       writeTextInScreen(aYou_AndLuckShe, 172261);
-      writeTextInScreen((const char *)&unk_452D70, 179301);
+      writeTextInScreen("", 179301);
       drawTextWithFont((int)graphicsGeneral.fbig3aBpk, (int)&bigLetterSpacing_445848, "CONTINUE", 201792);
       refreshAllScreen();
       drawPopupCursor_42C780 ();
@@ -551,7 +552,7 @@ int showHitmanScreen()
       createPopup(33, 131, 482, 230, 1);
       drawImageWithPosition((int)event2Bpk, 104, 128, (int)((char *)screenBuffer + 107565));
       writeTextInScreen(aWannaBeMyHitma, 107681);
-      writeTextInScreen((const char *)&unk_453108, 117921);
+      writeTextInScreen("", 117921);
       writeTextInScreen(aWannaGetRichTo, 128161);
       writeTextInScreen(aHereSTheDeal_I, 138401);
       writeTextInScreen(aMajorFundsOnTh, 148641);
@@ -616,8 +617,8 @@ int showHitmanScreen()
       while ( v32 );
       *(_WORD *)v31 = 46;
       writeTextInScreen(v44, 179361);
-      writeTextInScreen((const char *)&unk_453338, 189601);
-      writeTextInScreen((const char *)&unk_453388, 199841);
+      writeTextInScreen("", 189601);
+      writeTextInScreen("", 199841);
       refreshAllScreen();
       v33 = 50;
       do
@@ -699,7 +700,7 @@ int showHitmanScreen()
       createPopup(33, 131, 482, 230, 1);
       drawImageWithPosition((int)drugdealBpk, 104, 128, (int)((char *)screenBuffer + 107565));
       writeTextInScreen(aASlickSteroidR, 107681);
-      writeTextInScreen((const char *)&unk_452DE8, 117921);
+      writeTextInScreen("", 117921);
       v3 = 0;
       do
       {
@@ -732,8 +733,8 @@ int showHitmanScreen()
       writeTextInScreen(aWayAndGetThemT, 158881);
       writeTextInScreen(aLineBeforeThin, 169121);
       writeTextInScreen(aFirstLikeFloor, 179361);
-      writeTextInScreen((const char *)&unk_453018, 189601);
-      writeTextInScreen((const char *)&unk_453068, 199841);
+      writeTextInScreen("", 189601);
+      writeTextInScreen("", 199841);
       refreshAllScreen();
       v10 = 50;
       do
@@ -777,10 +778,10 @@ unsigned int lappedPopUp()
 {
   createPopup(33, 131, 482, 230, 1);
   drawImageWithPosition((int)spons1bBpk, 104, 128, (int)((char *)screenBuffer + 107565));
-  writeTextInScreen((const char *)&unk_44CB08, 87201);
-  writeTextInScreen((const char *)&unk_44CB58, 97441);
+  writeTextInScreen("", 87201);
+  writeTextInScreen("", 97441);
   writeTextInScreen(aYouWereLappedY, 107681);
-  writeTextInScreen((const char *)&unk_44CBF8, 117921);
+  writeTextInScreen("", 117921);
   writeTextInScreen(aThePainTheHumi, 128161);
   writeTextInScreen(aMadeMeTheLaugh, 138401);
   writeTextInScreen(aRaces_WhatWere, 148641);
@@ -831,17 +832,10 @@ unsigned int winStreakPopUp()
 	  drivers[driverId].money += 600;
     v0 = 0;
   }
-  v2 = 800 * v0;
-  writeTextInScreen(&byte_447388[v2], 87201);
-  writeTextInScreen(&byte_4473D8[v2], 97441);
-  writeTextInScreen(&aNotTooShabbyDr[v2], 107681);
-  writeTextInScreen(&byte_447478[v2], 117921);
-  writeTextInScreen(&aYourWildWinnin[v2], 128161);
-  writeTextInScreen(&aYouAnExtra600B[v2], 138401);
-  writeTextInScreen(&aGetCockyThoseO[v2], 148641);
-  writeTextInScreen(&aVictoryHoundsA[v2], 158881);
-  writeTextInScreen(&aRightIntoYourB[v2], 169121);
-  writeTextInScreen(&aAndTheyWantToG[v2], 179361);
+  //Texto de la variante del coche, de la tabla del original: v2 = 800 * v0 indexaba
+  //cadenas sueltas y salia texto de otros recuadros (el de bienvenida, el de los jinetes).
+  for ( v2 = 0; v2 < 10; ++v2 )
+    writeTextInScreen(sponsorWinStreakTexts[v0][v2], 87201 + 10240 * v2);
   return drawTextWithFont((int)graphicsGeneral.fbig3aBpk, (int)&bigLetterSpacing_445848, "CONTINUE", 202432);
 }
 
@@ -886,17 +880,10 @@ unsigned int noPaintJobPopUp()
 	  drivers[driverId].money += 350;
     v0 = 0;
   }
-  v2 = 800 * v0;
-  writeTextInScreen(&byte_448648[v2], 87201);
-  writeTextInScreen(&byte_448698[v2], 97441);
-  writeTextInScreen(&aInconceivableD[v2], 107681);
-  writeTextInScreen(&byte_448738[v2], 117921);
-  writeTextInScreen(&aItWasASnowball[v2], 128161);
-  writeTextInScreen(&aThroughThatBli[v2], 138401);
-  writeTextInScreen(&aNotAShadowOfAS[v2], 148641);
-  writeTextInScreen(&aPaintJob_MyBet[v2], 158881);
-  writeTextInScreen(&aItPaidMeBackBi[v2], 169121);
-  writeTextInScreen(&aShare350_GoKno[v2], 179361);
+  //Texto de la variante del coche, de la tabla del original: v2 = 800 * v0 indexaba
+  //cadenas sueltas y salia texto de otros recuadros (el de bienvenida, el de los jinetes).
+  for ( v2 = 0; v2 < 10; ++v2 )
+    writeTextInScreen(sponsorNoPaintJobTexts[v0][v2], 87201 + 10240 * v2);
   return drawTextWithFont((int)graphicsGeneral.fbig3aBpk, (int)&bigLetterSpacing_445848, "CONTINUE", 202432);
 }
 
@@ -943,17 +930,10 @@ unsigned int allCarsCrashPopUp()
 	  drivers[driverId].money += 600;
     v0 = 0;
   }
-  v2 = 800 * v0;
-  writeTextInScreen(&byte_449908[v2], 87201);
-  writeTextInScreen(&byte_449958[v2], 97441);
-  writeTextInScreen(&aIAmOneGrateful[v2], 107681);
-  writeTextInScreen(&byte_4499F8[v2], 117921);
-  writeTextInScreen(&aMoreCarCorpses[v2], 128161);
-  writeTextInScreen(&aAreMySweetestM[v2], 138401);
-  writeTextInScreen(&aSeriousDedicat[v2], 148641);
-  writeTextInScreen(&aAParkingSpaceA[v2], 158881);
-  writeTextInScreen(&aABonusOf600ToY[v2], 169121);
-  writeTextInScreen(&aPoweredSerialA[v2], 179361);
+  //Texto de la variante del coche, de la tabla del original: v2 = 800 * v0 indexaba
+  //cadenas sueltas y salia texto de otros recuadros (el de bienvenida, el de los jinetes).
+  for ( v2 = 0; v2 < 10; ++v2 )
+    writeTextInScreen(sponsorAllCarsCrashTexts[v0][v2], 87201 + 10240 * v2);
   return drawTextWithFont((int)graphicsGeneral.fbig3aBpk, (int)&bigLetterSpacing_445848, "CONTINUE", 202432);
 }
 
@@ -1012,15 +992,15 @@ int steriodsNotFoundPopup()
         break;
     }
     writeTextInScreen(aWhereReMyStero, 107681);
-    writeTextInScreen((const char *)&unk_44AF38, 117921);
+    writeTextInScreen("", 117921);
     writeTextInScreen(aTheWholeDealWe, 128161);
     writeTextInScreen(aOfYourIncompet, 138401);
     writeTextInScreen(aTurnsOfTheWhee, 148641);
     writeTextInScreen(aIMNotHappyAndW, 158881);
     writeTextInScreen(aHappyIAmMadAnd, 169121);
     writeTextInScreen(aMadBadThingsHa, 179361);
-    writeTextInScreen((const char *)&unk_44B168, 189601);
-    writeTextInScreen((const char *)&unk_44B1B8, 199841);
+    writeTextInScreen("", 189601);
+    writeTextInScreen("", 199841);
     
     v15 = drivers[driverId].money;
     if ( v15 < v13 )
@@ -1088,7 +1068,7 @@ int steriodsNotFoundPopup()
   *v1 = v2;
 LABEL_15:
   writeTextInScreen(aWhatMotorizedS, 107681);
-  writeTextInScreen((const char *)&unk_44AC18, 117921);
+  writeTextInScreen("", 117921);
   writeTextInScreen(aWowMyMainMan_I, 128161);
   writeTextInScreen(aThereWasThatMu, 138401);
   writeTextInScreen(aWholeBurningHe, 148641);
@@ -1118,8 +1098,8 @@ LABEL_15:
   *((_DWORD *)v11 + 1) = 1970239776;
   *((_WORD *)v11 + 4) = 46;
   writeTextInScreen(v23, 179361);
-  writeTextInScreen((const char *)&unk_44AE48, 189601);
-  writeTextInScreen((const char *)&unk_44AE98, 199841);
+  writeTextInScreen("", 189601);
+  writeTextInScreen("", 199841);
 LABEL_40:
   drawTextWithFont((int)graphicsGeneral.fbig3aBpk, (int)&bigLetterSpacing_445848, "CONTINUE", 202432);
   return 0;
@@ -1193,15 +1173,15 @@ int killOnePopup()
         break;
     }
     writeTextInScreen(aYourHitMissed, 107681);
-    writeTextInScreen((const char *)&unk_44B578, 117921);
+    writeTextInScreen("", 117921);
     writeTextInScreen(aYouSissySunday, 128161);
     writeTextInScreen(aSimplestJobAnd, 138401);
     writeTextInScreen(aIBetYouAreAfra, 148641);
     writeTextInScreen(aWell_ILlShowYo, 158881);
     writeTextInScreen(aWhenYouBreakYo, 169121);
     writeTextInScreen(aIMGonnaMakeYou, 179361);
-    writeTextInScreen((const char *)&unk_44B7A8, 189601);
-    writeTextInScreen((const char *)&unk_44B7F8, 199841);
+    writeTextInScreen("", 189601);
+    writeTextInScreen("", 199841);
    
     v23 = drivers[driverId].money;
     if ( v23 < v21 )
@@ -1269,7 +1249,7 @@ int killOnePopup()
   *v1 = v2;
 LABEL_15:
   writeTextInScreen(aYouTotallySlew, 107681);
-  writeTextInScreen((const char *)&unk_44B258, 117921);
+  writeTextInScreen("", 117921);
   writeTextInScreen(aAKillerRaceThe, 128161);
   writeTextInScreen(aSkyLikeCloudsO, 138401);
   writeTextInScreen(aTheScreamsOfMo, 148641);
@@ -1324,8 +1304,8 @@ LABEL_15:
   *((_DWORD *)v19 + 2) = 2036690543;
   *((_WORD *)v19 + 6) = 46;
   writeTextInScreen(v31, 179361);
-  writeTextInScreen((const char *)&unk_44B488, 189601);
-  writeTextInScreen((const char *)&unk_44B4D8, 199841);
+  writeTextInScreen("", 189601);
+  writeTextInScreen("", 199841);
 LABEL_46:
   drawTextWithFont((int)graphicsGeneral.fbig3aBpk, (int)&bigLetterSpacing_445848, "CONTINUE", 202432);
   return 0;
@@ -1335,16 +1315,16 @@ LABEL_46:
 unsigned int welcomeShopPopup()
 {
   createPopup(45, 131, 458, 230, 1);
-  writeTextInScreen((const char *)&unk_44B848, 90300);
+  writeTextInScreen("", 90300);
   writeTextInScreen(aWelcomeToTheSh, 100540);
-  writeTextInScreen((const char *)&unk_44B8E8, 110780);
+  writeTextInScreen("", 110780);
   writeTextInScreen(aZillionsMoreMi, 121020);
   writeTextInScreen(aIsNoJuggernaut, 131260);
   writeTextInScreen(aTheWay_YouNeed, 141500);
   writeTextInScreen(aMakeHeadlongHe, 151740);
   writeTextInScreen(aStrideToStrive, 161980);
   writeTextInScreen(aBest_BuyBeOneS, 172220);
-  writeTextInScreen((const char *)&unk_44BB18, 182460);
+  writeTextInScreen("", 182460);
   return drawTextWithFont((int)graphicsGeneral.fbig3aBpk, (int)&bigLetterSpacing_445848, "CONTINUE", 202432);
 }
 
@@ -1357,10 +1337,10 @@ unsigned int endGamePopup()
   if ( isMultiplayerGame )
   {
     drawImageWithPosition((int)event2Bpk, 104, 128, (int)((char *)screenBuffer + 107565));
-    writeTextInScreen((const char *)&unk_454F58, 87201);
-    writeTextInScreen((const char *)&unk_454F8A, 97441);
+    writeTextInScreen("", 87201);
+    writeTextInScreen("", 97441);
     writeTextInScreen(aItAinTOverTill, 107681);
-    writeTextInScreen((const char *)&unk_454FEE, 117921);
+    writeTextInScreen("", 117921);
     writeTextInScreen(aSoTheyThinkThe, 128161);
     writeTextInScreen(aEh_IThinkThatT, 138401);
     writeTextInScreen(aOnlyMadeYouStr, 148641);
@@ -1370,16 +1350,16 @@ unsigned int endGamePopup()
   }
   else
   {
-    writeTextInScreen((const char *)&unk_454C38, 90300);
+    writeTextInScreen("", 90300);
     writeTextInScreen(aEndOfTheRoadDr, 100540);
-    writeTextInScreen((const char *)&unk_454CD8, 110780);
+    writeTextInScreen("", 110780);
     writeTextInScreen(aThisThenIsHowI, 121020);
     writeTextInScreen(aWithAWhimper_Y, 131260);
     writeTextInScreen(aRoadButYouBlew, 141500);
     writeTextInScreen(aThat_InDeathRa, 151740);
     writeTextInScreen(aTheBestCanMake, 161980);
     writeTextInScreen(aSideAtLeastYou, 172220);
-    writeTextInScreen((const char *)&unk_454F08, 182460);
+    writeTextInScreen("", 182460);
   }
   result = drawTextWithFont((int)graphicsGeneral.fbig3aBpk, (int)&bigLetterSpacing_445848, "CONTINUE", 202432);
   isDemo_456B10 = 0;
@@ -1436,16 +1416,16 @@ int payBackTimePopup()
   drawImageWithPosition2((int)dealer2bBpk, 96, 96, (int)((char *)screenBuffer + 117805));
   if ( v2 )
   {
-    writeTextInScreen((const char *)&unk_44C7E8, 87168);
+    writeTextInScreen("", 87168);
     writeTextInScreen(aItSPayBackTi_0, 97408);
-    writeTextInScreen((const char *)&unk_44C888, 107648);
+    writeTextInScreen("", 107648);
     writeTextInScreen(aTutTutHotshotI, 117888);
     writeTextInScreen(aMoneyAnywhere_, 128128);
     writeTextInScreen(aJoker_ADealIsA, 138368);
     writeTextInScreen(aReputationToLo, 148608);
     writeTextInScreen(aNothingPersona, 158848);
     writeTextInScreen(aYouSomeNow_Hur, 169088);
-    writeTextInScreen((const char *)&unk_44CAB8, 179328);
+    writeTextInScreen("", 179328);
     v4 = driverId;
     v5 = drivers[driverId].engine;
     if ( v5 <= 0 )
@@ -1455,16 +1435,16 @@ int payBackTimePopup()
   }
   else
   {
-    writeTextInScreen((const char *)&unk_44C4C8, 87168);
+    writeTextInScreen("", 87168);
     writeTextInScreen(aItSPayBackTime, 97408);
-    writeTextInScreen((const char *)&unk_44C568, 107648);
+    writeTextInScreen("", 107648);
     writeTextInScreen(aThisIsWhatILik, 117888);
     writeTextInScreen(aWhoKeepsHisPar, 128128);
     writeTextInScreen(aAhTheSweetSmel, 138368);
     writeTextInScreen(aToPapaMyBabies, 148608);
     writeTextInScreen(aBusinessWithYo, 158848);
     writeTextInScreen(aThanksAndGoodR, 169088);
-    writeTextInScreen((const char *)&unk_44C798, 179328);
+    writeTextInScreen("", 179328);
     v3 = 27 * driverId;
     if (drivers[driverId].loanType == LOAN_DELIVERATOR )
 		drivers[driverId].money -= 18000;
@@ -1485,32 +1465,32 @@ int payBackTimePopup()
 unsigned int undergroundMarketPopup()
 {
   createPopup(45, 131, 458, 230, 1);
-  writeTextInScreen((const char *)&unk_44BE88, 90300);
+  writeTextInScreen("", 90300);
   writeTextInScreen(aPsst___yeahYou, 100540);
-  writeTextInScreen((const char *)&unk_44BF28, 110780);
+  writeTextInScreen("", 110780);
   writeTextInScreen(aJealousyBurnsY, 121020);
   writeTextInScreen(aWantThatRoadAl, 131260);
   writeTextInScreen(aThoseRivalSuck, 141500);
   writeTextInScreen(aBlazeYouTakeTh, 151740);
   writeTextInScreen(aUndergroundM_0, 161980);
   writeTextInScreen(aDigOutTheDough, 172220);
-  writeTextInScreen((const char *)&unk_44C158, 182460);
+  writeTextInScreen("", 182460);
   return drawTextWithFont((int)graphicsGeneral.fbig3aBpk, (int)&bigLetterSpacing_445848, "CONTINUE", 202432);
 }
 
 unsigned int welcomePopup()
 {
   createPopup(45, 131, 458, 230, 1);
-  writeTextInScreen((const char *)&unk_44C1A8, 90300);
+  writeTextInScreen("", 90300);
   writeTextInScreen(aWelcomeToDea_0, 100540);
-  writeTextInScreen((const char *)&unk_44C248, 110780);
+  writeTextInScreen("", 110780);
   writeTextInScreen(aTheRaceIsOnInD, 121020);
   writeTextInScreen(aShortHotFastDe, 131260);
   writeTextInScreen(aHearTheRumble_, 141500);
   writeTextInScreen(aFeelOfIt_ButRe, 151740);
   writeTextInScreen(aFryTheRulesPla, 161980);
   writeTextInScreen(aRideYourMachin, 172220);
-  writeTextInScreen((const char *)&unk_44C478, 182460);
+  writeTextInScreen("", 182460);
   return drawTextWithFont((int)graphicsGeneral.fbig3aBpk, (int)&bigLetterSpacing_445848, "CONTINUE", 202432);
 }
 

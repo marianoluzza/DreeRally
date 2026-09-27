@@ -223,6 +223,7 @@
     <ClCompile Include="ui\util\carRightSide.c" />
     <ClCompile Include="ui\util\input.c" />
     <ClCompile Include="ui\util\menus.c" />
+    <ClCompile Include="ui\util\originalTexts.c" />
     <ClCompile Include="ui\util\popup.c" />
     <ClCompile Include="ui\util\raceResults.c" />
     <ClCompile Include="util.c" />
@@ -279,6 +280,7 @@
     <ClInclude Include="ui\util\carRightSide.h" />
     <ClInclude Include="ui\util\input.h" />
     <ClInclude Include="ui\util\menus.h" />
+    <ClInclude Include="ui\util\originalTexts.h" />
     <ClInclude Include="ui\util\popup.h" />
     <ClInclude Include="ui\util\raceResults.h" />
     <ClInclude Include="util.h" />
