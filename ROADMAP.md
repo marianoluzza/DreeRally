@@ -148,6 +148,39 @@ Pendiente, en orden sugerido:
    con el arreglo de `sub_418B00`, verificado el 26/09).
 6. Buffer de teclas `dword_4A7D20` a `int[16]` y apagar `debug` (pasos 2 y 3 del plan).
 
+### Resultados, ranking y textos (26/09, segunda tanda)
+
+Pendientes 1 y 2 resueltos y verificados por Mariano con dos carreras (media 2.º, fácil 1.º):
+6 puntos, 1 ganada de 2, del puesto 20 al 18, textos de sponsor y prestamista completos.
+
+| Síntoma | Causa | Dónde |
+| --- | --- | --- |
+| Jane Honda repetida en la tabla de la carrera | Puesto inicial tomado como índice en lugar de la dirección del puesto | `recalculateRacePositions_413380` |
+| El ranking no se actualizaba | `sub_423C90`/`recalcRank` quitados; `recalcRank` copiaba `drivers` sobre sí mismo y el intercambio usaba `unk_4611E0` (un byte) como buffer | `postRaceMain`, `dr.c` |
+| "Races won" mostraba el daño | El daño del coche se guardaba en `racesWon` | `previewRaceScreen` |
+| Ingresos de la carrera en `$0` | Asignación de `v126` absorbida por un `if` comentado; máximo de puntos leído de un array suelto | `previewRaceScreen`, `getMaxDriverPoints` |
+| Parrilla con basura, jugador en otro coche | Orden de la parrilla armado sobre locales supuestamente contiguos en la pila | `selectRaceScreen` |
+| Textos de sponsor, préstamo, tienda y reparación cortados o con basura | Tablas por coche transcritas como una sola cadena e indexadas `&cadena[800 * n]` | `originalTexts.c`, generado desde `dr.exe` por `tools/originalTexts.py` |
+| Cierre al comprar un coche | `malloc` sin sitio para el `$` | `showCarBought` |
+| El hongo duraba un cuadro | `=-` en lugar de `-=` | `startRace` |
+| La IA disparaba hacia atrás | Paréntesis perdidos en grados→radianes | sensores de disparo de la IA |
+| Dejaban de aparecer power-ups | El conteo leía `powerups[16..20]` | `generatePowerUps` |
+
+Herramienta nueva: el `dr.exe` original (`.local/original-exe/`) se desensambla con `dumpbin
+/disasm` y las direcciones coinciden con las del decompilado. Sirve para confirmar tipos y
+lógica: las ocho globales de física del punto 3 son todas `float` en el original (`fld`/`fstp
+dword`, nunca `fild` ni `mov`).
+
+Pendiente, en orden sugerido:
+
+1. **Tipos de la física** (ver arriba), ahora contrastando con el ensamblador.
+2. **Coche del jugador demasiado bueno.** Acelera, dobla y aguanta como con todas las mejoras;
+   explicaría en parte el poco daño. Revisar qué nivel de motor/gomas/blindaje lee la carrera.
+3. **Distancia del sonido.** Disparos y choques de la IA visibles en pantalla que no suenan:
+   el cálculo de distancia al jugador los da por lejanos.
+4. **Pintura del coche en la tienda** mal hasta que aparece el primer cartel.
+5. Iluminación, logos de sponsors y buffer de teclas/`debug` (puntos 4 a 6 anteriores).
+
 Método que funcionó y conviene repetir: lanzar el juego con
 `scripts/Start-Diagnostics.ps1`, que Mariano pruebe y reporte con capturas, y resolver cada
 volcado con símbolos antes de tocar código. Un cambio de comportamiento por vuelta, para
