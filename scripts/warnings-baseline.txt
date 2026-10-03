@@ -88,7 +88,7 @@
 1	dr.c: warning C4101: 'v100': variable local sin referencia
 1	dr.c: warning C4101: 'v101': variable local sin referencia
 1	dr.c: warning C4101: 'v102': variable local sin referencia
-2	dr.c: warning C4101: 'v103': variable local sin referencia
+1	dr.c: warning C4101: 'v103': variable local sin referencia
 1	dr.c: warning C4101: 'v104': variable local sin referencia
 1	dr.c: warning C4101: 'v105': variable local sin referencia
 1	dr.c: warning C4101: 'v106': variable local sin referencia
@@ -196,28 +196,28 @@
 1	dr.c: warning C4101: 'v85': variable local sin referencia
 1	dr.c: warning C4101: 'v86': variable local sin referencia
 1	dr.c: warning C4101: 'v87': variable local sin referencia
-2	dr.c: warning C4101: 'v88': variable local sin referencia
+1	dr.c: warning C4101: 'v88': variable local sin referencia
 1	dr.c: warning C4101: 'v89': variable local sin referencia
 4	dr.c: warning C4101: 'v9': variable local sin referencia
 1	dr.c: warning C4101: 'v90': variable local sin referencia
 2	dr.c: warning C4101: 'v91': variable local sin referencia
 1	dr.c: warning C4101: 'v92': variable local sin referencia
-2	dr.c: warning C4101: 'v93': variable local sin referencia
+1	dr.c: warning C4101: 'v93': variable local sin referencia
 1	dr.c: warning C4101: 'v94': variable local sin referencia
 1	dr.c: warning C4101: 'v95': variable local sin referencia
 1	dr.c: warning C4101: 'v96': variable local sin referencia
 1	dr.c: warning C4101: 'v97': variable local sin referencia
-2	dr.c: warning C4101: 'v98': variable local sin referencia
+1	dr.c: warning C4101: 'v98': variable local sin referencia
 1	dr.c: warning C4101: 'v99': variable local sin referencia
 2	dr.c: warning C4113: 'void (__cdecl *)()' es distinto en las listas de par├ímetros de 'void (__cdecl *)(void)'
 1	dr.c: warning C4244: '+=': conversi├│n de '__int64' a 'uint32'; posible p├⌐rdida de datos
-212	dr.c: warning C4244: '=': conversi├│n de 'double' a 'float'; posible p├⌐rdida de datos
+235	dr.c: warning C4244: '=': conversi├│n de 'double' a 'float'; posible p├⌐rdida de datos
 2	dr.c: warning C4244: '=': conversi├│n de 'double' a 'GLfloat'; posible p├⌐rdida de datos
-46	dr.c: warning C4244: '=': conversi├│n de 'double' a 'int'; posible p├⌐rdida de datos
+23	dr.c: warning C4244: '=': conversi├│n de 'double' a 'int'; posible p├⌐rdida de datos
 1	dr.c: warning C4244: '=': conversi├│n de 'double' a 'unsigned __int64'; posible p├⌐rdida de datos
-68	dr.c: warning C4244: '=': conversi├│n de 'float' a 'int'; posible p├⌐rdida de datos
+63	dr.c: warning C4244: '=': conversi├│n de 'float' a 'int'; posible p├⌐rdida de datos
 5	dr.c: warning C4244: '=': conversi├│n de 'float' a 'unsigned __int64'; posible p├⌐rdida de datos
-11	dr.c: warning C4244: '=': conversi├│n de 'int' a 'float'; posible p├⌐rdida de datos
+9	dr.c: warning C4244: '=': conversi├│n de 'int' a 'float'; posible p├⌐rdida de datos
 3	dr.c: warning C4244: '=': conversi├│n de 'long double' a 'float'; posible p├⌐rdida de datos
 1	dr.c: warning C4244: '=': conversi├│n de 'long double' a 'int'; posible p├⌐rdida de datos
 8	dr.c: warning C4244: '=': conversi├│n de 'unsigned __int64' a 'BYTE'; posible p├⌐rdida de datos

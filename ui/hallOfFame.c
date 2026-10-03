@@ -971,7 +971,7 @@ int sub_427BC0()
       while ( v5 );
       v3 += 150;
     }
-    while ( v3 < (signed int)&blacktx1Bpk );
+    while ( v3 < (signed int)MENU_NEWS_END_462CE4 );
     --v1;
   }
   while ( v1 );

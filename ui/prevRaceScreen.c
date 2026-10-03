@@ -1461,7 +1461,7 @@ LABEL_534:
         while ( v177 );
         v162 += 150;
       }
-      while ( v162 < (signed int)&blacktx1Bpk );
+      while ( v162 < (signed int)MENU_NEWS_END_462CE4 );
       if (raceParticipant[0].difficulty == -1 )
       {
         memcpy(&dword_462C4E, "-- Multiplayer connection lost!", 0x20u);
@@ -1534,7 +1534,7 @@ LABEL_534:
         while ( v198 );
         v196 += 150;
       }
-      while ( v196 < (signed int)&blacktx1Bpk );
+      while ( v196 < (signed int)MENU_NEWS_END_462CE4 );
     }
     else
     {
@@ -1551,7 +1551,7 @@ LABEL_534:
         while ( v164 );
         v162 += 150;
       }
-      while ( v162 < (signed int)&blacktx1Bpk );
+      while ( v162 < (signed int)MENU_NEWS_END_462CE4 );
       v165 = &byte_460840[v245];
       dword_462C4E = 2108717;
       v166 = &byte_460840[v245];
@@ -1604,7 +1604,7 @@ LABEL_534:
         while ( v175 );
         v173 += 150;
       }
-      while ( v173 < (signed int)&blacktx1Bpk );
+      while ( v173 < (signed int)MENU_NEWS_END_462CE4 );
     }
     v199 = 0;
     LOBYTE(dword_462C4E) = 0;
@@ -2084,7 +2084,7 @@ char sub_4279C0()
       while ( v5 );
       v3 += 150;
     }
-    while ( v3 < (signed int)&blacktx1Bpk );
+    while ( v3 < (signed int)MENU_NEWS_END_462CE4 );
     --v1;
   }
   while ( v1 );

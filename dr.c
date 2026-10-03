@@ -109,7 +109,6 @@ int dword_45F050; // idb
 char byte_462D50=2; // weak  //CHECK INTRO LO SETEA A 2
 float arrayDamageMultiplier[7] ={0.2,0.35,0.5,0.65,0.8,0.95,0.95}; 
    
-__int16 word_461ED4; // weak
 #define ADS 256;
 
 #define __thiscall   // Test compile in C mode
@@ -875,22 +874,8 @@ void *dword_461EA4; // idb
 int participantsRace[3];
 //__int16 word_461EB4; // weak
 //char byte_461EB6; // weak
+//Noticias del menu y su color; las globales sueltas del decompilado son alias en dr.h.
 char unk_461EC0[256]; // idb
-_UNKNOWN unk_461EC1; // weak
-_UNKNOWN unk_461EC2; // weak
-_UNKNOWN unk_461EC3; // weak
-__int16 word_461EC4; // weak
-_UNKNOWN unk_461EC6; // weak
-_UNKNOWN unk_461EC7; // weak
-__int16 word_461EC8; // weak
-_UNKNOWN unk_461ECA; // weak
-_UNKNOWN unk_461ECB; // weak
-__int16 word_461ECC; // weak
-_UNKNOWN unk_461ECE; // weak
-_UNKNOWN unk_461ECF; // weak
-__int16 word_461ED0; // weak
-_UNKNOWN unk_461ED2; // weak
-_UNKNOWN unk_461ED3; // weak
 
 void *dword_461ED8; // idb
 
@@ -906,13 +891,7 @@ int currentRaceBestLapMilliseconds_461FEC; // idb
 void *bases43Bpk; // idb
 void *event2Bpk; // idb
 
-_UNKNOWN unk_462000; // weak
-_UNKNOWN unk_462096; // weak
-_UNKNOWN unk_462960; // weak
-char byte_4629F6[256]; // weak
-char byte_462A8C[256]; // weak
-char byte_462B22[256]; // weak
-char byte_462BB8[256]; // weak
+char unk_462000[MENU_NEWS_LINES * MENU_NEWS_LINE_SIZE];
 
 void *blacktx1Bpk; // idb
 int selectedRace_462CE8; // weak
@@ -1664,6 +1643,14 @@ int initParticipantValues_401060()
       
 	  raceParticipant2[indexRaceParticipantt].carSize_4A6890 =  arrayv29[raceParticipant[indexRaceParticipantt].carType];//6 posiciones
 	  raceParticipant2[indexRaceParticipantt].damageBar_4A6898 = (100 - raceParticipant[indexRaceParticipantt].damage) << 10;
+	  {
+		  //Prueba: DREERALLY_FORCE_OPPONENT_LIFE=40 arranca a los rivales con esa vida (en %), para
+		  //tener coches destrozados pronto y probar los choques contra ellos.
+		  const char *forcedLife = getenv("DREERALLY_FORCE_OPPONENT_LIFE");
+		  int life = forcedLife ? atoi(forcedLife) : 0;
+		  if ( !v14 && life > 0 && life < 100 && raceParticipant2[indexRaceParticipantt].damageBar_4A6898 > life << 10 )
+			  raceParticipant2[indexRaceParticipantt].damageBar_4A6898 = life << 10;
+	  }
 	  raceParticipant2[indexRaceParticipantt].rocket = raceParticipant[indexRaceParticipantt].rocket;
 	  raceParticipant2[indexRaceParticipantt].spikes = raceParticipant[indexRaceParticipantt].spikes;
 	  raceParticipant2[indexRaceParticipantt].mines = raceParticipant[indexRaceParticipantt].mines;
@@ -2384,45 +2371,6 @@ int loadCarsImages()
 
 
 //----- (004032F0) --------------------------------------------------------
-//Diagnostico temporal: copia de la tabla de luz al cargarla, para detectar quien la pisa.
-BYTE litTableAtLoad[256];
-int litTableCorruptionLogged;
-
-char driverNamesAtLoad[20][12];
-int driverNamesCorruptionLogged;
-
-void checkLitTable(const char *where)
-{
-  const BYTE *lit = (const BYTE *)trxLITTab_4A9EE0;
-  int first, last, k;
-  if ( !driverNamesCorruptionLogged )
-  {
-    for ( k = 0; k < 20; ++k )
-    {
-      if ( memcmp(drivers[k].name, driverNamesAtLoad[k], 12) )
-      {
-        driverNamesCorruptionLogged = 1;
-        diagnosticLog("pilotos: NOMBRE PISADO en %s piloto=%d era=%.12s ahora=%02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X",
-                      where, k, driverNamesAtLoad[k],
-                      (BYTE)drivers[k].name[0], (BYTE)drivers[k].name[1], (BYTE)drivers[k].name[2], (BYTE)drivers[k].name[3],
-                      (BYTE)drivers[k].name[4], (BYTE)drivers[k].name[5], (BYTE)drivers[k].name[6], (BYTE)drivers[k].name[7],
-                      (BYTE)drivers[k].name[8], (BYTE)drivers[k].name[9], (BYTE)drivers[k].name[10], (BYTE)drivers[k].name[11]);
-        break;
-      }
-    }
-  }
-  if ( litTableCorruptionLogged || !memcmp(lit, litTableAtLoad, 256) )
-    return;
-  for ( first = 0; lit[first] == litTableAtLoad[first]; ++first )
-    ;
-  for ( last = 255; lit[last] == litTableAtLoad[last]; --last )
-    ;
-  litTableCorruptionLogged = 1;
-  diagnosticLog("luz: TABLA PISADA en %s bytes %d..%d (esperado %d, hay %d)", where, first, last, litTableAtLoad[first], lit[first]);
-  for ( k = first; k <= last && k < first + 32; k += 8 )
-    diagnosticLog("luz:   [%3d] %02X %02X %02X %02X %02X %02X %02X %02X", k, lit[k], lit[k + 1], lit[k + 2], lit[k + 3], lit[k + 4], lit[k + 5], lit[k + 6], lit[k + 7]);
-}
-
 int loadCircuitTabFiles()
 {
 //  int v0; // eax@1
@@ -2499,11 +2447,6 @@ int loadCircuitTabFiles()
     for ( k = 0; k < 256; ++k )
       same += lit[k] == k;
     diagnosticLog("luz: %s identidad=%d lit[144]=%d lit[200]=%d lit[250]=%d", (char *)v14, same, lit[144], lit[200], lit[250]);
-    memcpy(litTableAtLoad, lit, 256);
-    litTableCorruptionLogged = 0;
-    for ( k = 0; k < 20; ++k )
-      memcpy(driverNamesAtLoad[k], drivers[k].name, 12);
-    driverNamesCorruptionLogged = 0;
   }
   return extractFromBpa("ENGINE.BPA", &trxVARJOTab_466F00, "VARJO.TAB");
 }
@@ -5363,9 +5306,9 @@ int *initRaceValues_409F90()
   raceParticipantIngame[1].flt_4A7E58 = v4;
   v5 = (double)raceParticipant2[1].b;
   /*dword_4A8070*/raceParticipantIngame[1].participantBpkOffser_4A7D10 = 1600 * (raceParticipantIngame[1].directionRotation_4A7D0C + 96);
-  raceParticipantIngame[1].dword_4A7E50 = LODWORD(raceParticipantIngame[1].absolutePositionX_4A7DB4 );
+  raceParticipantIngame[1].dword_4A7E50 = raceParticipantIngame[1].absolutePositionX_4A7DB4;
   v6 = (double)raceParticipant2[1].g;
-  raceParticipantIngame[1].dword_4A7E54 = LODWORD(raceParticipantIngame[1].absolutePositionY_4A7DB8);
+  raceParticipantIngame[1].dword_4A7E54 = raceParticipantIngame[1].absolutePositionY_4A7DB8;
  raceParticipantIngame[1].currentLap_4A7E08 = 1;
   raceParticipantIngame[1].racePosition_4A7E09 = 2;
   dword_4A83AC = 0;
@@ -5376,9 +5319,9 @@ int *initRaceValues_409F90()
   raceParticipantIngame[2].flt_4A7E58 = v8;
   v9 = (double)raceParticipant2[2].b;
   /*dword_4A83D0*/raceParticipantIngame[2].participantBpkOffser_4A7D10 = 1600 * (raceParticipantIngame[2].directionRotation_4A7D0C + 192);
-  raceParticipantIngame[2].dword_4A7E50 = LODWORD(raceParticipantIngame[2].absolutePositionX_4A7DB4 );
+  raceParticipantIngame[2].dword_4A7E50 = raceParticipantIngame[2].absolutePositionX_4A7DB4;
   v10 = (double)raceParticipant[2].g;
-  raceParticipantIngame[2].dword_4A7E54 = LODWORD(raceParticipantIngame[2].absolutePositionY_4A7DB8);
+  raceParticipantIngame[2].dword_4A7E54 = raceParticipantIngame[2].absolutePositionY_4A7DB8;
   raceParticipantIngame[2].currentLap_4A7E08 = 1;
   raceParticipantIngame[2].racePosition_4A7E09 = 3;
   dword_4A870C = 0;
@@ -5391,8 +5334,8 @@ int *initRaceValues_409F90()
   raceParticipantIngame[3].currentLap_4A7E08 = 1;
   v14 = (double)raceParticipant2[3].g;
   /*dword_4A8730*/raceParticipantIngame[3].participantBpkOffser_4A7D10 = 1600 * (raceParticipantIngame[3].directionRotation_4A7D0C + 288);
-  raceParticipantIngame[3].dword_4A7E50 = LODWORD(raceParticipantIngame[3].absolutePositionX_4A7DB4 );
-  raceParticipantIngame[3].dword_4A7E54 = LODWORD(raceParticipantIngame[3].absolutePositionY_4A7DB8);
+  raceParticipantIngame[3].dword_4A7E50 = raceParticipantIngame[3].absolutePositionX_4A7DB4;
+  raceParticipantIngame[3].dword_4A7E54 = raceParticipantIngame[3].absolutePositionY_4A7DB8;
   raceParticipantIngame[3].racePosition_4A7E09 = 4;
   v15 = (double)raceParticipant2[3].r;
   dword_4A8A6C = 0;
@@ -7514,7 +7457,6 @@ LABEL_6:
 
 
 //----- (0040D920) --------------------------------------------------------
-void checkLitTable(const char *where);
 //Faros: los vertices del cono usan _ftol (con signo) en dr.exe. Con (unsigned __int64) el
 //seno o coseno negativo no tiene conversion definida y el cono se deformaba segun el angulo.
 int drawCarInRace_40D920()
@@ -9195,22 +9137,6 @@ int recalculateCarBoundary_411D10()
   signed int v81; // ebx@64
   signed int v82; // ebp@64
   int *v83; // edi@64
-  int v84; // ST38_4@68
-  int v85; // et1@68
-  double v87; // st7@68
-  char v88; // c0@68
-  int v89; // ST38_4@70
-  int v90; // et1@70
-  double v92; // st7@70
-  char v93; // c0@70
-  int v94; // ST38_4@74
-  int v95; // et1@74
-  double v97; // st7@74
-  char v98; // c0@74
-  int v99; // ST38_4@76
-  int v100; // et1@76
-  double v102; // st7@76
-  char v103; // c0@76
   bool v104; // sf@79
   unsigned __int8 v105; // of@79
   int v106; // ebx@82
@@ -9302,7 +9228,7 @@ int recalculateCarBoundary_411D10()
       raceParticipantIngame[v1].backRightAbsoluteXPosition_4A7E40 = sin((raceParticipantIngame[v1].carAngle_4A7DAC + 22.0) * 0.01745329251994444) * 12.0
                                + raceParticipantIngame[v1].absolutePositionX_4A7DB4;
 	  raceParticipantIngame[v1].backRightAbsoluteYPosition_4A7E44 = cos((raceParticipantIngame[v1].carAngle_4A7DAC + 22.0) * 0.01745329251994444) * 9.999995999999999
-                               + raceParticipantIngame[userRaceOrder_4A9EA8].absolutePositionY_4A7DB8;
+                               + raceParticipantIngame[v1].absolutePositionY_4A7DB8;
       if ( v3 > 0
         && raceParticipantIngame[ v1].carVelocity_4A7DB0 > 0.0
         && raceParticipant2[v1].efectiveEngine_4A6884 * 0.55 > raceParticipantIngame[ v1].carVelocity_4A7DB0
@@ -9449,38 +9375,16 @@ int recalculateCarBoundary_411D10()
                 if ( !*v83 )
                 {
                   *v83 = 1;
-                  v84 = (raceParticipantIngame[v1].backLeftAbsoluteXPosition_4A7E30);
-                  v85 = (raceParticipantIngame[v1].backLeftAbsoluteXPosition_4A7E30);
-                  v87 = (raceParticipantIngame[v1].backLeftAbsoluteXPosition_4A7E30);
-                  if ( !v87 )
-                    v87 = v87 + 1.0;
-                  raceParticipantIngame[v1].dword_4A7F5C[v176] = (int)v87;
-                  v89 = (raceParticipantIngame[v1].backLeftAbsoluteYPosition_4A7E34);
-                  v90 = (raceParticipantIngame[v1].backLeftAbsoluteYPosition_4A7E34);
-                  v92 = (raceParticipantIngame[v1].backLeftAbsoluteYPosition_4A7E34);
-                  if ( !v92 )
-                    v92 = v92 + 1.0;
-                  raceParticipantIngame[v1].dword_4A7FD4[v176] = (int)v92;
+                  //El original redondea desde 0,5 (0x412745), pero aqui las posiciones de rueda ya son int.
+                  raceParticipantIngame[v1].dword_4A7F5C[v176] = raceParticipantIngame[v1].backLeftAbsoluteXPosition_4A7E30;
+                  raceParticipantIngame[v1].dword_4A7FD4[v176] = raceParticipantIngame[v1].backLeftAbsoluteYPosition_4A7E34;
                   v82 = 1;
                 }
                 if (!raceParticipantIngame[v1].dword_4A7F20[v176])
                 {
                   raceParticipantIngame[v1].dword_4A7F20[v176] = 1;
-                  v94 = (raceParticipantIngame[v1].backRightAbsoluteXPosition_4A7E40);
-                  v95 = (raceParticipantIngame[v1].backRightAbsoluteXPosition_4A7E40);
-                  v97 =(raceParticipantIngame[v1].backRightAbsoluteXPosition_4A7E40);
-                  //if ( !v98 )
-				  if ( !v97 )                  
-                    v97 = v97 + 1.0;
-                  raceParticipantIngame[v1].dword_4A7F98[v176] = (int)v97;
-                  v99 = (raceParticipantIngame[v1].backRightAbsoluteYPosition_4A7E44);
-                  v100 =(raceParticipantIngame[v1].backRightAbsoluteYPosition_4A7E44);
-                  v102 = (raceParticipantIngame[v1].backRightAbsoluteYPosition_4A7E44);
-                  //if ( !v103 )
-				  if ( !v102 )
-                  
-                    v102 = v102 + 1.0;
-                  raceParticipantIngame[v1].dword_4A8010[v176] = (int)v102;
+                  raceParticipantIngame[v1].dword_4A7F98[v176] = raceParticipantIngame[v1].backRightAbsoluteXPosition_4A7E40;
+                  raceParticipantIngame[v1].dword_4A8010[v176] = raceParticipantIngame[v1].backRightAbsoluteYPosition_4A7E44;
                   v81 = 1;
                 }
                 ++v83;
@@ -11164,15 +11068,11 @@ LABEL_248:
         dword_445034 = (unsigned __int64)((double)(5 * dword_4A7EA0[ userRaceOrder_4A9EA8]) * v73
                                         + (double)(dword_4A7E9C[ userRaceOrder_4A9EA8] + 163840));
        //TODO FIX SONIDO  sub_43C1B0(1u, 0x10000, dword_445034);
-        checkLitTable("antes de recalculateCarBoundary");
         recalculateCarBoundary_411D10(); //esto peta creo que calcula posiciones con velocidad y tal.
-        checkLitTable("recalculateCarBoundary");
         checkVaiZones_412DF0();
-        checkLitTable("checkVaiZones");
         v74 = isMultiplayerGame;
         if ( !isMultiplayerGame || !dword_4A6B04 )
 			recalculateRacePositions_413380();
-		checkLitTable("recalculateRacePositions");
 			
 		if ( !v74 && (raceParticipantIngame[userRaceOrder_4A9EA8].hasFinishedTheRace_4A7E0C || raceParticipant2[ userRaceOrder_4A9EA8].damageBar_4A6898 <= 0) )
           ++framesAfterEndRaceOrCrash_4AA508;
@@ -11458,20 +11358,16 @@ LABEL_318:
 
     if ( !isMultiplayerGame )
       LOBYTE(v84) = drawShotPedestrian_4111F0();
-    checkLitTable("drawShotPedestrian");
     for ( currentDriverSelectedIndex_503518 = 0; currentDriverSelectedIndex_503518 < numberOfParticipants_508D24; ++currentDriverSelectedIndex_503518 )
     {
 		//draw smoke
       showSmoke_40F070(v84);
       v84 = currentDriverSelectedIndex_503518 + 1;
     }
-    checkLitTable("showSmoke");
 	drawCarInRace_40D920();
-    checkLitTable("drawCarInRace");
     //TODO FIXdrawExplosion_40FE20();
    if ( raceShowShadows_445030 )
       drawShadows_40D7B0();
-    checkLitTable("drawShadows");
     v85 = numberOfParticipants_508D24;
     for ( currentDriverSelectedIndex_503518 = 0; currentDriverSelectedIndex_503518 < numberOfParticipants_508D24; ++currentDriverSelectedIndex_503518 )
     {
@@ -11492,16 +11388,11 @@ LABEL_318:
     }
 
 	
-    checkLitTable("llamas y cohetes");
 	sub_4156B0();
-    checkLitTable("sub_4156B0");
     draw3dElements_4116D0();// esto falla
-    checkLitTable("draw3dElements");
     for ( currentDriverSelectedIndex_503518 = 0; currentDriverSelectedIndex_503518 < numberOfParticipants_508D24; ++currentDriverSelectedIndex_503518 )
       	drawShots_40EBC0(); //pinta disparos
-    checkLitTable("drawShots");
     powerUpTaken_410050();
-    checkLitTable("powerUpTaken");
     if ( !isMultiplayerGame )
       checkPokes_4136C0();
     if ( raceFrame_481E14 < 290 )
@@ -13292,7 +13183,9 @@ int sub_4224E0()
   {
     v29 = 0;
     v14 =0;
-	 index = 192; //offset de la paleta
+	 //El original escribe desde 0x460540 (unk_460544 - 4): colores 192..223. Con 192 (color 64)
+	 //pisaba la rampa del coche que acaba de armar sub_418B00 y el coche salia del color del fondo.
+	 index = 576;
 	//int index = 192;
 	//v14 = (signed int)&unk_460544;
     do
@@ -14196,7 +14089,7 @@ void refreshAndCheckConnection_42A570()
   char v12; // cl@24
   int v13; // eax@26
   char v14; // cl@27
-  void *v15 = malloc(0x64u); // eax@34
+  //void *v15; // eax@34  (solo lo usaba el multijugador; reservaba 100 bytes por cuadro)
   char *v16; // eax@34
   char v17; // dl@35
   unsigned int v18; // eax@36
@@ -16476,10 +16369,11 @@ LABEL_27:
     goto LABEL_26;
   }
 LABEL_28:
-  ;
- // free(Memory);
- // free(v18);
- // free(v19);
+  //El original libera las tres tablas al salir (0x43CB70). Comentadas perdian 24,5 KB por
+  //imagen descomprimida: ~1 MB/s en el Underground por la animacion de "continue".
+  free(Memory);
+  free(v18);
+  free(v19);
 }
 
 //----- (0043CB90) --------------------------------------------------------

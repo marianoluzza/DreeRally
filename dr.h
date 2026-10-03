@@ -19,27 +19,46 @@ int sub_423C90(int a1, int a2);
 void recalcRank(int a1);
 
 extern char byte_463E00[256]; // weak
-extern _UNKNOWN unk_462096; // weak
-
-extern __int16 word_461ED4; // weak
 extern void *volcur2Bpk; // idb
 
+//Noticias del menu. En el original son dos bloques contiguos: el color de cada linea
+//(0x461EC0, 22 bytes) y las lineas (0x462000, 22 x 150 bytes). El decompilado los partio en
+//globales sueltas y los bucles que desplazan las lineas corrian hasta &blacktx1Bpk, que aqui
+//esta en cualquier lado: pisaban memoria cada 150 bytes (drivers[] tras una carrera, 27/09).
+#define MENU_NEWS_LINES 22
+#define MENU_NEWS_LINE_SIZE 150
 extern char unk_461EC0[256]; // idb
-extern _UNKNOWN unk_461EC1; // weak
-extern _UNKNOWN unk_461EC2; // weak
-extern _UNKNOWN unk_461EC3; // weak
-extern __int16 word_461EC4; // weak
-extern _UNKNOWN unk_461EC6; // weak
-extern _UNKNOWN unk_461EC7; // weak
-extern __int16 word_461EC8; // weak
-extern _UNKNOWN unk_461ECA; // weak
-extern _UNKNOWN unk_461ECB; // weak
-extern __int16 word_461ECC; // weak
-extern _UNKNOWN unk_461ECE; // weak
-extern _UNKNOWN unk_461ECF; // weak
-extern __int16 word_461ED0; // weak
-extern _UNKNOWN unk_461ED2; // weak
-extern _UNKNOWN unk_461ED3; // weak
+#define unk_461EC1 (unk_461EC0[1])
+#define unk_461EC2 (unk_461EC0[2])
+#define unk_461EC3 (unk_461EC0[3])
+#define word_461EC4 (*(__int16 *)&unk_461EC0[4])
+#define unk_461EC6 (unk_461EC0[6])
+#define unk_461EC7 (unk_461EC0[7])
+#define word_461EC8 (*(__int16 *)&unk_461EC0[8])
+#define unk_461ECA (unk_461EC0[10])
+#define unk_461ECB (unk_461EC0[11])
+#define word_461ECC (*(__int16 *)&unk_461EC0[12])
+#define unk_461ECE (unk_461EC0[14])
+#define unk_461ECF (unk_461EC0[15])
+#define word_461ED0 (*(__int16 *)&unk_461EC0[16])
+#define unk_461ED2 (unk_461EC0[18])
+#define unk_461ED3 (unk_461EC0[19])
+#define word_461ED4 (*(__int16 *)&unk_461EC0[20])
+extern char unk_462000[MENU_NEWS_LINES * MENU_NEWS_LINE_SIZE];
+#define MENU_NEWS_LINE(n) (&unk_462000[(n) * MENU_NEWS_LINE_SIZE])
+#define MENU_NEWS_END_462CE4 MENU_NEWS_LINE(MENU_NEWS_LINES)
+#define unk_462096 (*MENU_NEWS_LINE(1))
+#define unk_462960 (*MENU_NEWS_LINE(16))
+#define byte_4629F6 MENU_NEWS_LINE(17)
+#define byte_462A8C MENU_NEWS_LINE(18)
+#define byte_462B22 MENU_NEWS_LINE(19)
+#define byte_462BB8 MENU_NEWS_LINE(20)
+#define dword_462C4E (*(int *)MENU_NEWS_LINE(21))
+#define dword_462C52 (*(int *)(MENU_NEWS_LINE(21) + 4))
+#define dword_462C56 (*(int *)(MENU_NEWS_LINE(21) + 8))
+#define dword_462C5A (*(int *)(MENU_NEWS_LINE(21) + 12))
+#define dword_462C5E (*(int *)(MENU_NEWS_LINE(21) + 16))
+#define word_462C62 (*(__int16 *)(MENU_NEWS_LINE(21) + 20))
 extern int joystick_y_axis_default_4A9EA0;
 extern int joystick_y_axis_4A9EB8;
 extern int joystick_x_axis_default_4AA3E0; // weak
@@ -48,10 +67,6 @@ extern char byte_456B00;
 extern void *slidmus2Bpk; // idb
 extern char byte_456B01;
 extern char byte_44512A;
-extern char byte_4629F6[256]; // weak
-extern char byte_462A8C[256]; // weak
-extern char byte_462B22[256]; // weak
-extern char byte_462BB8[256]; // weak
 
 extern __int16 word_45F010; // weak
 

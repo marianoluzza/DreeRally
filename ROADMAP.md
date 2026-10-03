@@ -232,6 +232,50 @@ Pendiente para la próxima sesión, en orden sugerido:
    del coche en la tienda, logos de sponsors, buffer de teclas y `debug`.
 6. `hallOfFame.c`: cuatro cadenas de un carácter sin terminador (`{ 'A' }`, …).
 
+### Sesión del 03/10
+
+Todo verificado por Mariano en pantalla. Otra vez, globales que en el original eran posiciones de
+un mismo buffer y en el port quedaron sueltas, y campos `float` declarados `int`.
+
+| Síntoma | Causa | Dónde |
+| --- | --- | --- |
+| Corrupción de `drivers[]` tras una carrera (cierre del 27/09) | Las noticias del menú (22 líneas × 150 bytes en 0x462000 y su color en 0x461EC0) estaban partidas en ~35 globales sueltas; el desplazamiento corría hasta `&blacktx1Bpk` y pisaba memoria cada 150 bytes. No tenía que ver con la pista forzada. Ahora son dos buffers y las globales, alias en `dr.h` | `sub_4279C0`, `sub_427BC0` |
+| Humo de derrape "corrido" a la altura del jugador | La Y de la rueda trasera derecha de cada coche usaba la posición del jugador | `recalculateCarBoundary_411D10` |
+| Textos de otro menú al volver con Escape | `sub_41ACF0` leía la tabla vieja de 50 bytes por texto; además "Continue Racing" (16 bytes) en `char[13]` | `ui/menu.c` |
+| Cierre al cargar partida (en la inscripción) | La tabla de ranuras (10 × 50 bytes, 0x446C32) era un byte: "Empty Slot" pisaba `graphics4` | `loadSaveGameScreen.c` |
+| El prompt de guardar decía "Empty Slot" / no ofrecía el nombre | Copia del nombre comentada (0x41C9D0) y comparación con un `int` en vez de "Empty Slot" | `savegame.c` |
+| Coche del color del fondo en el Underground al cargar | La rampa del fondo iba a `palette1[192]` (color 64, la del coche) y no a `[576]` (color 192) | `sub_4224E0` |
+| Coches enganchados tras chocar | Impulso, giro y posición anterior del choque son `float` en el original; como `int` el impulso < 1,4 px se perdía. El intento del 20/09 fallaba porque los coches 1–3 guardaban `LODWORD` (los bits) de la posición | `unk_4A7DFC/E00/E04`, `dword_4A7E50/54` |
+| Memoria creciendo ~1 MB/s hasta 1,4 GB | `decryptTexture` no liberaba sus tres tablas (el original sí); el menú de carga descifraba la partida en cada dibujado; 100 bytes por cuadro en `refreshAndCheckConnection_42A570`; `hash_index` copiaba todas las claves en cada búsqueda | `dr.c`, `savegame.c`, `util/hash.c` |
+
+Canarios del 27/09 retirados. Prueba nueva: `DREERALLY_FORCE_OPPONENT_LIFE=40` arranca a los
+rivales con esa vida (no guardar encima de la partida buena: el daño queda en su ficha).
+
+Herramienta nueva para memoria: volcado completo con `procdump -ma -r <pid>` (clona el proceso,
+casi no lo congela) y recorrer el heap de depuración del CRT. Cada bloque va precedido por
+`next, prev, file, line, blockUse, dataSize, request` (7 × 4 bytes) y `FD FD FD FD`; agrupar por
+`dataSize` con `blockUse == 1` da el culpable al instante (script en el scratchpad de la sesión,
+fácil de rehacer).
+
+Pendiente para la próxima sesión, en orden sugerido:
+
+1. **Física, segundo grupo**: `dword_4A7DBC`, `dword_4A7DC0`, `dword_4A7DC4`, `dword_4A7DF4` y
+   `dword_4A7DF8` son `float` en el original. Luego las ocho posiciones de rueda
+   (`front/backLeft/RightAbsoluteX/YPosition_4A7E10..44`), también `float`: al pasarlas,
+   restaurar el redondeo del humo desde 0,5 (0x412745).
+2. **IA contra una pared**: si un choque la deja de frente a un borde, sigue acelerando contra él
+   hasta que otro coche la mueve (TR8, bajo el puente). Ver si el original tiene recuperación.
+3. **Memoria por carrera** (~15–25 MB): `free` comentados al terminar la carrera (imágenes del
+   circuito, escenario 3D, `genflaBpk`, cohetes, humo…). Restaurarlos de a uno. Quedan además
+   `malloc(100)` sin liberar en `drawRightPositions` y otras pantallas, y `Str` (global
+   compartida) se reserva en cada `decryptEntireSavegame`.
+4. **Titileo del menú** (`sub_4220D0`): el bucle compara una dirección con
+   `maxPaletteEntries*3` y corre una sola vez; en el original recorre `palette2` hasta 0x461424.
+5. "Continue Racing" / "Enter The Shop": el original cambia esos textos al empezar partida, pero
+   `getMenuText` siempre devuelve los de inicio (faltaría también su traducción).
+6. Siguen los pendientes del 27/09: `BYTE` con signo, polígonos 3D, animación de largada,
+   distancia del sonido, logos de sponsors, buffer de teclas, `debug` y `hallOfFame.c`.
+
 Método que funcionó y conviene repetir: lanzar el juego con
 `scripts/Start-Diagnostics.ps1`, que Mariano pruebe y reporte con capturas, y resolver cada
 volcado con símbolos antes de tocar código. Un cambio de comportamiento por vuelta, para

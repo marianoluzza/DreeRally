@@ -3,6 +3,7 @@
 #include "hash.h"
 #include <malloc.h>
 #include <string.h>
+#include <SDL_stdinc.h>
 
 hash_t *hash_new (int size) {
     hash_t *h = malloc(sizeof (hash_t));
@@ -17,19 +18,10 @@ hash_t *hash_new (int size) {
  
 int hash_index (hash_t *h, char *key) {
     int i;// = (int) hash(key) % h->size;
-	char *orig ="";
-	char * dest="";
-	dest =malloc(strlen(key));
-	if (dest != NULL) {
-		strcpy(dest, key);
-	}
+	//Comparacion sin mayusculas y sin copias: antes cada busqueda reservaba la clave y todas
+	//las guardadas (sin sitio para el terminador) y nunca las liberaba.
 	for(i=0;i<h->filled;i++){
-		orig = malloc(strlen(h->keys[i]));
-		if (orig != NULL) {
-			strcpy(orig, h->keys[i]);
-		}
-		
-		if(strcmp(_strupr(orig),_strupr(dest))==0){
+		if(SDL_strcasecmp(h->keys[i], key)==0){
 			return i;
 		}
 	}

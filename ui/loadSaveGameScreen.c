@@ -15,13 +15,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-_UNKNOWN unk_446C32; // weak
+//Nombres de las ranuras de guardado, 50 bytes cada una como en el original; era un solo byte
+//y escribir "Empty slot" en las 10 ranuras pisaba graphics4 (cierre al cargar partida, 03/10).
+char unk_446C32[10 * 50];
 BYTE unk_4455B0[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
 
 void *Str; // idb
-int dword_443D18 = 1953525061; // weak
 char loadSaveScreenaStartANewGam_0[17] = "Start A New Game"; // weak
-char loadSaveScreenaStartRacing[13] = "Start Racing"; // weak
+char loadSaveScreenaStartRacing[16] = "Start Racing"; // weak  //recibe "Continue Racing" (16 bytes)
 //----- (0042F2E0) --------------------------------------------------------
 signed int loadGame()
 {
@@ -248,7 +249,7 @@ __int16 savegameWithName()
       drawTextWithFont((int)graphicsGeneral.fsma3aBpk, (int)&letterSpacing_4458B0, "Enter the name of save game?", 180610);
       refreshAllScreen();
       v7 = (char *)&unk_446C32 + 50 * v6;
-      if ( !memcmp((char *)&unk_446C32 + 50 * v6, &dword_443D18, 0xBu) )
+      if ( !memcmp((char *)&unk_446C32 + 50 * v6, "Empty Slot", 0xBu) )
       {
         v27[0] = 0;
       }

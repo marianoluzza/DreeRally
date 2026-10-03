@@ -567,7 +567,7 @@ int dword_445188 = 163840; // weak
 char byte_45FC10[256]; // weak
 char menuaStartANewGame[17] = "Start A New Game"; // weak
 char menuaStartANewGam_0[17] = "Start A New Game"; // weak
-char menuaStartRacing[13] = "Start Racing"; // weak
+char menuaStartRacing[16] = "Start Racing"; // weak  //recibe "Continue Racing" (16 bytes)
 //----- (0042E0B0) --------------------------------------------------------
 signed int   readEventInMenu(int menuType)
 {
@@ -1690,7 +1690,7 @@ int   sub_41ACF0(int a1)
   drawTextWithFont(
     (int)graphics2.fbig3bBpk,
     (int)&bigLetterSpacing_445848,
-    &menuaStartRacing[50 * (dword_445708[v1] + 9 * a1)],
+    getMenuText(a1, dword_445708[v1]),
     640 * (dword_4456F8[v1] + dword_445708[v1] * dword_4456FC[v1]) + dword_4456F4[v1] + 3232);
   v4 = dword_4456F0[v1] - 1;
   v5 = v4 * dword_4456FC[v1];
@@ -1713,7 +1713,7 @@ int   sub_41ACF0(int a1)
   drawTextWithFont(
     (int)graphicsGeneral.fbig3aBpk,
     (int)&bigLetterSpacing_445848,
-    &menuaStartRacing[50 * (v9 + v17)],
+    getMenuText(a1, v9),
     640 * (v10 + dword_4456F8[v1]) + dword_4456F4[v1] + 3232);
   drawImageWithPosition(
     (int)((char *)graphics2.cursorBpk + 400 * cursorBpkFrame),
