@@ -302,6 +302,20 @@ igual que en el original, así que en pantalla suena muy bajo; los choques entre
 no tienen sonido en el original. Tampoco importa el `abs` que upstream agregó al sensor
 `LR1`: el mapa vale 0..15 en los diez circuitos.
 
+Pendiente para la próxima sesión, en orden sugerido:
+
+1. **Memoria por carrera** (~20–30 MB por carrera; el 03/10 subió de 100 a 168 MB en una sesión):
+   `free` comentados al terminar la carrera (imágenes del circuito, escenario 3D, `genflaBpk`,
+   cohetes, humo…), `malloc(100)` sin liberar en `drawRightPositions`, `reloadArmourAnimation2` y
+   otras pantallas, y `Str` reservado en cada `decryptEntireSavegame`. Restaurarlos de a uno,
+   cotejando con el original, y medir con `procdump -ma -r` + heap de depuración.
+2. **Titileo del menú** (`sub_4220D0`): el bucle de paleta corre una sola vez (ver arriba).
+3. **`BYTE` con signo** en `defs.h`, en una vuelta propia.
+4. **Polígonos 3D del escenario** (tipo leído como `char`, casos 0x80–0x8A sin ejecutar).
+5. Animación de largada (`sub_404C30`), logos de sponsors en la tienda, buffer de teclas
+   `dword_4A7D20` a `int[16]` (el original lo indexa de a 4 bytes) y `debug`, `hallOfFame.c`.
+6. Antes del PR a upstream: decidir qué infraestructura local va (ver "Forma de avanzar").
+
 Método que funcionó y conviene repetir: lanzar el juego con
 `scripts/Start-Diagnostics.ps1`, que Mariano pruebe y reporte con capturas, y resolver cada
 volcado con símbolos antes de tocar código. Un cambio de comportamiento por vuelta, para
