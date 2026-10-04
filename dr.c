@@ -8431,6 +8431,7 @@ int drawRocket_40F450()
   bool v20; // sf@26
   unsigned __int8 v21; // of@26
   signed int v23; // [sp+0h] [bp-4h]@13
+  void *rocketBpk;
 
   v0 = currentDriverSelectedIndex_503518;
   LODWORD(v1) = currentDriverSelectedIndex_503518;
@@ -8463,7 +8464,9 @@ int drawRocket_40F450()
       if ( v8 + 16 < 320 && v9 >= 0 && v9 + 16 < 200 )
       {
         v10 = raceParticipantIngame[v2].directionRotation_4A7D0C;
-        v11 = dword_456AFC;//parece que es el frame
+        v11 = dword_456AFC;//cuadro de la animacion (0/1)
+        //El original elige la hoja con [ebp*4+479260h] (0x40F592): rocket1Bpk o rocket2Bpk.
+        rocketBpk = v11 ? rocket2Bpk : rocket1Bpk;
         v12 = v9 << 9;
         v13 = v10 / 4 << 8;//12288 es el tama\F1o de la images y tiene 24 sprites 12288/24=512 bytes por sprite
         v23 = 16;
@@ -8474,17 +8477,16 @@ int drawRocket_40F450()
           do
           {
 
-			  //v11 es para poner rocker2bpks
-            v15 = *((BYTE *)rocket1Bpk + v11 + v13 + v14);
+            v15 = *((BYTE *)rocketBpk + v13 + v14);
             if ( v15 )
               *(BYTE *)(v14 + v12 + dword_464F14 + v8 + 96) = v15;
-            v16 = *((BYTE *)&rocket1Bpk + v11 + v13 + v14 + 1);
+            v16 = *((BYTE *)rocketBpk + v13 + v14 + 1);
             if ( v16 )
               *(BYTE *)(v14 + v12 + dword_464F14 + v8 + 97) = v16;
-            v17 = *((BYTE *)rocket1Bpk + v11 + v13 + v14 + 2);
+            v17 = *((BYTE *)rocketBpk + v13 + v14 + 2);
             if ( v17 )
               *(BYTE *)(v14 + v12 + dword_464F14 + v8 + 98) = v17;
-            v18 = *((BYTE *)rocket1Bpk + v11 + v13 + v14 + 3);
+            v18 = *((BYTE *)rocketBpk + v13 + v14 + 3);
             if ( v18 )
               *(BYTE *)(v14 + v12 + dword_464F14 + v8 + 99) = v18;
             v14 += 4;
