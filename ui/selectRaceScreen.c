@@ -207,9 +207,10 @@ int calculateNextRaces()
   lastCircuitsSelected_456780[0] = (unsigned __int8)circuitsToSelect_46126C[0];
   do
   {
-    circuitsToSelect_46126C[1] = circuitOrder_45673C[rand() % 6];
-	//circuitsToSelect_46126C[1] = byte_45673E[rand() % 6];
-	//byte_46126D = byte_45673E[rand() % 6];
+    //Cada dificultad toma su tramo de la tabla: medio desde la posicion 2 (0x4241A1) y dificil
+    //desde la 5 (0x4241F5). Tomandolas todas desde 0, en dificil salian los circuitos faciles
+    //y Downtown, Bogota y Velodrome (y sus invertidos) no salian nunca.
+    circuitsToSelect_46126C[1] = circuitOrder_45673C[2 + rand() % 6];
     v8 = rand() & 0x80000001;
     v7 = v8 == 0;
     if ( (v8 & 0x80000000) != 0 )
@@ -228,8 +229,7 @@ int calculateNextRaces()
   lastCircuitsSelected_456780[1] = (unsigned __int8)v9;
   do
   {
-    circuitsToSelect_46126C[2] = circuitOrder_45673C[rand() % 4];
-	//byte_46126E = byte_456741[rand() % 4];
+    circuitsToSelect_46126C[2] = circuitOrder_45673C[5 + rand() % 4];
     result = rand() % 2;
     v5 = result == 0;
     LOBYTE(result) = circuitsToSelect_46126C[2];
@@ -245,6 +245,9 @@ int calculateNextRaces()
   //while ( dword_456788 == (unsigned __int8)result || byte_46126D == (BYTE)result );
   while (lastCircuitsSelected_456780[2] == (unsigned __int8)result || circuitsToSelect_46126C[1] == (BYTE)result);
   lastCircuitsSelected_456780[2] = (unsigned __int8)result;
+  diagnosticLog("circuitos: facil=%s medio=%s dificil=%s",
+                circuits[(unsigned __int8)circuitsToSelect_46126C[0]], circuits[(unsigned __int8)circuitsToSelect_46126C[1]],
+                circuits[(unsigned __int8)circuitsToSelect_46126C[2]]);
 
   //TODO esto es para que salgan fijas
 if(debug==1){
