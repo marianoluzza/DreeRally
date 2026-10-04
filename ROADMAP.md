@@ -276,6 +276,32 @@ Pendiente para la próxima sesión, en orden sugerido:
 6. Siguen los pendientes del 27/09: `BYTE` con signo, polígonos 3D, animación de largada,
    distancia del sonido, logos de sponsors, buffer de teclas, `debug` y `hallOfFame.c`.
 
+### Sesión del 03/10, segunda tanda
+
+| Síntoma | Causa | Dónde |
+| --- | --- | --- |
+| Derrape corto, coleadas pobres | Deslizamiento lateral `dword_4A7DBC` declarado `int` (se truncaba); también `DC0`, `DC4`, `DF4`, `DF8`, que son `float` en el original | `RaceParticipantIngame`, `calculateUserMovements_40BAB0` |
+| Marcas y chirrido de derrape según el lado | `fabs` del deslizamiento (0x4124A2) traducido como "negar si DC0 o DC4 no son 0" | `recalculateCarBoundary_411D10` |
+| Los pinchos casi no hacían daño | Paréntesis perdidos: el segundo sensor sumaba la posición en lugar de restarla (0x40D457) | `recalculateRaceCarWithOrientation` |
+| En dificil salian los circuitos faciles; Downtown, Bogota y Velodrome (y sus invertidos) nunca | Las tres dificultades tomaban la tabla de circuitos desde el principio; el original usa los tramos 0..4, 2..7 y 5..8 | `selectRaceScreen` |
+| Animación del motor que "se corre y vuelve" tras comprar | Tablas de tamaños de cuadro copiadas a mano con tres valores mal (motor 37, reparación 22, continue 1); cotejadas con la `.data` | `anim.c` |
+| La bandera de "continue" aleteaba rapidísimo en la tienda y quedaba quieta al entrar al Underground | Avanzaba módulo 2 en la tienda y no avanzaba en la transición; el original recorre 23 cuadros en los seis lugares. Reparación: 24 cuadros, no 23 | `shopScreen.c`, `blackMarketScreen.c` |
+| Interferencia en voces y explosiones, efectos a destiempo | El stream de efectos se creaba con `FSOUND_UNSIGNED` (0x80); el original usa 0x50, 16 bits estéreo con signo, que es lo que entrega el mezclador. Para compensar, upstream dividía el volumen de los efectos por 32 (`>>5`), fijaba la envolvente en 64 y la inicializaba en 32; el original multiplica por `envvol` sin correr y lo arranca en 64 (0x43E994, 0x43EB36). Además el período se multiplicaba por 0,62 (sube la nota ~×4) para compensar que FMOD leía el stream como 8 bits mono, cuatro veces más lento (0x43EC2E) | `loadMusic`, `soundSystem.c` |
+| El menú seguía diciendo "Start Racing" / "Start A New Game" con una partida en curso, y tras cargar una partida "Start A New Game" llevaba a la licencia | Cada pantalla escribía "Continue Racing" / "Enter The Shop" en su propia copia del texto y `getMenuText` leía otra tabla; ahora es un único par de buffers, con traducción | `menus.c`, `menu.c`, `loadSaveGameScreen.c`, `prevRaceScreen.c`, `shopScreen.c` |
+| Cierre en la tienda con blindaje ≥ 1 | Tabla de cuadros del blindaje indexada de a 16 bytes en vez de 64 (0x420ADB); el tope comparaba con las mejoras de motor | `reloadArmourAnimation2` |
+
+Mariano confirmó que las coleadas andan mejor; tres carreras sin valores no finitos en la física. El sonido quedó "impecable" (Mariano, 03/10). Circuitos por dificultad: diez rondas registradas en el log (`circuitos:`), todas dentro de las listas del original. El cierre de
+la tienda las animaciones de la tienda y los textos del menú también verificados.
+
+Revisado sin cambios: la IA contra una pared (pendiente 2 del 03/10) es fiel al original. El
+modo "retroceder girando" (`dword_4A7E80`) nunca se activa, ni siquiera en `dr.exe`; la única
+recuperación es el rebote y la búsqueda de hueco al azar con `E94 > 3`, que conserva el rumbo,
+así que un coche de frente al muro sigue trabado hasta que otro lo empuja. Salir de esa traba
+queda como mejora propia (sección 5). Sonido de la IA lejana: el volumen cae lineal con la distancia (36864 − 75·d, se corta a ~430 px)
+igual que en el original, así que en pantalla suena muy bajo; los choques entre coches de la IA
+no tienen sonido en el original. Tampoco importa el `abs` que upstream agregó al sensor
+`LR1`: el mapa vale 0..15 en los diez circuitos.
+
 Método que funcionó y conviene repetir: lanzar el juego con
 `scripts/Start-Diagnostics.ps1`, que Mariano pruebe y reporte con capturas, y resolver cada
 volcado con símbolos antes de tocar código. Un cambio de comportamiento por vuelta, para
@@ -323,9 +349,25 @@ Prioridad P2; después de la base estable.
       prueba (`DREERALLY_FORCE_MUSHROOM=1`) y, según Mariano, es muy divertido; darle un lugar
       en el juego (carrera especial u opción).
 
+- [ ] IA trabada contra una pared: si queda de frente a un borde sigue acelerando contra él
+      hasta que otro coche la empuja. Pasa también en el original. Mejora propia, por ejemplo
+      marcha atrás girando tras unos segundos sin avanzar. Hacerla después de terminar la
+      fidelidad con el original.
+
+- [ ] Todos los circuitos en cualquier dificultad (quizás como opción). En el original cada
+      nivel tiene su lista (Rock Zone, por ejemplo, no sale en Hard), así que hay pistas que no
+      se pueden correr ni pelear su récord en algunos niveles. Mejora propia, después del PR.
+
 Multijugador, motor nuevo, conversión a 64 bits y contenido adicional quedan para una etapa posterior; no son condiciones del primer hito.
 
 ## Forma de avanzar
+
+Plan con upstream: primero terminar la base fiel al original (errores de traducción del
+decompilado, cierres y pérdidas de memoria) y ofrecerla como PR a
+`enriquesomolinos/DreeRally`, rama `0.3.x`. Después vienen las features propias (sección 5),
+que ya no son arreglos del original. Por eso cada commit de fidelidad va separado de cualquier
+mejora propia, y la infraestructura local (scripts, diagnóstico, variables `DREERALLY_FORCE_*`,
+este ROADMAP) se decide aparte antes de armar el PR.
 
 Cada cambio debe tener un objetivo verificable, instrucciones de prueba y evidencia del resultado. Mantener mejoras de infraestructura separadas de cambios de gameplay. Trabajar en ramas para las siguientes modificaciones y conservar siempre la atribución upstream.
 

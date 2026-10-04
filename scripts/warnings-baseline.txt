@@ -211,15 +211,14 @@
 1	dr.c: warning C4101: 'v99': variable local sin referencia
 2	dr.c: warning C4113: 'void (__cdecl *)()' es distinto en las listas de par├ímetros de 'void (__cdecl *)(void)'
 1	dr.c: warning C4244: '+=': conversi├│n de '__int64' a 'uint32'; posible p├⌐rdida de datos
-235	dr.c: warning C4244: '=': conversi├│n de 'double' a 'float'; posible p├⌐rdida de datos
+243	dr.c: warning C4244: '=': conversi├│n de 'double' a 'float'; posible p├⌐rdida de datos
 2	dr.c: warning C4244: '=': conversi├│n de 'double' a 'GLfloat'; posible p├⌐rdida de datos
-23	dr.c: warning C4244: '=': conversi├│n de 'double' a 'int'; posible p├⌐rdida de datos
+15	dr.c: warning C4244: '=': conversi├│n de 'double' a 'int'; posible p├⌐rdida de datos
 1	dr.c: warning C4244: '=': conversi├│n de 'double' a 'unsigned __int64'; posible p├⌐rdida de datos
-63	dr.c: warning C4244: '=': conversi├│n de 'float' a 'int'; posible p├⌐rdida de datos
+60	dr.c: warning C4244: '=': conversi├│n de 'float' a 'int'; posible p├⌐rdida de datos
 5	dr.c: warning C4244: '=': conversi├│n de 'float' a 'unsigned __int64'; posible p├⌐rdida de datos
 9	dr.c: warning C4244: '=': conversi├│n de 'int' a 'float'; posible p├⌐rdida de datos
-3	dr.c: warning C4244: '=': conversi├│n de 'long double' a 'float'; posible p├⌐rdida de datos
-1	dr.c: warning C4244: '=': conversi├│n de 'long double' a 'int'; posible p├⌐rdida de datos
+4	dr.c: warning C4244: '=': conversi├│n de 'long double' a 'float'; posible p├⌐rdida de datos
 8	dr.c: warning C4244: '=': conversi├│n de 'unsigned __int64' a 'BYTE'; posible p├⌐rdida de datos
 85	dr.c: warning C4244: '=': conversi├│n de 'unsigned __int64' a 'int'; posible p├⌐rdida de datos
 1	dr.c: warning C4244: '-=': conversi├│n de 'unsigned __int64' a 'int'; posible p├⌐rdida de datos
@@ -232,7 +231,6 @@
 3	dr.c: warning C4244: 'return': conversi├│n de 'unsigned __int64' a 'int'; posible p├⌐rdida de datos
 4	dr.c: warning C4305: '=': truncamiento de 'double' a 'float'
 6	dr.c: warning C4305: 'inicializando': truncamiento de 'double' a 'float'
-3	dr.c: warning C4554: "|": compruebe la prioridad de operador para posibles errores; utilice par├⌐ntesis para indicar la prioridad
 2	dr.c: warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _itoa. See online help for details.
 1	drivers.c: warning C4013: 'reInitUnderGroundMarketStock' sin definir; se supone que extern devuelve como resultado int
 1	drivers.c: warning C4013: 'sub_4224E0' sin definir; se supone que extern devuelve como resultado int
@@ -391,7 +389,7 @@
 4	sfx\minifmod\soundSystem.c: warning C4101: 'v8': variable local sin referencia
 6	sfx\minifmod\soundSystem.c: warning C4101: 'v9': variable local sin referencia
 3	sfx\minifmod\soundSystem.c: warning C4244: '*=': conversi├│n de 'double' a 'float'; posible p├⌐rdida de datos
-2	sfx\minifmod\soundSystem.c: warning C4244: '=': conversi├│n de 'double' a 'float'; posible p├⌐rdida de datos
+3	sfx\minifmod\soundSystem.c: warning C4244: '=': conversi├│n de 'double' a 'float'; posible p├⌐rdida de datos
 1	sfx\minifmod\soundSystem.c: warning C4244: '=': conversi├│n de 'double' a 'int'; posible p├⌐rdida de datos
 1	sfx\minifmod\soundSystem.c: warning C4244: '=': conversi├│n de 'float' a 'unsigned __int64'; posible p├⌐rdida de datos
 3	sfx\minifmod\soundSystem.c: warning C4244: '=': conversi├│n de 'unsigned __int64' a 'int'; posible p├⌐rdida de datos
