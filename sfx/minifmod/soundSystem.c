@@ -89,7 +89,9 @@ void *  FSOUND_File_OpenCallback_43AD80(int size,char *data)
  // v3 = calloc(0xCu, 1u);
   handle = v3;
   *(_DWORD *)v3 = v2;
-  v5 = calloc(v2, 1u);
+  //El original copiaba los datos a un calloc(size) que liberaba al cerrar; aqui se lee directo
+  //de data, asi que esa copia (sin usar ni liberar) perdia el tamano entero del banco de efectos.
+  v5 = NULL;
 
  // v1 = calloc(v2, 1u);//esto lo he puesto yo para que no falle
  // v6 = *(_DWORD *)handle; //v4 es el tama�o del audio
@@ -260,6 +262,34 @@ char   FMUSIC_FreeSong_43D940(FMUSIC_MODULE *mod)
     while ( byte_456C35 )//while(FSOUND_Software_UpdateMutex);
       ;
     FMUSIC_StopSong_43D8E0(mod);
+    //Igual que el original (0x43D967): muestras, instrumentos, patrones y el modulo.
+    if ( mod->instrument )
+    {
+      for ( v3 = 0; v3 < mod->numinsts; v3++ )
+      {
+        FMUSIC_INSTRUMENT *iptr = &mod->instrument[v3];
+        for ( v7 = 0; v7 < iptr->numsamples; v7++ )
+        {
+          FSOUND_SAMPLE *sptr = iptr->sample[v7];
+          if ( sptr )
+          {
+            FSOUND_Memory_Free(sptr->buff);
+            FSOUND_Memory_Free(sptr);
+          }
+        }
+      }
+      FSOUND_Memory_Free(mod->instrument);
+    }
+    if ( mod->pattern )
+    {
+      for ( i = 0; i < mod->numpatternsmem; i++ )
+      {
+        if ( mod->pattern[i].data )
+          FSOUND_Memory_Free(mod->pattern[i].data);
+      }
+      FSOUND_Memory_Free(mod->pattern);
+    }
+    FSOUND_Memory_Free(mod);
     result = 1;
   }
   else
@@ -2025,12 +2055,11 @@ char   FMUSIC_LoadXM_43EF60(FMUSIC_MODULE *mod, FSOUND_FILE_HANDLE *fp)
   }
   
   
-  v7 = mod->numpatternsmem;
-  if ( v7 <= (unsigned __int16)filenumpatterns_v54 )
-    v7 = (unsigned __int16)filenumpatterns_v54;
- 
+  //La tabla tiene que cubrir numpatternsmem (FMUSIC_FreeSong la recorre entera); v7 leia
+  //numpatternsmem antes de calcularlo, cuando todavia valia 0.
   mod->numpatternsmem = (mod->numpatterns > filenumpatterns_v54 ? mod->numpatterns : filenumpatterns_v54);
-  mod->pattern = calloc(8 * v7, 1u);	//FIXME:MEMLEAK
+  v7 = mod->numpatternsmem;
+  mod->pattern = calloc(8 * v7, 1u);
 
   v8 = filenumpatterns_v54;
   v52 = 0;
@@ -2126,6 +2155,7 @@ char   FMUSIC_LoadXM_43EF60(FMUSIC_MODULE *mod, FSOUND_FILE_HANDLE *fp)
     do
     {
       //v19 = *(_DWORD *)effectStruct + 8 * v18;
+      pptr_v10 = &mod->pattern[v18];
       pptr_v10->rows= 64; //v19
       pptr_v10->data = (FMUSIC_NOTE *)FSOUND_Memory_Calloc(mod->numchannels * pptr_v10->rows * sizeof(FMUSIC_NOTE));
 	
@@ -2269,6 +2299,8 @@ LABEL_94:
           //v50 = v20 + 4;
           do
           {
+            //Cada muestra lee sus propios datos; sin esto todas caian sobre la ultima.
+            sptr_v48 = iptr_v20->sample[v51];
            //todofix v30 = *(_DWORD *)v50;
             //v31 = *(_DWORD *)(*(_DWORD *)v50 + 4);
             samplelenbytes_v32 = sptr_v48->length * sptr_v48->bits / 8;// (unsigned int)*(BYTE *)(*(_DWORD *)v50 + 28) >> 3;
@@ -2411,10 +2443,12 @@ LABEL_94:
           FSOUND_File_SeekCallback_43AE30(fp->userhandle, firstsampleoffset, SEEK_SET);
         //FSOUND_File_Seek_43F7B0(fp);
       }
+	  //Con "v45 < v53" se cargaban dos instrumentos de mas, fuera de la tabla (el desborde
+	  //aparecio al liberarla en FMUSIC_FreeSong).
 	  v45 = mod->numinsts;
-	  if(v45<v53)
-		goto LABEL_90;
 	  v53++;
+	  if(v53 >= v45)
+		goto LABEL_90;
 
 	  //esto hay que cambiarlo porque ni idea
       /*v45 = *(_WORD *)(effectStruct + 32);
@@ -2468,7 +2502,6 @@ FSOUND_FILE_HANDLE * FSOUND_File_Open_43F720(int size,char *data, signed char ty
 	void *result; // eax@2
   FSOUND_FILE_HANDLE *handle;
 
-  void *v3 = calloc(0x18u, 1u); // esi@1
   handle = calloc(0x18u, 1u);
   result = handle;
   handle->type = type;

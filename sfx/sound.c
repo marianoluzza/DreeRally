@@ -251,7 +251,9 @@ int stopAndOpenMusic()
     FSOUND_Stream_Close(soundStream);
 	#ifndef _NO_MINIFMOD
 	 FMUSIC_FreeSong_43D940(musicModuleModified_456C24);
-	 result = FMUSIC_FreeSong_43D940(musicModule);
+	 //La musica la carga fmod.dll (FMUSIC_LoadSongEx): el original la libera con el
+	 //FMUSIC_FreeSong de la DLL (0x43F89A), no con el minifmod interno.
+	 result = FMUSIC_FreeSong(musicModule);
 	#endif
 	musicModule = NULL;
     musicModuleModified_456C24 = 0;
@@ -289,9 +291,7 @@ void   loadMusic(int a1, char * music1, int a3, char* soundEffect)
 	if (!mainArgs.configNoSound)
 	{
 		musicSize = getSizeMusic(music1);
-		musicStream = malloc(musicSize);
 		soundEffectSize = getSizeMusic(soundEffect);
-		soundEffectStream = malloc(soundEffectSize);
 
 		soundEffectStream = getMusicStream(soundEffect);
 		
@@ -349,7 +349,8 @@ void   loadMusic(int a1, char * music1, int a3, char* soundEffect)
 				}
 			#endif
 		}
-		//free(musicStream);
-		//free(soundEffectStream);
+		//El original libera los dos archivos al terminar (0x43CD3B): FMOD y minifmod copian lo que usan.
+		free(musicStream);
+		free(soundEffectStream);
 	}
 }
