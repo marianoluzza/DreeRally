@@ -1538,13 +1538,16 @@ double temp;
   if (cptr->notectrl & FMUSIC_VOLUME)	
   {
 	  
-	  finalvol = (double)(signed int)64;				//  6 bits (   64)
+	  //0x43E994: el original multiplica por la envolvente (cptr->envvol, [ebx+34h]) y no corre el
+	  //resultado. El "64" fijo anulaba los desvanecimientos y el ">>5" dividia los efectos por 32,
+	  //seguramente para compensar el stream de salida declarado sin signo.
+	  finalvol = (double)(signed int)cptr->envvol;	//  6 bits (   64)
 	finalvol *= (double)(cptr->volume+cptr->voldelta);	//  6 bits (   64)
 	finalvol *= (double)(signed int)cptr->fadeoutvol;				// 16 bits (65536)
 	finalvol *= (double)(signed int)mod->globalvolume;	
 	// Any half arsed compiler will convert this into 1 constant at compile time.
 	finalvol *= (double)(255.0f / (64.0f * 64.0f * 65536.0f * 64.0f)) * 0.5f;
-	volume = (int)finalvol>>5; ////BYGFIX-------------------------------------------------------------------------/20 sobra
+	volume = (int)finalvol;
 /*    v6 = (unsigned __int64)((double)(*(_DWORD *)(a1 + 16) + *(_DWORD *)(a1 + 24))
                           * (double)*(signed int *)(a1 + 52)
                           * (double)*(signed int *)(a1 + 88)
@@ -1654,7 +1657,7 @@ int   FMUSIC_XM_Resetcptr_43EB10(FMUSIC_CHANNEL *cptr, FSOUND_SAMPLE	*sptr)
   //v3 = *(BYTE *)(a1 + 162);
   
   cptr->pan			= sptr->defpan;// 20 y 24
-  cptr->envvol		= 32;//52
+  cptr->envvol		= 64;//52 (0x43EB36: 40h, volumen de envolvente completo)
   cptr->envvolpos		= 0;//44
   cptr->envvoltick	= 0;//40
   cptr->envvoldelta	= 0;//56
@@ -1723,7 +1726,10 @@ unsigned __int64   sub_43EBD0(int channelId, signed int a2)
   //para carreracptr->period = result*0.75;
   	//cptr->freq = result*0.75; //esto esta tuneadisimo
 	 cptr->period = result;
-	 cptr->freq = result*0.62; //BUGFIX
+	 //0x43EC2E: el original guarda el mismo periodo en los dos campos. El "*0.62" subia la nota
+	 //~x4 para compensar el stream de salida declarado 0x80 (FMOD lo leia como 8 bits mono, cuatro
+	 //veces mas lento); con el stream correcto (0x50) aceleraba todos los efectos.
+	 cptr->freq = (int)result;
 //  *((_DWORD *)v2 + 3) = result; //unsigned char	notectrl;	
   return result;
 }

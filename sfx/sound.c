@@ -335,7 +335,10 @@ void   loadMusic(int a1, char * music1, int a3, char* soundEffect)
 			
 
 				FMUSIC_PlaySong_43DA40(musicModuleModified_456C24);
-				sound_stream = FSOUND_Stream_Create(sub_43C220, 4096, FSOUND_UNSIGNED, 44100, 0); //int length,unsigned int mode 80,int samplerate,int userdata
+				//0x43CCE3: modo 50h = FSOUND_16BITS | FSOUND_STEREO (con signo), que es lo que entrega
+				//FSOUND_MixerClipCopy. El "80" del comentario era decimal y se habia leido como
+				//FSOUND_UNSIGNED (0x80): la mezcla con signo se leia sin signo.
+				sound_stream = FSOUND_Stream_Create(sub_43C220, 4096, FSOUND_16BITS | FSOUND_STEREO, 44100, 0);
 				soundStream = sound_stream;
 				channel = FSOUND_Stream_Play(-1, sound_stream);
 				channel_456C10 = channel;
