@@ -350,7 +350,6 @@
 1	sfx\minifmod\soundSystem.c: warning C4101: 'deltaTemp': variable local sin referencia
 1	sfx\minifmod\soundSystem.c: warning C4101: 'effect': variable local sin referencia
 1	sfx\minifmod\soundSystem.c: warning C4101: 'effectStruct': variable local sin referencia
-1	sfx\minifmod\soundSystem.c: warning C4101: 'i': variable local sin referencia
 1	sfx\minifmod\soundSystem.c: warning C4101: 'paramx': variable local sin referencia
 1	sfx\minifmod\soundSystem.c: warning C4101: 'paramy': variable local sin referencia
 2	sfx\minifmod\soundSystem.c: warning C4101: 'result': variable local sin referencia
@@ -370,7 +369,7 @@
 1	sfx\minifmod\soundSystem.c: warning C4101: 'v25': variable local sin referencia
 1	sfx\minifmod\soundSystem.c: warning C4101: 'v26': variable local sin referencia
 1	sfx\minifmod\soundSystem.c: warning C4101: 'v27': variable local sin referencia
-6	sfx\minifmod\soundSystem.c: warning C4101: 'v3': variable local sin referencia
+5	sfx\minifmod\soundSystem.c: warning C4101: 'v3': variable local sin referencia
 1	sfx\minifmod\soundSystem.c: warning C4101: 'v30': variable local sin referencia
 1	sfx\minifmod\soundSystem.c: warning C4101: 'v31': variable local sin referencia
 1	sfx\minifmod\soundSystem.c: warning C4101: 'v34': variable local sin referencia
@@ -385,12 +384,11 @@
 1	sfx\minifmod\soundSystem.c: warning C4101: 'v46': variable local sin referencia
 5	sfx\minifmod\soundSystem.c: warning C4101: 'v5': variable local sin referencia
 5	sfx\minifmod\soundSystem.c: warning C4101: 'v6': variable local sin referencia
-4	sfx\minifmod\soundSystem.c: warning C4101: 'v7': variable local sin referencia
+3	sfx\minifmod\soundSystem.c: warning C4101: 'v7': variable local sin referencia
 4	sfx\minifmod\soundSystem.c: warning C4101: 'v8': variable local sin referencia
 6	sfx\minifmod\soundSystem.c: warning C4101: 'v9': variable local sin referencia
 3	sfx\minifmod\soundSystem.c: warning C4244: '*=': conversi├│n de 'double' a 'float'; posible p├⌐rdida de datos
 3	sfx\minifmod\soundSystem.c: warning C4244: '=': conversi├│n de 'double' a 'float'; posible p├⌐rdida de datos
-1	sfx\minifmod\soundSystem.c: warning C4244: '=': conversi├│n de 'double' a 'int'; posible p├⌐rdida de datos
 1	sfx\minifmod\soundSystem.c: warning C4244: '=': conversi├│n de 'float' a 'unsigned __int64'; posible p├⌐rdida de datos
 3	sfx\minifmod\soundSystem.c: warning C4244: '=': conversi├│n de 'unsigned __int64' a 'int'; posible p├⌐rdida de datos
 2	sfx\minifmod\soundSystem.c: warning C4244: '=': conversi├│n de 'unsigned __int64' a 'unsigned int'; posible p├⌐rdida de datos

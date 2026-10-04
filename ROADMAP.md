@@ -316,6 +316,42 @@ Pendiente para la próxima sesión, en orden sugerido:
    `dword_4A7D20` a `int[16]` (el original lo indexa de a 4 bytes) y `debug`, `hallOfFame.c`.
 6. Antes del PR a upstream: decidir qué infraestructura local va (ver "Forma de avanzar").
 
+### Sesión del 04/10
+
+Todo verificado por Mariano en pantalla. La memoria privada subía ~50 MB por carrera; ahora queda
+plana (124,4 → 127 MB en seis carreras, las tres últimas sin cambio). La mayor parte eran `malloc`
+cuyo puntero se pisaba enseguida, y varios `free` restaurados destaparon desbordes viejos.
+
+| Síntoma | Causa | Dónde |
+| --- | --- | --- |
+| ~20–30 MB por carrera | El original libera 34 buffers al terminar la carrera (0x4179CE) y el port 21: circuito, escenario 3D, pantalla, bandera, mensajes, cohetes, humo… | `dr.c` (fin de carrera) |
+| Una copia de los gráficos del menú por cada vuelta | `extractFromBpa` reservaba un buffer del tamaño de cada archivo extraído y leía en el destino del que llama | `asset/bpaUtil.c` |
+| 11 MB en un rato de tienda | `autoLoadSave` (F2/F3, 0x4221A0) reservaba dos partidas al declarar variables, y la tienda lo llama en cada cuadro | `dr.c` |
+| Pérdidas menores en cada carrera y pantalla | La pausa reservaba tres copias de pantalla y no liberaba ninguna (0x40696F); `malloc(10)` por cuadro sin su `free` (0x416478); la tabla del BPA (4 KB) en cada `getFileSizeFromBpa`; HAF sin liberar un buffer de 64 KB; unos 20 `malloc(100)` que en el original eran buffers locales | `dr.c`, `bpaUtil.c`, `haf.c`, pantallas |
+| ~4–7 MB por canción cargada | `FMUSIC_FreeSong` (0x43D940) solo detenía la canción; `loadMusic` perdía los dos archivos (0x43CD3B los libera); el archivo en memoria de minifmod copiaba el banco de efectos a un `calloc` que no usaba | `soundSystem.c`, `sound.c` |
+| Cierre en la intro al liberar la música | La música la carga `fmod.dll` y el original la libera con su `FMUSIC_FreeSong` (0x43F89A), no con el de minifmod; el cargador MOD procesaba dos instrumentos de más (`v53 <= numinsts`), las muestras de un instrumento se leían todas sobre la última y la tabla de patrones se dimensionaba antes de calcular `numpatternsmem` | `sound.c`, `soundSystem.c` |
+| Quick save: la ranura decía "Quic" y F3 no cargaba la partida | `byte_460840` es `drivers[]` en el original y aquí una global suelta (F2 grababa una tabla vacía); el nombre se armaba con locales contiguos de la pila (esp+18h..26h) | `autoLoadSave` |
+| El reintegro del auto no seguía al original | Restaba 5 en vez de `ceil` y no ponía en 0 la última cifra (0x437480). Crece con cada reparación y mejora porque suman al valor del auto | `shopScreen.c` |
+| Manchas bajo la descripción de Shrieker, Wraith y Deliverator | Quinta línea leída de `&unk_44E118 + 1760 * auto` (un byte suelto); en el original está vacía en los seis | `reloadCarAnimation2` |
+| Llama del turbo rara | El original elige `rocket1Bpk`/`rocket2Bpk` según el cuadro (0x40F592); el port sumaba el cuadro como un byte y leía columnas de `&rocket1Bpk` | `drawRocket_40F450` |
+
+Revisado sin cambios: el original tampoco libera el `Str` de `decryptEntireSavegame` (2 KB por
+ranura al abrir el menú de carga). La línea de log `tienda:` (valor del auto, daño, reintegro) se
+agregó para diagnosticar; decidir antes del PR si queda.
+
+Pendiente para la próxima sesión, en orden sugerido:
+
+1. **Restos de memoria** (~0,3 MB por carrera): bloques de 4096 bytes que se reservan al cargar
+   cada carrera intercalados con reservas de 2 bytes (origen sin encontrar), y tres `free`
+   comentados "porque petaban" en los gráficos del menú (`dword_461EA4`, `carnameBpk`,
+   `shoptxt1/2Bpk`); el original los libera y el port reserva igual o más, así que no es por tamaño.
+2. **Nombres de teclas en el menú de pausa**: `unk_4A6B20` y `unk_479E40` (de a 15 bytes) son bytes
+   sueltos en el port, el mismo patrón que la tienda.
+3. **Titileo del menú** (`sub_4220D0`), **`BYTE` con signo** y **polígonos 3D**, como antes.
+4. Animación de largada, logos de sponsors, buffer de teclas, `debug`, `hallOfFame.c`.
+5. `byte_460840` en el multijugador (fuera de alcance por ahora).
+6. Antes del PR a upstream: decidir qué infraestructura local va (ver "Forma de avanzar").
+
 Método que funcionó y conviene repetir: lanzar el juego con
 `scripts/Start-Diagnostics.ps1`, que Mariano pruebe y reporte con capturas, y resolver cada
 volcado con símbolos antes de tocar código. Un cambio de comportamiento por vuelta, para
