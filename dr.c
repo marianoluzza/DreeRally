@@ -7346,14 +7346,16 @@ LABEL_119:
           if ( v65 < 20 && *((BYTE *)participantCarBpk_5034FC + 40 * v63 + raceParticipantIngame[v5].participantBpkOffser_4A7D10 + v62 + 820) > 3u )
             v74 = 1;
         }
-        v66 = v61 - raceParticipantIngame[v5].dword_4A7DC4 + raceParticipantIngame[v5].absolutePositionX_4A7DB4;
-        v67 = v88 - raceParticipantIngame[v5].dword_4A7DC8 + raceParticipantIngame[v5].absolutePositionY_4A7DB8;
+        //0x40D457: se resta la suma truncada; sin parentesis la posicion se sumaba y este
+        //sensor de los pinchos nunca tocaba al otro coche.
+        v66 = v61 - (int)(raceParticipantIngame[v5].dword_4A7DC4 + raceParticipantIngame[v5].absolutePositionX_4A7DB4);
+        v67 = v88 - (int)(raceParticipantIngame[v5].dword_4A7DC8 + raceParticipantIngame[v5].absolutePositionY_4A7DB8);
         v68 = v66;
         if ( v66 < 0 )
           v68 = -v66;
         if ( v68 < 20 )
         {
-          v69 = v88 - raceParticipantIngame[v5].dword_4A7DC8 + raceParticipantIngame[v5].absolutePositionY_4A7DB8;
+          v69 = v67;
           if ( v67 < 0 )
             v69 = -v67;
           if ( v69 < 20 && *((BYTE *)participantCarBpk_5034FC + 40 * v67 + raceParticipantIngame[v5].participantBpkOffser_4A7D10+ v66 + 820) > 3u )
@@ -9117,16 +9119,13 @@ int recalculateCarBoundary_411D10()
   char v58; // c0@32
   int v59; // eax@34
   unsigned int v60; // eax@36
-  int v61; // et1@38
   double v63; // st7@38
 //  unsigned __int8 v64; // c0@38
 //  unsigned __int8 v65; // c2@38
   int v66; // ebx@46
-  int v67; // et1@49
   double v69; // st7@49
   unsigned __int8 v70; // c0@49
   unsigned __int8 v71; // c2@49
-  int v72; // et1@52
   double v74; // st7@52
   unsigned __int8 v75; // c0@52
   unsigned __int8 v76; // c2@52
@@ -9307,11 +9306,9 @@ int recalculateCarBoundary_411D10()
       }
       else
       {
-        v61 = raceParticipantIngame[ v1].dword_4A7DBC;
-        v63 = (raceParticipantIngame[ v1].dword_4A7DBC);
-		if(raceParticipantIngame[ v1].dword_4A7DC0!=0.0 |  raceParticipantIngame[ v1].dword_4A7DC4!=0.0)
-			v63 =-v63;
-       //TODO FIX esto esta sin inicializar if ( v64 | v65 )      v63 = -v63;
+        //c0/c2 de comparar el deslizamiento con 0 (0x4124A8): es un fabs, igual que los dos
+        //de abajo. La version anterior negaba segun DC0/DC4, que no tienen nada que ver.
+        v63 = fabs(raceParticipantIngame[ v1].dword_4A7DBC);
 		v174 = (double)(raceParticipant2[v1].carType + 13);
         if ( v63 > v174
           || raceParticipantIngame[ v1].carVelocity_4A7DB0 > 0.0 && raceParticipantIngame[ v1].dword_4A7D20[dword_4A7A20] & IN_RACE_BRAKE
@@ -9324,20 +9321,10 @@ int recalculateCarBoundary_411D10()
           {
             if ( currentDriverSelectedIndex_503518 == userRaceOrder_4A9EA8 )
             {
-              v67 = raceParticipantIngame[ v1].dword_4A7DBC;
-              v69 = (raceParticipantIngame[ v1].dword_4A7DBC);
-              //if ( v70 | v71 )
-
-			  if(raceParticipantIngame[ v1].dword_4A7DC0!=0.0 |  raceParticipantIngame[ v1].dword_4A7DC4!=0.0)
-				v69 = -v69;
+              v69 = fabs(raceParticipantIngame[ v1].dword_4A7DBC);
               if ( v69 > v174 )
               {
-                v72 = raceParticipantIngame[ v1].dword_4A7DBC;
-                v74 = (raceParticipantIngame[ v1].dword_4A7DBC);
-                //if ( v75 | v76 )
-				 if(raceParticipantIngame[ v1].dword_4A7DC0!=0.0 |  raceParticipantIngame[ v1].dword_4A7DC4!=0.0)
-			
-                  v74 = -v74;
+                v74 = fabs(raceParticipantIngame[ v1].dword_4A7DBC);
                 dword_4AA92C = (unsigned __int64)(v74 * 2048.0);
               }
               if ( dword_4AA92C > 0x10000 )
@@ -16982,11 +16969,11 @@ int drawDebugInfo(){
   sprintf(str, "ADVANCEY=%f", raceParticipantIngame[0].advanceYAxis_4A7E60);
   writeTextInRace_402510(200+ 512*8*line++, str);
 
-  sprintf(str, "dword_4A7DC0=%d", raceParticipantIngame[0].dword_4A7DC0);  
+  sprintf(str, "dword_4A7DC0=%f", raceParticipantIngame[0].dword_4A7DC0);  
   writeTextInRace_402510(200+ 512*8*line++, str);
   sprintf(str, "currentSteeringAngleDelta_4A7DA8=%f", raceParticipantIngame[0].currentSteeringAngleDelta_4A7DA8);
   writeTextInRace_402510(200+ 512*8*line++, str);
-  sprintf(str, "dword_4A7DBC=%d", raceParticipantIngame[0].dword_4A7DBC);
+  sprintf(str, "dword_4A7DBC=%f", raceParticipantIngame[0].dword_4A7DBC);
   writeTextInRace_402510(200+ 512*8*line++, str);
   sprintf(str, "dword_50E71C=%d", dword_50E71C);
   writeTextInRace_402510(200+ 512*8*line++, str);

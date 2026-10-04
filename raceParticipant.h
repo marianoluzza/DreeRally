@@ -256,15 +256,11 @@ typedef struct RaceParticipantIngame {
 	double carVelocity_4A7DB0; // weak //parece la velocidad que llevas
 	float absolutePositionX_4A7DB4; // weak
 	float absolutePositionY_4A7DB8; // weak
-	//OJO: estos ocho se usan como float en todo el codigo, pero pasarlos a float rompe
-	//la carrera (los coches salen disparados). El truncado a int esta absorbiendo
-	//valores NaN/infinito que se generan antes, en el calculo de advanceX/advanceY:
-	//(int)NaN da un entero fijo, mientras que en float el NaN se propaga y ademas
-	//atraviesa los guardas "< -1000 || > 10000" (toda comparacion con NaN es falsa).
-	//Hay que eliminar la fuente de NaN antes de volver a tocar estos tipos.
-	int dword_4A7DBC;//este no venia
-	int dword_4A7DC0;//este no venia  parece como el tiempo que llevas girando
-	int dword_4A7DC4; //este n venia  estos son para el calculo del mobvimiento dle usuario
+	//float en el original (fld/fstp dword en 0x40BCBE..0x40C33E). Como int el deslizamiento
+	//lateral se truncaba y los puntos de muestreo del terreno quedaban corridos un pixel.
+	float dword_4A7DBC;//deslizamiento lateral: DC0 * velocidad * gomas / motor
+	float dword_4A7DC0;//tiempo que llevas girando, de -36 a 36
+	float dword_4A7DC4;//punto de muestreo del terreno a +26 grados del frente, X relativa (Y en DC8)
 	float dword_4A7DC8; //este no venia
 	float dword_4A7DCC;//float
 	float dword_4A7DD0;
@@ -277,8 +273,8 @@ typedef struct RaceParticipantIngame {
 	float dword_4A7DEC;
 	float dword_4A7DF0;
 	
-	int dword_4A7DF4;//est eno venia
-	int dword_4A7DF8;//este no venia
+	float dword_4A7DF4;//punto de muestreo en el centro del frente, X relativa
+	float dword_4A7DF8;//idem, Y relativa
 	float unk_4A7DFC; // weak  modificador del avance ejex
 	float unk_4A7E00; // weak modificador del avance eje y sobre todo para choques
 	float unk_4A7E04; // weak modificador del angulo con choques y terreno.
