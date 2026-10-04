@@ -493,8 +493,6 @@ int   drawMenuAnimation(int x, int y, int frame, int animation, int frameSizes[]
 //----- (00420250) --------------------------------------------------------
 int reloadCarAnimation2()
 {
-  unsigned int v0; // eax@1
-  char *v1; // edi@1
 //  char v2; // cl@2
 //  int v3; // eax@3
   const char *v4; // edx@4
@@ -502,21 +500,19 @@ int reloadCarAnimation2()
 //  int v7; // [sp-4h] [bp-2Ch]@4
 //  int v8; // [sp-4h] [bp-2Ch]@5
 //  __int16 v9; // [sp+0h] [bp-28h]@1
-  char *DstBuf=malloc(100); // [sp+14h] [bp-14h]@1
+  char DstBuf[100]; // [sp+14h] [bp-14h]@1
+  char price[104];
 
   drawImageWithPosition2((int)carbas2Bpk, 96, 96, (int)((char *)screenBuffer + 80016));
   drawImageWithPosition2((int)((char *)carnameBpk + 1536 * actualCarSelected), 96, 16, (int)((char *)screenBuffer + 80016));
   drawMenuAnimation(16, 141, carAnimCurrentFrame_45FBA0, getCarBpkById(actualCarSelected), (int)&carAnimFrameSize_45FBA0[64 * actualCarSelected]);
   SDL_itoa(cars[actualCarSelected].cost, DstBuf, 10);
   
-  v0 = strlen(DstBuf) + 1;
+  //"$" + cifras: el malloc(strlen + 1) quedaba un byte corto y no se liberaba.
+  sprintf(price, "$%s", DstBuf);
+	v6 = getBoxTextOffset(price);//get small text size
 
-  v1 = malloc(v0); //coste + el $
-strcpy(v1,"$"); /* copy name into the new var */
-	strcat(v1, DstBuf);
-	v6 = getBoxTextOffset(v1);//get small text size
-
-  drawInGamePrices(v1, v6 + 132496);
+  drawInGamePrices(price, v6 + 132496);
   createPopup(144, 114, 384, 119, 1);
   v6 = 79530;
   if ( useWeapons )
@@ -529,7 +525,7 @@ strcpy(v1,"$"); /* copy name into the new var */
     writeTextInScreen(shopMessages.carMessage[actualCarSelected].infoMessage.line1, 100010);
     writeTextInScreen(shopMessages.carMessage[actualCarSelected].infoMessage.line2, 110250);
     writeTextInScreen(shopMessages.carMessage[actualCarSelected].infoMessage.line3, 120490);
-    v4 = (char *)&unk_44E118 + 1760 * actualCarSelected;
+    v4 = "";//&unk_44E118 + 1760 * n: en el original la quinta linea esta vacia en los seis autos
   }
   else
   {
@@ -538,7 +534,7 @@ strcpy(v1,"$"); /* copy name into the new var */
     writeTextInScreen(shopMessages.carMessageNoWeapons[actualCarSelected].infoMessage.line1, 100010);
     writeTextInScreen(shopMessages.carMessageNoWeapons[actualCarSelected].infoMessage.line2, 110250);
     writeTextInScreen(shopMessages.carMessageNoWeapons[actualCarSelected].infoMessage.line3, 120490);
-    v4 = (char *)&unk_44E028 + 1760 * actualCarSelected;
+    v4 = "";//&unk_44E028 + 1760 * n, tambien vacia
   }
   writeTextInScreen(v4, 130730);
   drawImageWithPosition((int)((char *)arrows1dBpk ), 16, 64, (int)((char *)screenBuffer + 90240));

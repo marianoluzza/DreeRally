@@ -9,6 +9,8 @@
 #include "../defs.h"
 #include "../drivers.h"
 #include "../dr.h"
+#include "../diagnostics.h"
+#include <math.h>
 #include "../graphics.h"
 #include "../i18n/i18n.h"
 #include "util/popup.h"
@@ -280,7 +282,7 @@ void enterShop()
 
 
 
-  v0 = (unsigned __int64)((double)drivers[driverId].carMoneyCost  * 0.25)-5;
+  v0 = (unsigned __int64)ceil((double)drivers[driverId].carMoneyCost * 0.25);
   v1 =  driverId;
   if ( useWeapons )
   {
@@ -295,9 +297,19 @@ void enterShop()
   if ( v4 < 0 )
     v4 = 0;
   _itoa(v4, DstBuf, 10);
-  //todo comentado porque falla
-  //*((BYTE *)&v97 + strlen(DstBuf) + 3) = 48;
+  //El original pone en '0' la ultima cifra (0x437480): el reintegro va de a 10.
+  DstBuf[strlen(DstBuf) - 1] = '0';
   v5 = atoi(DstBuf);
+  {
+    static int lastCarMoneyCost = -1, lastDamage = -1;
+    if ( drivers[driverId].carMoneyCost != lastCarMoneyCost || drivers[driverId].damage != lastDamage )
+    {
+      lastCarMoneyCost = drivers[driverId].carMoneyCost;
+      lastDamage = drivers[driverId].damage;
+      diagnosticLog("tienda: auto=%d valor=%d dano=%d reintegro=%d", drivers[driverId].carType,
+                    drivers[driverId].carMoneyCost, drivers[driverId].damage, v5);
+    }
+  }
   switch ( menuOptionSelected_463DF0 )
   {
     case BUY_CAR:
