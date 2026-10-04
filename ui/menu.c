@@ -566,8 +566,6 @@ int dword_4470EA = 1735289196; // weak
 int dword_445188 = 163840; // weak
 char byte_45FC10[256]; // weak
 char menuaStartANewGame[17] = "Start A New Game"; // weak
-char menuaStartANewGam_0[17] = "Start A New Game"; // weak
-char menuaStartRacing[16] = "Start Racing"; // weak  //recibe "Continue Racing" (16 bytes)
 //----- (0042E0B0) --------------------------------------------------------
 signed int   readEventInMenu(int menuType)
 {

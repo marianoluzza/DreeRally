@@ -21,8 +21,6 @@ char unk_446C32[10 * 50];
 BYTE unk_4455B0[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
 
 void *Str; // idb
-char loadSaveScreenaStartANewGam_0[17] = "Start A New Game"; // weak
-char loadSaveScreenaStartRacing[16] = "Start Racing"; // weak  //recibe "Continue Racing" (16 bytes)
 //----- (0042F2E0) --------------------------------------------------------
 signed int loadGame()
 {
@@ -108,19 +106,19 @@ signed int loadGame()
 
   if ( v6 < 0 )
     return 0;
-  *(_DWORD *)loadSaveScreenaStartANewGam_0 = 1702129221;
-  *(_DWORD *)&loadSaveScreenaStartANewGam_0[4] = 1750343794;
-  *(_DWORD *)&loadSaveScreenaStartANewGam_0[8] = 1750278245;
-  *(_WORD *)&loadSaveScreenaStartANewGam_0[12] = 28783;
-  loadSaveScreenaStartANewGam_0[14] = 0;
-  *(_DWORD *)loadSaveScreenaStartRacing = 1953394499;
+  *(_DWORD *)menuaStartANewGam_0 = 1702129221;
+  *(_DWORD *)&menuaStartANewGam_0[4] = 1750343794;
+  *(_DWORD *)&menuaStartANewGam_0[8] = 1750278245;
+  *(_WORD *)&menuaStartANewGam_0[12] = 28783;
+  menuaStartANewGam_0[14] = 0;
+  *(_DWORD *)menuaStartRacing = 1953394499;
   menuActive_4457F0[1] = 0;
   menuActive_4457F0[10] = 1;
   menuActive_4457F0[11] = 1;
   menuActive_4457F0[13] = 1;
-  *(_DWORD *)&loadSaveScreenaStartRacing[4] = 1702194793;
-  *(_DWORD *)&loadSaveScreenaStartRacing[8] = 1667322400;
-  *(_DWORD *)&loadSaveScreenaStartRacing[12] = 6778473;
+  *(_DWORD *)&menuaStartRacing[4] = 1702194793;
+  *(_DWORD *)&menuaStartRacing[8] = 1667322400;
+  *(_DWORD *)&menuaStartRacing[12] = 6778473;
   showHardWarningRace = 0;
   showMediumWarningRace = 0;
   showUndergroundPopup_456B78 = 0;

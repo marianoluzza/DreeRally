@@ -28,9 +28,7 @@ _UNKNOWN unk_45FDC4; // weak
 
 _UNKNOWN unk_44E208; // weak
 
-char shopScreenaStartRacing[13] = "Start Racing"; // weak
 char shopScreenaStartANewGame[17] = "Start A New Game"; // weak
-char shopScreenaStartANewGam_0[17] = "Start A New Game"; // weak
 
 char aAroundButSheLl[33] = "around, but she'll get you there"; // weak
 char aOnHerOwnSweetT[33] = "- on her own sweet time, is all."; // weak
@@ -1019,7 +1017,7 @@ LABEL_44:
             {
               drawMenuAnimation(432, 269, continueAnimCurrentFrame_4611D0, (int)contaniBpk, (int)continueAnimFramesSize_4611D0);
               drawKeyCursor(172592, (char *)screenBuffer + 172592, 0x60u, 64);
-			  continueAnimCurrentFrame_4611D0 = continueAnimCurrentFrame_4611D0 % 22;
+			  continueAnimCurrentFrame_4611D0 = (continueAnimCurrentFrame_4611D0 + 1) % 23;//23 cuadros: inc y vuelta a 0 pasado el 22 (0x439690)
             }
           }
         }
@@ -1387,12 +1385,12 @@ LABEL_166:
       case REPAIR:
         drawMenuAnimation(328, 269, repairAnimCurrentFrame_45EEAC, (int)repaaniBpk, (int)&repairAnimFrameSize_446308);
         drawKeyCursor(172488, (char *)screenBuffer + 172488, 0x60u, 64);
-		repairAnimCurrentFrame_45EEAC = (repairAnimCurrentFrame_45EEAC + 1) % 23; ///aqui va 23 p\F2prque son 23 frames
+		repairAnimCurrentFrame_45EEAC = (repairAnimCurrentFrame_45EEAC + 1) % 24;//24 cuadros (0x43963A)
         break;
       case CONTINUE:
         drawMenuAnimation(432, 269, continueAnimCurrentFrame_4611D0, (int)contaniBpk, (int)continueAnimFramesSize_4611D0);
         drawKeyCursor(172592, (char *)screenBuffer + 172592, 0x60u, 64);
-		continueAnimCurrentFrame_4611D0 = (continueAnimCurrentFrame_4611D0 + 1)%2; ///aqui va 24 p\F2prque son 22 frames
+		continueAnimCurrentFrame_4611D0 = (continueAnimCurrentFrame_4611D0 + 1) % 23;//23 cuadros: inc y vuelta a 0 pasado el 22 (0x439690)
         
         break;
       default:
@@ -1721,15 +1719,15 @@ int sub_4291D0()
 {
   int result; // eax@1
 
-  *(_DWORD *)shopScreenaStartANewGam_0 = *(_DWORD *)"Start A New Game";
-  *(_DWORD *)&shopScreenaStartANewGam_0[4] = *(_DWORD *)"t A New Game";
-  *(_DWORD *)&shopScreenaStartANewGam_0[8] = *(_DWORD *)"New Game";
-  *(_DWORD *)&shopScreenaStartANewGam_0[12] = *(_DWORD *)"Game";
-  shopScreenaStartANewGam_0[16] = shopScreenaStartANewGame[16];
-  *(_DWORD *)shopScreenaStartRacing = 1918989395;
-  *(_DWORD *)&shopScreenaStartRacing[4] = 1632772212;
-  *(_DWORD *)&shopScreenaStartRacing[8] = 1735289187;
-  shopScreenaStartRacing[12] = 0;
+  *(_DWORD *)menuaStartANewGam_0 = *(_DWORD *)"Start A New Game";
+  *(_DWORD *)&menuaStartANewGam_0[4] = *(_DWORD *)"t A New Game";
+  *(_DWORD *)&menuaStartANewGam_0[8] = *(_DWORD *)"New Game";
+  *(_DWORD *)&menuaStartANewGam_0[12] = *(_DWORD *)"Game";
+  menuaStartANewGam_0[16] = shopScreenaStartANewGame[16];
+  *(_DWORD *)menuaStartRacing = 1918989395;
+  *(_DWORD *)&menuaStartRacing[4] = 1632772212;
+  *(_DWORD *)&menuaStartRacing[8] = 1735289187;
+  menuaStartRacing[12] = 0;
   menuActive_4457F0[10] = 0;
   menuActive_4457F0[11] = 0;
   menuActive_4457F0[13] = 0;

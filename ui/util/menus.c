@@ -4,6 +4,7 @@
 #include "../../i18n/i18n.h"
 
 #include <stdio.h>
+#include <string.h>
 
 char * menu0[] = { "Start Racing", "Multiplayer Race", "Configure","See hall of fame","Credits","Exit to os" };
 char * menu1[] = { "Start a new game", "End current Game", "See current Stadistics","Load game","save game","Previous menu" };
@@ -25,6 +26,12 @@ char menuActive_4457F0[] = { '\x01','\x0','\x01','\x01','\x01','\x01','\x01','\x
 						'\x1','\x1','\x01','\x01','\x1','\x1','\x1','\x1','\x1',
 						'\x1','\x1','\x01','\x01','\x1','\x1','\x1','\x1','\x0',
 						'\x1','\x1','\x01','\x01','\x1','\x1','\x1','\x1','\x1'			}; // weak
+//Primeras opciones de los menus principal y de partida. En el original son un unico texto que
+//se sobrescribe al empezar o cargar una partida ("Continue Racing" / "Enter The Shop") y se
+//restaura al terminarla; el port tenia una copia por archivo y el menu nunca veia el cambio.
+char menuaStartANewGam_0[17] = "Start A New Game";
+char menuaStartRacing[16] = "Start Racing";
+
 char* getMenuText(int menu, int position) {
 	
 	switch (menu)
@@ -32,10 +39,14 @@ char* getMenuText(int menu, int position) {
 	default:
 		break;
 	case INITIAL_MENU://menu principal
+		if (position == 0 && strcmp(menuaStartRacing, "Start Racing"))
+			return getLanguageEntry(menuaStartRacing);
 		return getLanguageEntry(menu0[position]);
 		break;
 
 	case START_NEW_GAME_MENU://
+		if (position == 0 && strcmp(menuaStartANewGam_0, "Start A New Game"))
+			return getLanguageEntry(menuaStartANewGam_0);
 		return getLanguageEntry(menu1[position]);
 		break;
 	
