@@ -303,7 +303,7 @@ void selectRaceScreen()
   signed int v42; // esi@78
 //  const char **v43; // [sp+0h] [bp-6Ch]@0
 //  const char **v44; // [sp+4h] [bp-68h]@0
-  char *name =malloc(100); // [sp+30h] [bp-3Ch]@45
+  char name[100]; // [sp+30h] [bp-3Ch]@45
   int index = 176;
   selectedRace_462CE8 = -1;
   calculateNextRaces();

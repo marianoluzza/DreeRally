@@ -370,7 +370,7 @@ int drawLoanShark()
   int v2; // edi@3
   int v3; // esi@4
   int result; // eax@4
-  char *DstBuf=malloc(100); // [sp+4h] [bp-60h]@8
+  char DstBuf[100]; // [sp+4h] [bp-60h]@8
   char v14[80]; // [sp+14h] [bp-50h]@6
 
   createPopup(144, 114, 384, 119, 1);
@@ -454,7 +454,7 @@ int drawBlackMarketElement0()
   int result; // eax@5
   char v5; // [sp-1h] [bp-29h]@2
   __int16 v6; // [sp+0h] [bp-28h]@2
-  char *DstBuf=malloc(100); // [sp+14h] [bp-14h]@2
+  char DstBuf[100]; // [sp+14h] [bp-14h]@2
 
   if ( minesAvailable_45EFF0 == 1 )
   {
@@ -511,7 +511,7 @@ int drawBlackMarketElement1()
   int result; // eax@5
   char v5; // [sp-1h] [bp-29h]@2
   __int16 v6; // [sp+0h] [bp-28h]@2
-char *DstBuf = malloc(100); // [sp+14h] [bp-14h]@2
+char DstBuf[100]; // [sp+14h] [bp-14h]@2
 
 if (spikesAvailable_45EFF4 == 1)
 {
@@ -566,7 +566,7 @@ int drawBlackMarketElement2()
 	int result; // eax@5
 	//char v5; // [sp-1h] [bp-29h]@2
 	//__int16 v6; // [sp+0h] [bp-28h]@2
-	char *DstBuf = malloc(100); // [sp+14h] [bp-14h]@2
+	char DstBuf[100]; // [sp+14h] [bp-14h]@2
 
 	if (rocketAvailable_45EFF8 == 1)
 	{
@@ -623,7 +623,7 @@ int drawBlackMarketElement3()
 	int result; // eax@22
 //	char v8; // [sp+Bh] [bp-29h]@19
 	//__int16 v9; // [sp+Ch] [bp-28h]@19
-	char *DstBuf = malloc(100); // [sp+14h] [bp-14h]@2
+	char DstBuf[100]; // [sp+14h] [bp-14h]@2
 
 	int maxDriverPoints = getMaxDriverPoints(driverId);
   

@@ -561,7 +561,7 @@ int reloadEngineAnimation2()
   int result; // eax@4
 //  char v7; // [sp-1h] [bp-29h]@2
 //  __int16 v8; // [sp+0h] [bp-28h]@2
-  char *DstBuf =malloc(100); // [sp+14h] [bp-14h]@2
+  char DstBuf[100]; // [sp+14h] [bp-14h]@2
 
   drawImageWithPosition2((int)bases41Bpk, 96, 96, (int)((char *)screenBuffer + 161936));
   v0 = cars[drivers[driverId].carType].engineUpgrades;
@@ -622,7 +622,7 @@ int reloadTireAnimation2()
   int result; // eax@4
 //  char v7; // [sp-1h] [bp-29h]@2
 //  __int16 v8; // [sp+0h] [bp-28h]@2
-  char *DstBuf=malloc(100); // [sp+14h] [bp-14h]@2
+  char DstBuf[100]; // [sp+14h] [bp-14h]@2
 
   drawImageWithPosition2((int)bases42Bpk, 96, 96, (int)((char *)screenBuffer + 162040));
   v0 = cars[drivers[driverId].carType].tireUpgrades;
@@ -680,7 +680,7 @@ int reloadArmourAnimation2()
   int result; // eax@4
 //  char v7; // [sp-1h] [bp-29h]@2
 //  __int16 v8; // [sp+0h] [bp-28h]@2
-  char *DstBuf=malloc(100); // [sp+14h] [bp-14h]@2
+  char DstBuf[100]; // [sp+14h] [bp-14h]@2
 
   drawImageWithPosition2((int)bases43Bpk, 96, 96, (int)((char *)screenBuffer + 162144));
   v0 = cars[drivers[driverId].carType].armourUpgrades;//0x420AB2: tope de blindaje, no de motor

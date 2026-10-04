@@ -214,7 +214,6 @@ void enterShop()
   int v93; // eax@132
   signed int v94; // edx@132
   int v95; // ecx@132
-  char* youcould = malloc(100);
   int v96; // [sp+8h] [bp-68h]@7
   int v99[50]; // [sp+34h] [bp-3Ch]@9   8//coger 100 101 102 103 y juntarlo
   char DstBuf[100]; // [sp+20h] [bp-50h]@6
@@ -690,7 +689,6 @@ LABEL_154:
       }
       break;
     case CONTINUE:
-        free(youcould);
       if ( drivers[driverId].damage != 100 || useWeapons )
       {
         if ( isMultiplayerGame )
@@ -777,7 +775,6 @@ LABEL_154:
       }
       break;
     default:
-        free(youcould);
       return;
   }
 }

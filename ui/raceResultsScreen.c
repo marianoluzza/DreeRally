@@ -990,37 +990,37 @@ int   drawRightPositions(int numDrivers, int a2)
 //  char *v14 = malloc(100); // ecx@9
 //  char v15; // dl@10
   int v16; // eax@15
-  char *v17 = malloc(100); // edx@15
+  char *v17; // edx@15
   signed int v18; // ecx@15
   int v19; // eax@15
   double v20; // st7@15
   int v21; // eax@16
-  char *v22 = malloc(100); // edx@16
+  char *v22; // edx@16
   signed int v23; // ecx@16
   int v24; // eax@16
   float v25; // ST30_4@17
   int v26; // eax@19
-  char *v27 = malloc(100); // edx@19
+  char *v27; // edx@19
   signed int v28; // ecx@19
   int v29; // eax@19
   double v30; // st7@19
   int v31; // eax@20
-  char *v32 = malloc(100); // edx@20
+  char *v32; // edx@20
   signed int v33; // ecx@20
   int v34; // eax@20
   float v35; // ST38_4@21
   int v36; // eax@24
-  char *v37 = malloc(100); // edx@24
+  char *v37; // edx@24
   signed int v38; // ecx@24
   int v39; // eax@24
   double v40; // st7@24
   int v41; // eax@25
-  char *v42 = malloc(100); // edx@25
+  char *v42; // edx@25
   signed int v43; // ecx@25
   int v44; // eax@25
   float v45; // ST38_4@26
   int v46; // eax@29
-  char *v47 = malloc(100); // edx@29
+  char *v47; // edx@29
   signed int v48; // ecx@29
   int v49; // eax@29
   float v50; // ST40_4@29
@@ -1028,7 +1028,7 @@ int   drawRightPositions(int numDrivers, int a2)
   float v52; // ST38_4@29
   int result; // eax@29
   int v54; // eax@30
-  char *v55 = malloc(100); // edx@30
+  char *v55; // edx@30
   signed int v56; // ecx@30
   int v57; // eax@30
   float v58; // ST40_4@30
@@ -1045,7 +1045,7 @@ int   drawRightPositions(int numDrivers, int a2)
   int v69; // [sp+1Ch] [bp-1Ch]@2
 //  int v70; // [sp+20h] [bp-18h]@3
   char DstBuf[20]; // [sp+24h] [bp-14h]@3
-  char *tmp = malloc(20);
+  char tmp[20];
   v2 = *(_DWORD *)a2;
   v3 = (350 - 79 * numDrivers) / (numDrivers + 1);
   a2 = *(_DWORD *)a2;

@@ -199,7 +199,7 @@ __int16 savegameWithName()
 //  char *v19; // edi@26
 //  char v20; // cl@27
   FILE *v21; // esi@28
-  char *DstBuf=malloc(100); // [sp+10h] [bp-2Ch]@2
+  char DstBuf[100]; // [sp+10h] [bp-2Ch]@2
   int v24; // [sp+14h] [bp-28h]@19
   int v25; // [sp+18h] [bp-24h]@2
   char Filename[8]; // [sp+1Ch] [bp-20h]@2

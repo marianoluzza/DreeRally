@@ -4268,7 +4268,6 @@ signed int   racePauseMenu_4064A0(int a1)
     exit(112);
   }
   dword_47926C = v2;
-  dword_47926C =malloc(0xFA00u);
   v3 = 0;
   memset(Memory, 0, 0xFA00u);
 
@@ -4412,8 +4411,8 @@ signed int   racePauseMenu_4064A0(int a1)
   //}
   stopSoundChannel_43C3E0(5u);
   //copyBuffer2Screen((void *)screenPtr, dword_47926C, 16000);
- /// free(Memory);
- // free(dword_47926C);
+  free(Memory);
+  free(dword_47926C);
   dword_4A9EAC = 0;
   dword_503510 = 0;
   dword_503500 = dword_4A8D2C;
@@ -10778,7 +10777,7 @@ if ( isCircuitReversed_456AA8 )
     }
    sub_413500();//parece como lanzar minas hacia detras
     v49 = malloc(0xAu);
-    //free(v49);
+    free(v49);
     generatePowerUps();// esto es muy chungo
     if ( dword_503510 > 0 )
     {
@@ -11714,19 +11713,19 @@ LABEL_460:
   stopAndOpenMusic();
   updateRacePositions();
   free(circuitMatrixHxW_5034F8);
-  //free(trxImaBpk_50A16C);
- // free(trxVaiBpk_5034D0);
- // free(trxLR1Bpk_4AA920);
-  //free(trxSCE5Bpk_4A7A28);
-  //free((void *)(dword_464F14 - 512));
+  free(trxImaBpk_50A16C);
+  free(trxVaiBpk_5034D0);
+  free(trxLR1Bpk_4AA920);
+  free(trxSCE5Bpk_4A7A28);
+  free((void *)(dword_464F14 - 512));
   free(participantCarBpk_5034FC);
- // free(genflaBpk);
+  free(genflaBpk);
   free(sidebom1Bpk_481E04);
   free(genlamBpk);
   free(damslidBpk);
- // free(genmesBpk);
+  free(genmesBpk);
   free(inRaceMessagePopup_479690);
-  //free(rast1Bpk_464F78);
+  free(rast1Bpk_464F78);
   free(goalnum2Bpk_4AA50C);
   free(flamesBpk[0]);
   free(flamesBpk[1]);
@@ -11740,12 +11739,12 @@ LABEL_460:
   free(shotsBpk);
   free(obstacleBpk);
   free(pedestrBpk);
- // free(splat3Bpk);
+  free(splat3Bpk);
   free(splat4Bpk);
-  /*free(rocket1Bpk);
+  free(rocket1Bpk);
   free(rocket2Bpk);
   free(burn1aBpk);
-  free(smokeBpk);*/
+  free(smokeBpk);
   free(dword_4A6854);
   free(dword_46F204);
   keysRead_45E0C0[KEY_ESCAPE] = 0;
