@@ -12974,16 +12974,13 @@ LABEL_5:
 signed int autoLoadSave()
 {
   signed int v0; // ebp@1
-  void *v1=malloc(0x883u); // eax@3
+  void *v1; // eax@3
   int v2; // edi@3
   int v3; // eax@3
   int v4; // edx@3
-  int *v5; // eax@3
-  unsigned int v6; // ecx@3
-  char v7; // bl@4
   unsigned int v8; // ebx@7
   FILE *v9; // esi@10
-  void *v10=malloc(0x883u); // eax@12
+  void *v10; // eax@12
   int v11; // edi@12
   FILE *v12; // eax@12
   FILE *v13; // esi@12
@@ -12994,11 +12991,6 @@ signed int autoLoadSave()
   signed int result; // eax@16
   char v19; // [sp+4h] [bp-18h]@3
   char v20; // [sp+4h] [bp-18h]@13
-  int v21; // [sp+Ch] [bp-10h]@3
-  int v22; // [sp+10h] [bp-Ch]@3
-  int v23; // [sp+14h] [bp-8h]@3
-  __int16 v24; // [sp+18h] [bp-4h]@3
-  char v25; // [sp+1Ah] [bp-2h]@3
 
   v0 = 0;
   if ( isMultiplayerGame )
@@ -13011,6 +13003,8 @@ signed int autoLoadSave()
     {
       v0 = 1;
       //allocateMemory(0x883u);
+      //Se llama en cada cuadro de la tienda: reservar solo al guardar, como el original.
+      v1 = malloc(0x883u);
       Str = v1;
       memset(v1, 0, 0x880u);
       v2 = (int)((char *)v1 + 2176);
@@ -13022,30 +13016,12 @@ signed int autoLoadSave()
       *((BYTE *)Str + 1) = driverId;
       *((BYTE *)Str + 2) = useWeapons;
       *((BYTE *)Str + 3) = configuration.difficulty;
-      v21 = 1667855697;
-      v22 = 1986098027;
-      v23 = 1817387109;
-      v24 = 29807;
-      v5 = &v21;
-      v25 = 0;
+      //El original arma el nombre en locales seguidos de la pila (esp+18h..26h); sueltos,
+      //strlen(&v21) cortaba en 4 bytes y la ranura decia "Quic".
       v19 = v4;
-      v6 = 0;
-      do
-      {
-        v7 = *(BYTE *)v5;
-        v5 = (int *)((char *)v5 + 1);
-      }
-      while ( v7 );
-      if ( v5 != (int *)((char *)&v21 + 1) )
-      {
-        do
-        {
-          *((BYTE *)Str + v6 + 4) = *((BYTE *)&v21 + v6);
-          ++v6;
-        }
-        while ( v6 < strlen((const char *)&v21) );
-      }
-      memcpy((char *)Str + 19, byte_460840, 0x870u);
+      memcpy((char *)Str + 4, "Quicksave Slot", strlen("Quicksave Slot"));
+      //byte_460840 es drivers[] en el original; aqui es una global suelta que el juego no usa.
+      memcpy((char *)Str + 19, drivers, 0x870u);
       v8 = 1;
       while ( 1 )
       {
@@ -13068,6 +13044,7 @@ signed int autoLoadSave()
     firstRacePlayed_464F44 = 0;
     useHasMorePoints_456BC4 = 0;
     //allocateMemory(0x883u);
+    v10 = malloc(0x883u);
     Str = v10;
     memset(v10, 0, 0x880u);
     v11 = (int)((char *)v10 + 2176);
@@ -13091,7 +13068,7 @@ signed int autoLoadSave()
       driverId = *((BYTE *)Str + 1);
       useWeapons = *((BYTE *)Str + 2);
 	  configuration.difficulty = *((BYTE *)Str + 3);
-      memcpy(byte_460840, (char *)Str + 19, 0x870u);
+      memcpy(drivers, (char *)Str + 19, 0x870u);
       free(Str);
       v15 = drivers[driverId].spikes;
       v16 = drivers[driverId].rocket;
