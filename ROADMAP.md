@@ -405,8 +405,8 @@ Pendiente para la próxima sesión, en orden sugerido (lo demás del barrido, to
 Pruebas hacia la 1.0 desde un save cerca de la final, hasta ganarle al Adversary. Mariano confirmó
 que F2/F3 (silenciar música y efectos) andan, que el joystick navega los menús, la voz de la
 dificultad, el final (animación, Hall of Fame y mensaje, con `DREERALLY_FORCE_ENDING=1`), las
-noticias y el espaciado de las letras. Sin verificar todavía: MUSIC VOLUME, récords por circuito,
-capturas F6 y la escena `ENDANI0` (primera vez 1.º en puntos).
+noticias, el espaciado de las letras, MUSIC VOLUME con su `%` y las capturas F6 (menú y carrera). Sin
+verificar todavía: récords por circuito y la escena `ENDANI0` (primera vez 1.º en puntos).
 
 Casi todo fue la misma trampa: locales que en la pila del original eran contiguas (un texto se
 completaba buscando su final desde la variable anterior). En el port caen sobre otras locales.
@@ -448,7 +448,7 @@ atajo de prueba: con la música del taller sonando quedaban dos streams de efect
 
 Pendiente, en orden sugerido:
 
-1. **Ver en pantalla**: MUSIC VOLUME, récords por circuito, capturas F6 y `ENDANI0`.
+1. **Ver en pantalla**: récords por circuito y `ENDANI0`.
 2. **Release no enlaza** (`_CrtSetReportHook2` solo existe en Debug): bloquea la 1.0.
 3. Multijugador fuera de alcance, con el mismo patrón: `previewRaceScreen` (`&v246`), los
    corrimientos de noticias comentados.
@@ -527,6 +527,12 @@ Prioridad P2; después de la base estable.
       pisarlos en memoria después de `extractFromBpa("copper.pal")` y no tocar los datos. Ojo:
       `sub_418B00` tiñe los menús con el color del jugador, así que un negro puro puede dejar
       los resaltados del menú invisibles; probar un gris muy oscuro.
+
+- [ ] Capturas en PNG: F6 guarda `HS-PICnn.PCX` (menús 640×480, carrera 320×200), que Windows no
+      abre, y hasta 100 por carpeta. Guardar PNG (sin pérdida, ideal para imágenes de 256 colores;
+      JPG mancharía los bordes del texto), quizás al tamaño de la ventana y con fecha en el nombre,
+      y una sola por pulsación (hoy guarda una por cuadro mientras F6 sigue apretada, como el
+      original). Mejora propia, después del PR.
 
 - [ ] Todos los circuitos en cualquier dificultad (quizás como opción). En el original cada
       nivel tiene su lista (Rock Zone, por ejemplo, no sale en Hard), así que hay pistas que no
