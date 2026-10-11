@@ -400,7 +400,8 @@ int dword_4AA924 = 0;
 
 int dword_44509C = 1063675494; // weak
 int dword_4450A0 = 1065353216; // weak
-_UNKNOWN unk_4450A8; // weak
+// PCX header for 320x200 (0x4450A8, 128 bytes in dr.exe)
+unsigned char unk_4450A8[128] = { [0] = 0x0A, [1] = 0x05, [2] = 0x01, [3] = 0x08, [8] = 0x3F, [9] = 0x01, [10] = 0xC7, [65] = 0x01, [66] = 0x40, [67] = 0x01, [68] = 0x01 };
 
 char byte_44512A = '\x03'; // weak
 
@@ -504,7 +505,8 @@ int dword_456788 = 4294967295; // weak*/
 
 char aTshape01[9] = "TSHAPE01"; // weak
 
-_UNKNOWN unk_456848; // weak
+// PCX header for 640x480 (0x456848, 128 bytes in dr.exe)
+unsigned char unk_456848[128] = { [0] = 0x0A, [1] = 0x05, [2] = 0x01, [3] = 0x08, [8] = 0x7F, [9] = 0x02, [10] = 0xDF, [11] = 0x01, [65] = 0x01, [66] = 0x80, [67] = 0x02, [68] = 0x01 };
 _UNKNOWN unk_4568D8; // weak
 char aSanim_haf[10] = "SANIM.HAF"; // weak
 _UNKNOWN unk_4569F0; // weak
@@ -4841,69 +4843,31 @@ void __noreturn exitCtrlAltDel()
 //----- (004092B0) --------------------------------------------------------
 int makeSnapshot_4092B0()
 {
-  unsigned int v0; // eax@4
-  char *v1; // edi@4
-  char v2; // cl@5
-  char *v3; // edi@6
-  char v4; // al@7
   FILE *v5; // eax@8
-  FILE *v6; // esi@8
   __int32 v7; // edi@9
-  bool v8; // sf@10
-  unsigned __int8 v9; // of@10
   signed int v10; // esi@11
-  char DstBuf; // [sp+Ch] [bp-318h]@2
-  char v13; // [sp+Dh] [bp-317h]@3
-  char v14; // [sp+Eh] [bp-316h]@3
-  int Val2; // [sp+10h] [bp-314h]@1
-  char Filename[10]; // [sp+14h] [bp-310h]@4
-  __int16 v17; // [sp+18h] [bp-30Ch]@4
-  char v18; // [sp+1Ah] [bp-30Ah]@4
-  char Str; // [sp+24h] [bp-300h]@13
+  int Val; // [sp+10h] [bp-314h]@1
+  char Filename[16]; // [sp+14h] [bp-310h]@4
+  char Str[768]; // [sp+24h] [bp-300h]@13
 
-  Val2 = 0;
-  do
+  // HS-PIC00.PCX .. HS-PIC99.PCX: the first missing or empty one; with all
+  // of them taken the original overwrites HS-PIC99.PCX
+  for ( Val = 0; Val < 100; ++Val )
   {
-    SDL_itoa(Val2, &DstBuf, 10);
-    if ( strlen(&DstBuf) != 2 )
-    {
-      v13 = DstBuf;
-      DstBuf = 48;
-      v14 = 0;
-    }
-	memset(Filename,0,10);
-    *(_DWORD *)Filename = 1345147720;//P-SH
-	
-    v18 = 0;
-    v17 = 17225;
-    v0 = strlen(&DstBuf) + 1;
-    v1 = (char *)&Val2 + 3;
-    do
-      v2 = (v1++)[1];
-    while ( v2 );
-    memcpy(v1, &DstBuf, v0);
-    v3 = (char *)&Val2 + 3;
-    do
-      v4 = (v3++)[1];
-    while ( v4 );
-    *(_DWORD *)v3 = 1480806446;//.pcx
-    v3[4] = 0;
-	strcat(Filename, v3);
+    sprintf(Filename, "HS-PIC%02d.PCX", Val);
     v5 = fopen(Filename, "rb");
-    v6 = v5;
     if ( !v5 )
       break;
     fseek(v5, 0, 2);
-    v7 = ftell(v6);
-    fclose(v6);
+    v7 = ftell(v5);
+    fclose(v5);
     if ( v7 < 1 )
       break;
-    v9 = __OFSUB__(Val2 + 1, 100);
-    v8 = Val2++ - 99 < 0;
   }
-  while ( v8 ^ v9 );
   File = fopen(Filename, "wb");
-  fwrite(&unk_4450A8, 1u, 0x80u, File);
+  if ( !File )
+    return 0;
+  fwrite(unk_4450A8, 1u, 0x80u, File);
   v10 = 0;
   do
   {
@@ -4912,8 +4876,8 @@ int makeSnapshot_4092B0()
   }
   while ( v10 < 64000 );
   fputc(12, File);
-  generateSnapshotData_43C160((int)&Str);
-  fwrite(&Str, 1u, 0x300u, File);
+  generateSnapshotData_43C160((int)Str);
+  fwrite(Str, 1u, 0x300u, File);
   return fclose(File);
 }
 // 456BF0: using guessed type int screenPtr;
@@ -13602,7 +13566,7 @@ int   sub_426460(unsigned __int8 a1, unsigned __int8 a2)
 
   if ( a2 )
   {
-    if ( a2 != 1 || (a1 & 0xC0) == -64 )
+    if ( a2 != 1 || (a1 & 0xC0) == 0xC0 )
     {
       if ( putc(a2 | 0xC0, File) == -1 )
         result = 0;
@@ -13866,66 +13830,31 @@ LABEL_14:
 //----- (00429DC0) --------------------------------------------------------
 int makeSnapshot_429DC0()
 {
-  unsigned int v0; // eax@4
-  char *v1; // edi@4
-  char v2; // cl@5
-  char *v3; // edi@6
-  char v4; // al@7
   FILE *v5; // eax@8
-  FILE *v6; // esi@8
   __int32 v7; // edi@9
-  bool v8; // sf@10
-  unsigned __int8 v9; // of@10
   signed int v10; // esi@11
-  char DstBuf; // [sp+Ch] [bp-318h]@2
-  char v13; // [sp+Dh] [bp-317h]@3
-  char v14; // [sp+Eh] [bp-316h]@3
   int Val; // [sp+10h] [bp-314h]@1
-  char Filename[4]; // [sp+14h] [bp-310h]@4
-  __int16 v17; // [sp+18h] [bp-30Ch]@4
-  char v18; // [sp+1Ah] [bp-30Ah]@4
-  char Str; // [sp+24h] [bp-300h]@13
+  char Filename[16]; // [sp+14h] [bp-310h]@4
+  char Str[768]; // [sp+24h] [bp-300h]@13
 
-  Val = 0;
-  do
+  // HS-PIC00.PCX .. HS-PIC99.PCX: the first missing or empty one; with all
+  // of them taken the original overwrites HS-PIC99.PCX
+  for ( Val = 0; Val < 100; ++Val )
   {
-    SDL_itoa(Val, &DstBuf, 10);
-    if ( strlen(&DstBuf) != 2 )
-    {
-      v13 = DstBuf;
-      DstBuf = 48;
-      v14 = 0;
-    }
-    *(_DWORD *)Filename = 1345147720;
-    v18 = 0;
-    v17 = 17225;
-    v0 = strlen(&DstBuf) + 1;
-    v1 = (char *)&Val + 3;
-    do
-      v2 = (v1++)[1];
-    while ( v2 );
-    memcpy(v1, &DstBuf, v0);
-    v3 = (char *)&Val + 3;
-    do
-      v4 = (v3++)[1];
-    while ( v4 );
-    *(_DWORD *)v3 = 1480806446;
-    v3[4] = 0;
+    sprintf(Filename, "HS-PIC%02d.PCX", Val);
     v5 = fopen(Filename, "rb");
-    v6 = v5;
     if ( !v5 )
       break;
     fseek(v5, 0, 2);
-    v7 = ftell(v6);
-    fclose(v6);
+    v7 = ftell(v5);
+    fclose(v5);
     if ( v7 < 1 )
       break;
-    v9 = __OFSUB__(Val + 1, 100);
-    v8 = Val++ - 99 < 0;
   }
-  while ( v8 ^ v9 );
   File = fopen(Filename, "wb");
-  fwrite(&unk_456848, 1u, 0x80u, File);
+  if ( !File )
+    return 0;
+  fwrite(unk_456848, 1u, 0x80u, File);
   v10 = 0;
   do
   {
@@ -13934,8 +13863,8 @@ int makeSnapshot_429DC0()
   }
   while ( v10 < 307200 );
   fputc(12, File);
-  generateSnapshotData_43C160((int)&Str);
-  fwrite(&Str, 1u, 0x300u, File);
+  generateSnapshotData_43C160((int)Str);
+  fwrite(Str, 1u, 0x300u, File);
   return fclose(File);
 }
 
