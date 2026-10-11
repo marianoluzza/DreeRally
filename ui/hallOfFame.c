@@ -23,7 +23,6 @@ int dword_461F30[256]; //weak
 
 int dword_461F2C[256]; // weak
 
-extern char  unk_445928[];
 extern int dword_45FC00; // wea
 extern  int dword_461250; // weak
 extern  int dword_462D7C; // weak
