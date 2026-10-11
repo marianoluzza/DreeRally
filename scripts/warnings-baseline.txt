@@ -42,10 +42,6 @@
 1	D:\Mis Docs\GitHub\DreeRally\ui\blackMarketScreen.c : warning C4716: 'initBlackMarketMessages': debe devolver un valor
 1	D:\Mis Docs\GitHub\DreeRally\ui\hallOfFame.c : warning C4700: se utiliz├│ la variable local 'v17' sin inicializar
 1	D:\Mis Docs\GitHub\DreeRally\ui\hallOfFame.c : warning C4700: se utiliz├│ la variable local 'v8' sin inicializar
-1	D:\Mis Docs\GitHub\DreeRally\ui\menu.c : warning C4739: la referencia a la variable 'unk_446EBC' supera su espacio de almacenamiento
-1	D:\Mis Docs\GitHub\DreeRally\ui\menu.c : warning C4739: la referencia a la variable 'unk_446EEE' supera su espacio de almacenamiento
-2	D:\Mis Docs\GitHub\DreeRally\ui\menu.c : warning C4739: la referencia a la variable 'unk_447240' supera su espacio de almacenamiento
-1	D:\Mis Docs\GitHub\DreeRally\ui\menu.c : warning C4739: la referencia a la variable 'unk_447272' supera su espacio de almacenamiento
 1	D:\Mis Docs\GitHub\DreeRally\ui\util\anim.c : warning C4716: 'initShopMessages': debe devolver un valor
 1	dr.c: warning C4013: 'drawCursor' sin definir; se supone que extern devuelve como resultado int
 1	dr.c: warning C4013: 'drawKeyCursor' sin definir; se supone que extern devuelve como resultado int

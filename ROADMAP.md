@@ -357,6 +357,49 @@ Método que funcionó y conviene repetir: lanzar el juego con
 volcado con símbolos antes de tocar código. Un cambio de comportamiento por vuelta, para
 poder atribuir las regresiones.
 
+### Sesión del 11/10
+
+Herramientas nuevas, locales en `.local/` (no van al repo): **Ghidra 12.1.4** y
+`.local/tools/decomp.py`, que descompila funciones del `dr.exe` original con los nombres y el
+archivo:línea de nuestra traducción (`-x` referencias, `--dump` todo a un archivo). El análisis
+corrige el CRT que Ghidra no reconoce (`_ftol2`, `__alldiv`, `__allshr`), sin lo cual el código
+con floats sale roto. Y `.local/tools/sweep.py`, que cruza los accesos del original con las
+direcciones reales del PDB de Debug y dice qué variable del port pisa cada uno: tablas que el
+decompilado partió en globales de un byte, bucles hasta `&otraGlobal` y copias más grandes que su
+destino. Lo que coincide con el layout del original por suerte lo descarta.
+
+Verificado por Mariano en pantalla, salvo el joystick (sin conectar todavía):
+
+| Síntoma | Causa | Dónde |
+| --- | --- | --- |
+| Entrar a definir teclado o joystick pisaba cientos de KB de globales | La tabla de nombres de teclas (0x462DA0, 256 × 15) era un byte y se llenaba con "UNAVAILABLE " hasta `&numberOfLaps`, que en el port está a ~340 KB | `sub_41CA40` |
+| Precios del mercado negro pisados al pasar por esos menús | Las opciones de los menús 5 a 8 (líneas de 50 bytes desde 0x446C32) eran globales sueltas y los títulos se copiaban (24–32 bytes) sobre `rocketCost`, `sabotageCost`, `spikesCost` | `redefineControls`, `defineGamepadJoystickMenu` |
+| Los menús de teclado y joystick no mostraban la tecla de cada acción | El port reemplazó las líneas del original ("Steer Left … left arrow") por etiquetas fijas | `getMenuText` |
+| La pantalla de teclas en carrera (F1) mostraba las teclas de fábrica, con basura sobre ACCELERATE | No armaba la tabla de 0x4A6B20 ni componía las líneas; dibujaba texto fijo | `keyMenuInRace_407330` |
+
+Los nombres de teclas salen de emular las funciones originales en Ghidra
+(`tools/ghidra/DumpKeyNames.java` → `ui/util/keyNames.c`) y las líneas de los menús de
+`tools/originalTexts.py`, con las globales viejas como alias (`ui/util/menuTexts.h`). Con la
+etiqueta traducida no sirve el relleno del original: se muestra la traducción y la tecla.
+
+Pendiente para la próxima sesión, en orden sugerido (lo demás del barrido, todo vivo):
+
+1. **Probar el joystick**: menú Define Gamepad/Joystick y la parte de joystick de F1.
+2. **Récords por circuito** (`drawRecordByCircuit`, `hallOfFame.c:645`): lee los nombres de
+   `unk_45F8BC + 24 * i`, un byte suelto.
+3. **Mensaje al ganar el juego** (`sub_427BC0`): las cuatro líneas de 70 bytes ("Ah, fortune and
+   glory! …", desde 0x456618) quedaron reducidas a su primera letra; van a `originalTexts.py`.
+4. **`dr.cfg`**: `fread`/`fwrite` de 4 bytes sobre `word_462D54` (2 bytes) pisa dos bytes de
+   configuración recién leídos. Hoy no se nota.
+5. **Capturas** (`makeSnapshot_429DC0`): la cabecera PCX de 128 bytes (0x456848) es un byte.
+6. **Release no enlaza**: `diagnostics.c` usa `_CrtSetReportHook2`, que solo existe en Debug.
+7. `sub_404C30` y `sub_4055A0` no se llaman, y el original sí las llama desde la carrera
+   (0x41787C, 0x417963): falta un fundido de paleta. Antes de conectarlas hay que arreglarles la
+   tabla de 3 KB de floats (0x4B3400, `unk_4B3404` es un byte) y una docena de bucles hasta
+   `&otraGlobal`.
+8. Siguen los del 04/10: restos de memoria, titileo del menú, `BYTE` con signo, polígonos 3D,
+   animación de largada, logos de sponsors, buffer de teclas, `debug`.
+
 ## 3. Sonido, campaña y guardados
 
 Prioridad P1; depende de una carrera estable.
