@@ -4347,6 +4347,10 @@ signed int   racePauseMenu_4064A0(int a1)
   }
   while ( (dword_479270 < 968 || !a1) && !v10 );
   memset(keysRead_45E0C0, 0, 0x100u);
+  //Mas alla del original: el Enter que cierra este cartel tambien queda en el buffer de
+  //teclas (dword_456BF8), y al terminar la carrera el primer resultado lo leia y se salteaba.
+  sub_43B2E0();
+  sub_43B2D0();
   stopSoundChannel_43C3E0(5u);
   v12 = 0;
   do

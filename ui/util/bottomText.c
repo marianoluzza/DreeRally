@@ -39,6 +39,10 @@ void scrollMenuNews()
 {
   memmove(unk_461EC0, unk_461EC0 + 1, MENU_NEWS_LINES - 1);
   memmove(MENU_NEWS_LINE(0), MENU_NEWS_LINE(1), (MENU_NEWS_LINES - 1) * MENU_NEWS_LINE_SIZE);
+  // Mas alla del original: la ultima linea quedaba con su texto y se repetia arriba y abajo de
+  // cada noticia nueva (la version DOS las muestra con renglones vacios alrededor).
+  memset(MENU_NEWS_LINE(MENU_NEWS_LINES - 1), 0, MENU_NEWS_LINE_SIZE);
+  unk_461EC0[MENU_NEWS_LINES - 1] = 0;
 }
 
 //Agrega una noticia abajo de todo (linea 21) con su color: 0 normal, 1 resaltada, 2 tercer color.
