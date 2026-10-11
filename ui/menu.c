@@ -1,4 +1,5 @@
 #include <SDL_keysym.h>
+#include "util/bottomText.h"
 #include "menu.h"
 
 #include "util/menus.h"
@@ -758,6 +759,7 @@ int mainMenu()
   while ( v28 < (signed int)&blacktx1Bpk );
   memcpy(&dword_462C4E, "Use arrow keys to change selection and press enter to confirm.", 0x3Fu);
   HIBYTE(word_461ED4) = 1;*/
+  initMenuNews();
   drawTransparentBlock(0, 371, 639, 109);
   
   drawBottomMenuText();

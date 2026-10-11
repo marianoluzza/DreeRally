@@ -709,12 +709,7 @@ void *slidmus2Bpk; // idb
 int totalRaceSeconds_45EEBC; // weak
 int totalRaceMinutes_45EEC0; // weak
 
-int dword_45F000; // weak
-int dword_45F004; // weak
-int dword_45F008; // weak
-int dword_45F00C; // weak
-__int16 word_45F010; // weak
-char byte_45F012; // weak
+char newsSetUsed_45F000[19]; // 0x45F000..0x45F012, ver dr.h
 
 void *bases42Bpk; // idb
 

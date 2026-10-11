@@ -68,14 +68,16 @@ extern void *slidmus2Bpk; // idb
 extern char byte_456B01;
 extern char byte_44512A;
 
-extern __int16 word_45F010; // weak
-
-extern int dword_45F000; // weak
-extern int dword_45F004; // weak
-extern int dword_45F008; // weak
-extern int dword_45F00C; // weak
+//Juegos de noticias de True Tom ya usados (0x45F000, un byte por cada uno de los 19). El decompilado
+//los partio en globales sueltas y sub_4279C0 marcaba el usado escribiendo mas alla del primer int.
+extern char newsSetUsed_45F000[19];
+#define dword_45F000 (*(int *)&newsSetUsed_45F000[0])
+#define dword_45F004 (*(int *)&newsSetUsed_45F000[4])
+#define dword_45F008 (*(int *)&newsSetUsed_45F000[8])
+#define dword_45F00C (*(int *)&newsSetUsed_45F000[12])
+#define word_45F010 (*(__int16 *)&newsSetUsed_45F000[16])
+#define byte_45F012 (newsSetUsed_45F000[18])
 extern char byte_45FB84; // weak
-extern char byte_45F012; // weak
 extern char aGamepadDisable[50];
 extern int menuOptionSelected_463DF0; // weak
 extern int debug;

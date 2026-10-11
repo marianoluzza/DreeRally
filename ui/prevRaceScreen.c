@@ -1,3 +1,4 @@
+#include "util/bottomText.h"
 #include "prevRaceScreen.h"
 
 #include "util/menus.h"
@@ -18,10 +19,29 @@
 #include <SDL.h>
 #include "../diagnostics.h"
 
-char aThisIsIt_Here_[68] = "This is it. Here. Now. In Death Rally, where life is short and hot,"; // weak
-char aFastAndDeadly_[58] = "fast and deadly. The race is on. Watch the road. Hear the"; // weak
-char aRumble_WannaPl[62] = "rumble. Wanna play it sweet or play it dirty, by the rules or"; // weak
-char aFryTheRulesThe[59] = "fry the rules, there's only one way to do it, play to win."; // weak
+//Las 19 noticias de True Tom, de cuatro lineas de 70 bytes (0x455150). El port solo tenia la
+//primera y sub_4279C0 leia las demas fuera del arreglo.
+static const char trueTomNews_455150[19][4][70] = {
+  { "This is it. Here. Now. In Death Rally, where life is short and hot,", "fast and deadly. The race is on. Watch the road. Hear the", "rumble. Wanna play it sweet or play it dirty, by the rules or", "fry the rules, there's only one way to do it, play to win." },
+  { "Ride your machine, your motor-war-chariot. Go for that Grail.", "Only one can be the king of the race, the fastest man on the", "track, the number one. And there are plenty of takers. Gas is", "the only pedal. Floor it. You have been warned." },
+  { "Perk up. This is a free newsflash. I am True Tom Rhymer, and I", "know the road. I got petrol in my veins, I got wind in my engine-", "oiled hair. I've been where you are now, hotshot, thunderboy,", "youngblood. I've been farther down the road than you'll ever get." },
+  { "Listen. This is True Tom talking. I speak to you through the", "mystic ring-shapes of your wheels. A genie in a bottle, I sing", "to you from that beer bottle, half drank, on the side of the", "road. Smell my sweat in the reek and excitement of petrol pumps." },
+  { "Listen. This is True Tom talking. Hear me groan mantras and", "mysteries over the roar and rumble of boastful motor monsters.", "I am the man in the machine, the guru of cars, the rocket petrol", "daddy. I know that twisted road. Listen close. I tell no lies." },
+  { "Are you ready for the ride, magical and mysterious? A long long", "way down the yellow brick road? Through zillions miles of", "blitzkrieg battle, prolonged and blazing? Trailblaze through the", "multitude of unknown uphill struggles the road sends your way." },
+  { "That junk of yours is no juggernaut, she won't hold, she won't", "take you all the way, half the way. You need to gear up, to", "upgrade, make headlong headway, strive to stride, stride to strive,", "evolve, improve, better, best. Buy and be one shining perfection." },
+  { "Ride that whirlwind. Put some heavy-metal to the pedal, put that", "hammer down, and aim your nose towards that myth-shrouded final", "challenge. The Adversary awaits. Here you come now, there's no", "turning back now. True Tom can see you coming. I tell no lies." },
+  { "This is how it goes. You are driving. You are saying, 'Hang on", "baby, this is what I do.' It's doable, all right? Winnable. And the", "bullets take the sky, like clouds of locusts. The end is nigh.", "Race over, get it? Budda budda budda. You have been warned." },
+  { "This is how it goes. All you can see from the rear mirror is", "rocket fume, and you know there isn't that much smoke in the", "whole burning hell. And your engine, it screams and moans like a", "banshee. Death is coming, death is coming, that's what it's saying." },
+  { "This is how it goes. Your heart pumps that winning beat. This is", "race time, real time. And your brakes are gone. Don't miss them,", "don't care. Gas is the only pedal. Floor it; did long time ago.", "See the lap of honor, bullets turned into confetti. Win, win, win!" },
+  { "Through the hot rod road-hell purgatory, where motor souls", "scream and way-tired wheels burn. To the final challenge.", "There awaits the demon king of the race. The flame-crowned demon", "king. The Adversary. Fear him. Listen to True Tom. I tell no lies." },
+  { "Listen. This is True Tom talking. Once, I tried to prove my gas-", "pedal mettle in a race against the Adversary. I lost. Only once did", "I hear him speak. It was when he raised his fire-crowned head, and", "said, 'Racer boy, now I'm going to mow you dead.'" },
+  { "Listen. This is True Tom Talking. Yes, I speak to you now from my", "car-coffin grave. It was the Adversary that put me here, the", "demon king of the race. You would do well to fear him. I tell no", "lies. I know, True Tom does. Listen, and listen close. Fear him." },
+  { "Body and soul; yin and yang. You, my roadward apprentice, are the", "soul in this exponentially accelerating equation. Your vehicle is", "the body. Can you feel the precious equilibrium slipping and tail-", "sliding from your control? Don't lose it now, stay tuned: race time!" },
+  { "Those other wannabe victory hounds are just taillights blazing", "away in the far horizon. Gone daddy gone! Not enough juice, not", "enough potential power in your engine box. True Tom too, has been", "in the same fix you are now, oh yeah. Shoot 'em down." },
+  { "You wanna know if it's safe. Listen to True Tom, this is the score.", "Things can get out of hand real speedy like. I'm talking 'bout the", "world lighting up shining blast white and then nothing, I'm talking", "'bout going out in a blaze of glory. You have been warned." },
+  { "So jealousy burns you like a diesel engine inside, you want that", "road all to yourself? The black cat of bad luck haunts you? Jinx", "those rival wheels so they'll reap only burning engine death, and", "the road is all yours. But beware, the road can be a fickle lover." },
+  { "So my baby walked when I bought me a new set of wheels instead", "of a wedding ring. Any regrets? For a while there, but now all", "bitter regrets are in the past, blurred sweet streetlights speeding", "past, fast. The rush, the high, Death Rally! Drive it. Love it." },
+};
 int multiplayerWaitCounter_456BE8 = 0; // weak
 int dword_4A7AC4; // weak
 int dword_4A7A6C; // weak
@@ -2000,123 +2020,29 @@ int drawWaitMultiplayer_4261D0()
 //----- (004279C0) --------------------------------------------------------
 char sub_4279C0()
 {
-  char v0; // bl@1
-  signed int v1; // edi@1
-  char v2; // al@2
-  signed int v3; // edx@2
-  signed int v4; // eax@3
-  char v5; // cl@4
+  int v1; // edi@1
   int v6; // edx@8
-  int v7; // edx@9
-  char *v8; // eax@9
-  char v9; // cl@10
-  char *v10; // eax@11
-  char v11; // cl@12
-  char *v12; // eax@13
-  char v13; // cl@14
-  char *v14; // eax@15
-  signed int v15; // edx@15
-  char v16; // cl@16
-  char result; // al@17
-  bool v18; // cf@17
-  bool v19; // zf@17
 
-  v0 = unk_461EC1;
-  v1 = 6;
-  do
-  {
-    v2 = unk_461EC3;
-    unk_461EC3 = word_461EC4;
-    unk_461EC0[0] = v0;
-    v0 = unk_461EC2;
-    unk_461EC2 = v2;
-    HIBYTE(word_461EC4) = unk_461EC6;
-    unk_461EC6 = unk_461EC7;
-    unk_461EC7 = word_461EC8;
-    HIBYTE(word_461EC8) = unk_461ECA;
-    unk_461ECA = unk_461ECB;
-    unk_461ECB = word_461ECC;
-    HIBYTE(word_461ECC) = unk_461ECE;
-    unk_461ECE = unk_461ECF;
-    unk_461ECF = word_461ED0;
-    HIBYTE(word_461ED0) = unk_461ED2;
-    unk_461ED2 = unk_461ED3;
-    v3 = (signed int)&unk_462096;
-    unk_461ED3 = word_461ED4;
-    do
-    {
-      v4 = v3;
-      do
-      {
-        v5 = *(BYTE *)v4;
-        *(BYTE *)(v4 - 150) = *(BYTE *)v4;
-        ++v4;
-      }
-      while ( v5 );
-      v3 += 150;
-    }
-    while ( v3 < (signed int)MENU_NEWS_END_462CE4 );
-    --v1;
-  }
-  while ( v1 );
-  unk_461EC1 = v0;
+  // Six lines up, then one of the 19 news not used yet in the last four lines, highlighted
+  for ( v1 = 0; v1 < 6; ++v1 )
+    scrollMenuNews();
   do
     v6 = rand() % 19;
-  while ( *((BYTE *)&dword_45F000 + v6) == 1 );
-  *((BYTE *)&dword_45F000 + v6) = 1;
-  v7 = 280 * v6;
-  v8 = &aThisIsIt_Here_[v7];
-  do
+  while ( newsSetUsed_45F000[v6] == 1 );
+  newsSetUsed_45F000[v6] = 1;
+  for ( v1 = 0; v1 < 4; ++v1 )
   {
-    v9 = *v8;
-    v8[byte_4629F6 - &aThisIsIt_Here_[v7]] = *v8;
-    ++v8;
+    strcpy(MENU_NEWS_LINE(17 + v1), trueTomNews_455150[v6][v1]);
+    unk_461EC0[17 + v1] = 1;
   }
-  while ( v9 );
-  v10 = &aFastAndDeadly_[v7];
-  HIBYTE(word_461ED0) = 1;
-  do
+  // word_461ED4 = 1: the last flag is cleared as well
+  unk_461EC0[21] = 0;
+  if ( (unsigned char)++byte_45FB84 > 18 )
   {
-    v11 = *v10;
-    v10[byte_462A8C - &aFastAndDeadly_[v7]] = *v10;
-    ++v10;
-  }
-  while ( v11 );
-  v12 = &aRumble_WannaPl[v7];
-  unk_461ED2 = 1;
-  do
-  {
-    v13 = *v12;
-    v12[byte_462B22 - &aRumble_WannaPl[v7]] = *v12;
-    ++v12;
-  }
-  while ( v13 );
-  v14 = &aFryTheRulesThe[v7];
-  unk_461ED3 = 1;
-  v15 = byte_462BB8 - &aFryTheRulesThe[v7];
-  do
-  {
-    v16 = *v14;
-    v14[v15] = *v14;
-    ++v14;
-  }
-  while ( v16 );
-  result = byte_45FB84 + 1;
-  v18 = (unsigned __int8)(byte_45FB84 + 1) < 0x12u;
-  v19 = byte_45FB84 == 17;
-  LOBYTE(word_461ED4) = 1;
-  ++byte_45FB84;
-  if ( !v18 && !v19 )
-  {
-    dword_45F000 = 0;
-    dword_45F004 = 0;
-    dword_45F008 = 0;
-    dword_45F00C = 0;
-    word_45F010 = 0;
-    byte_45F012 = 0;
+    memset(newsSetUsed_45F000, 0, sizeof(newsSetUsed_45F000));
     byte_45FB84 = 0;
   }
-  return result;
+  return byte_45FB84;
 }
 
 //----- (0042C670) --------------------------------------------------------
