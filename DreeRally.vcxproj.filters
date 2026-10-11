@@ -205,6 +205,9 @@
     <ClCompile Include="ui\util\input.c">
       <Filter>Source Files\ui\util</Filter>
     </ClCompile>
+    <ClCompile Include="ui\util\keyNames.c">
+      <Filter>Source Files\ui\util</Filter>
+    </ClCompile>
     <ClCompile Include="ui\util\originalTexts.c">
       <Filter>Source Files\ui\util</Filter>
     </ClCompile>
@@ -368,6 +371,9 @@
       <Filter>Header Files\ui</Filter>
     </ClInclude>
     <ClInclude Include="ui\util\input.h">
+      <Filter>Header Files\ui\util</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\util\keyNames.h">
       <Filter>Header Files\ui\util</Filter>
     </ClInclude>
     <ClInclude Include="ui\util\originalTexts.h">

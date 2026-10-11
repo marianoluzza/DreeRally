@@ -3,8 +3,15 @@
 #include "../../savegame.h"
 #include "../../i18n/i18n.h"
 
+#include "../../config.h"
+#include "keyNames.h"
+#include "menuTexts.h"
+
 #include <stdio.h>
 #include <string.h>
+
+extern char unk_462DA0[];
+extern char unk_45EAC0[];
 
 char * menu0[] = { "Start Racing", "Multiplayer Race", "Configure","See hall of fame","Credits","Exit to os" };
 char * menu1[] = { "Start a new game", "End current Game", "See current Stadistics","Load game","save game","Previous menu" };
@@ -31,6 +38,28 @@ char menuActive_4457F0[] = { '\x01','\x0','\x01','\x01','\x01','\x01','\x01','\x
 //restaura al terminarla; el port tenia una copia por archivo y el menu nunca veia el cambio.
 char menuaStartANewGam_0[17] = "Start A New Game";
 char menuaStartRacing[16] = "Start Racing";
+
+//Opciones de los menus de teclado y joystick. El original muestra su linea de 50 bytes: etiqueta,
+//relleno y el nombre de la tecla que arma sub_41CA40 (el port solo mostraba la etiqueta). Con
+//la etiqueta traducida no sirve el relleno del original: etiqueta traducida y tecla.
+static char *keyMenuText(int menu, int position, char **labels, int keys) {
+	static char line[MENU_TEXT_SIZE + KEY_NAME_SIZE];
+	int keyboard[] = { configuration.accelerateKey, configuration.brakeKey, configuration.leftSteeringKey,
+		configuration.rightSteeringKey, configuration.turboKey, configuration.gunKey, configuration.mineKey,
+		configuration.hornKey };
+	int gamepad[] = { configuration.accelerateGamepad, configuration.brakeGamepad,
+		configuration.leftSteeringGamepad, configuration.rightSteeringGamepad, configuration.turboGamepad,
+		configuration.gunGamepad, configuration.mineGamepad };
+	char *label = getLanguageEntry(labels[position]);
+
+	if (position >= keys)
+		return label;
+	if (label == labels[position])
+		return MENU_TEXT(menu, position);
+	snprintf(line, sizeof(line), "%s  %s", label, menu == DEFINE_KEYBOARD_MENU
+		? unk_462DA0 + KEY_NAME_SIZE * keyboard[position] : unk_45EAC0 + KEY_NAME_SIZE * gamepad[position]);
+	return line;
+}
 
 char* getMenuText(int menu, int position) {
 	
@@ -67,11 +96,9 @@ char* getMenuText(int menu, int position) {
 		
 		break;
 	case DEFINE_KEYBOARD_MENU://
-		return getLanguageEntry(menu6[position]);
-		break;
+		return keyMenuText(menu, position, menu6, 8);
 	case DEFINE_GAMEPAD_MENU://
-		return getLanguageEntry(menu8[position]);
-		break;
+		return keyMenuText(menu, position, menu8, 7);
 	}
 	return "";
 	

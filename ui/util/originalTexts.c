@@ -332,3 +332,51 @@ const char loanOfferTexts[6][6][40] = {
     "Press [ESC{ to go back to the shop.",
   },
 };
+
+//menuTexts_446C32: 4 x 9 x 50 bytes, desde 0x446C32
+char menuTexts_446C32[4][9][50] = {
+  {
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  },
+  {
+    "Accelerate    a",
+    "Brake        z",
+    "Steer Left    \372\372left arrow",
+    "Steer Right   \372\372\372\372\372\372right arrow",
+    "Turbo Boost  \372\372\372\372\372\372\372\372\372\372\372\372space",
+    "Machine Gun  \372\372\372\372\372\372\372\372\372\372\372\372left control",
+    "Drop Mine    \372\372\372\372\372\372\372\372\372\372\372left alt",
+    "Horn        \372\372\372\372\372\372\372\372\372\372\372\372\372\372\372\372\372\372\372space",
+    "Previous Menu",
+  },
+  {
+    "Standard COM1",
+    "Standard COM2",
+    "Standard COM3",
+    "Standard COM4",
+    "Custom COM-port",
+    "Modem Init String",
+    "Tone Dialing",
+    "Previous Menu",
+    "",
+  },
+  {
+    "Accelerate    a",
+    "Brake        z",
+    "Steer Left    \372\372left arrow",
+    "Steer Right   \372\372\372\372\372\372right arrow",
+    "Turbo Boost  \372\372\372\372\372\372\372\372\372\372\372\372space",
+    "Machine Gun  \372\372\372\372\372\372\372\372\372\372\372\372left control",
+    "Drop Mine    \372\372\372\372\372\372\372\372\372\372\372left alt",
+    "Previous Menu",
+    "",
+  },
+};

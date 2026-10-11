@@ -14,10 +14,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "util/menuTexts.h"
 
-//Nombres de las ranuras de guardado, 50 bytes cada una como en el original; era un solo byte
-//y escribir "Empty slot" en las 10 ranuras pisaba graphics4 (cierre al cargar partida, 03/10).
-char unk_446C32[10 * 50];
+//Los nombres de las ranuras (unk_446C32, 50 bytes cada una) son las opciones del menu 5, ver
+//menuTexts.h. El original tiene 8; con las 10 del port la ultima cae, como caeria en dr.exe,
+//sobre "Accelerate" del menu de teclado, que sub_41CA40 vuelve a escribir al entrar en el.
 BYTE unk_4455B0[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
 
 void *Str; // idb

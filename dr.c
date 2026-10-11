@@ -54,6 +54,7 @@
 #include "race/lightSystem.h"
 #include "dr.h"
 #include "diagnostics.h"
+#include "ui/util/keyNames.h"
 
 // La fisica del coche puede producir NaN o infinito (divisiones por cero en la capacidad
 // de giro y en la normalizacion del vector de avance). Mientras varios campos eran int el
@@ -1006,7 +1007,8 @@ _UNKNOWN unk_479AAC; // weak*/
 //_UNKNOWN unk_479D2C; // weak
 //_UNKNOWN unk_479D38; // weak
 char trxBLOTab_479D40[257]; // weak
-_UNKNOWN unk_479E40; // weak
+//Botones del joystick para la pantalla de teclas en carrera (codigos 0 a 8, 0x90 bytes).
+char unk_479E40[0x90];
 
 RacePopupMemory racePopupMemory[969];
 /*
@@ -1119,8 +1121,9 @@ int dword_4A6AF8; // weak*/
 //int dword_4A6AFC; // weak
 int dword_4A6B00; // weak
 int dword_4A6B04; // weak
-_UNKNOWN unk_4A6B20; // weak
-_UNKNOWN unk_4A6B24; // weak
+//Nombres de las teclas para la pantalla de teclas en carrera ("...LEFT ARROW"), 15 bytes por
+//scancode; era un solo byte.
+char unk_4A6B20[KEY_NAMES * KEY_NAME_SIZE];
 int dword_4A7A20; // weak
 int dword_4A7A24; // weak
 
@@ -4461,6 +4464,16 @@ unsigned int   drawInRaceMenuText_4072C0(int a1, const char *a2)
   return result;
 }
 
+//Linea de la pantalla de teclas en carrera: accion y tecla, como el strcpy + strcat del original.
+static void drawKeyDefinition_407330(int offset, const char *action, const char *keyName)
+{
+  char line[60];
+
+  strcpy(line, action);
+  strcat(line, keyName);
+  drawInRaceMenuText_4072C0(screenPtr + offset, line);
+}
+
 //----- (00407330) --------------------------------------------------------
 int keyMenuInRace_407330()
 {
@@ -4488,24 +4501,20 @@ int keyMenuInRace_407330()
   int v119; // [sp+18h] [bp-30h]@3
   char v120; // [sp+1Ch] [bp-2Ch]@3
 
- /* v0 = (char *)&unk_479E40 + 15 * (unsigned __int8)byte_456B01;
-  
-  v1 = (char *)&unk_479E40 + 15 * (unsigned __int8)configuration.defaultLeftSteeringGamepad;
-  
-  v2 = (char *)&unk_479E40 + 15 * (unsigned __int8)configuration.defaultRightSteeringGamepad;
+  //Nombres de los botones del joystick y de las teclas, alineados a la derecha con puntos. El
+  //port no los escribia (las tablas eran un byte) y dibujaba las teclas por defecto aunque se
+  //hubieran redefinido.
+  strcpy(unk_479E40 + 15 * (unsigned __int8)byte_456B01, ".........NONE");
+  strcpy(unk_479E40 + 15 * (unsigned __int8)configuration.defaultLeftSteeringGamepad, ".........LEFT");
+  strcpy(unk_479E40 + 15 * (unsigned __int8)configuration.defaultRightSteeringGamepad, "........RIGHT");
+  strcpy(unk_479E40 + 15 * (unsigned __int8)byte_44512A, "...........UP");
+  strcpy(unk_479E40 + 15 * (unsigned __int8)configuration.defaultBrakeGamepad, ".........DOWN");
+  strcpy(unk_479E40 + 15 * (unsigned __int8)configuration.defaultAccelerateGamepad, ".....BUTTON 1");
+  strcpy(unk_479E40 + 15 * (unsigned __int8)configuration.defaultTurboGamepad, ".....BUTTON 2");
+  strcpy(unk_479E40 + 15 * (unsigned __int8)configuration.defaultGunGamepad, ".....BUTTON 3");
+  strcpy(unk_479E40 + 15 * (unsigned __int8)configuration.defaultMineGamepad, ".....BUTTON 4");
+  memcpy(unk_4A6B20, originalKeyNamesInRace, sizeof(unk_4A6B20));
 
-  v3 = (char *)&unk_479E40 + 15 * (unsigned __int8)byte_44512A;
-  
-  v4 = (char *)&unk_479E40 + 15 * (unsigned __int8)configuration.defaultBrakeGamepad;
-
-  v5 = (char *)&unk_479E40 + 15 * (unsigned __int8)configuration.defaultAccelerateGamepad;
-
-  v6 = (char *)&unk_479E40 + 15 * (unsigned __int8)configuration.defaultTurboGamepad;
-
-  v7 = (char *)&unk_479E40 + 15 * (unsigned __int8)configuration.defaultGunGamepad;
- 
-  v8 = (char *)&unk_479E40 + 15 * (unsigned __int8)configuration.defaultMineGamepad;*/
- 
   //unk_491820= malloc ( 0xFA00u);
 
   //esto guarda la ultima imagen para ponerla mas tarde despues del menu
@@ -4537,56 +4546,24 @@ int keyMenuInRace_407330()
   drawInRaceMenuText_4072C0(screenPtr + 17980, "   P....................PAUSE");
 
   drawInRaceMenuText_4072C0(screenPtr + 23100, "      KEYBOARD DEFINITIONS");
-  drawInRaceMenuText_4072C0(screenPtr + 26940, "   ACCELERATE...............A");
-  drawInRaceMenuText_4072C0(screenPtr + 26968, (char*)&unk_4A6B20 + 15 * configuration.accelerateKey);
-  drawInRaceMenuText_4072C0(screenPtr + 28860, "   BRAKE....................Z");
-  drawInRaceMenuText_4072C0(screenPtr + 30780, "   STEER LEFT......LEFT ARROW");
-  drawInRaceMenuText_4072C0(screenPtr + 32700, "   STEER RIGHT....RIGHT ARROW");
-  drawInRaceMenuText_4072C0(screenPtr + 34620, "   TURBO BOOST.....LEFT SHIFT");
-  drawInRaceMenuText_4072C0(screenPtr + 36540, "   MACHINE GUN...LEFT CONTROL");
-  drawInRaceMenuText_4072C0(screenPtr + 38460, "   DROP MINE.........LEFT ALT");
-  drawInRaceMenuText_4072C0(screenPtr + 40380, "   HORN.................SPACE");
+  //Cada linea es el texto de la accion y el nombre de la tecla definida (strcat en el original).
+  drawKeyDefinition_407330(26940, "   ACCELERATE...", unk_4A6B20 + 15 * configuration.accelerateKey);
+  drawKeyDefinition_407330(28860, "   BRAKE........", unk_4A6B20 + 15 * configuration.brakeKey);
+  drawKeyDefinition_407330(30780, "   STEER LEFT...", unk_4A6B20 + 15 * configuration.leftSteeringKey);
+  drawKeyDefinition_407330(32700, "   STEER RIGHT..", unk_4A6B20 + 15 * configuration.rightSteeringKey);
+  drawKeyDefinition_407330(34620, "   TURBO BOOST..", unk_4A6B20 + 15 * configuration.turboKey);
+  drawKeyDefinition_407330(36540, "   MACHINE GUN..", unk_4A6B20 + 15 * configuration.gunKey);
+  drawKeyDefinition_407330(38460, "   DROP MINE....", unk_4A6B20 + 15 * configuration.mineKey);
+  drawKeyDefinition_407330(40380, "   HORN.........", unk_4A6B20 + 15 * configuration.hornKey);
 
   drawInRaceMenuText_4072C0(screenPtr + 45500, "      GAMEPAD DEFINITIONS");
-  drawInRaceMenuText_4072C0(screenPtr + 49340, "   ACCELERATE........BUTTON 1");
-  
-  drawInRaceMenuText_4072C0(screenPtr + 51260, "   BRAKE.................DOWN");
-  drawInRaceMenuText_4072C0(screenPtr + 53180, "   STEER LEFT............LEFT");
-  drawInRaceMenuText_4072C0(screenPtr + 55100, "   STEER RIGHT..........RIGHT");
-  drawInRaceMenuText_4072C0(screenPtr + 57020, "   TURBO BOOST.......BUTTON 2");
-  drawInRaceMenuText_4072C0(screenPtr + 58940, "   MACHINE GUN.......BUTTON 3");
-  drawInRaceMenuText_4072C0(screenPtr + 60860, "   DROP MINE.........BUTTON 4");
- 
-  
-  /*memcpy(v20, (char *)&unk_4A6B20 + 15 * configuration.brakeKey, v19);
-  
-  memcpy(v25, (char *)&unk_4A6B20 + 15 * configuration.leftSteeringKey, v24);
-  
-  v30 = v28 - ((char *)&unk_4A6B20 + 15 * configuration.rightSteeringKey);
-  
-  v35 = (char *)&unk_4A6B20 + 15 * configuration.turboKey;
- 
-  v40 = (char *)&unk_4A6B20 + 15 * configuration.gunKey;
-  
-  v46 = (char *)&unk_4A6B20 + 15 * configuration.mineKey;
-  
-  v53 = (char *)&unk_4A6B20 + 15 * configuration.hornKey;
-  
-  v58 = (char *)&unk_479E40 + 15 * configuration.accelerateGamepad;
-  
-  
-  v65 = (char *)&unk_479E40 + 15 * configuration.brakeGamepad;
-  
-  v70 = (char *)&unk_479E40 + 15 * configuration.leftSteeringGamepad;
- 
-  v76 = (char *)&unk_479E40 + 15 * configuration.rightSteeringGamepad;
- 
-  v83 = (char *)&unk_479E40 + 15 * configuration.turboGamepad;
-  
-  v88 = (char *)&unk_479E40 + 15 * configuration.gunGamepad;
-  
- 
-  v94 = (char *)&unk_479E40 + 15 * configuration.mineGamepad;*/
+  drawKeyDefinition_407330(49340, "   ACCELERATE...", unk_479E40 + 15 * configuration.accelerateGamepad);
+  drawKeyDefinition_407330(51260, "   BRAKE........", unk_479E40 + 15 * configuration.brakeGamepad);
+  drawKeyDefinition_407330(53180, "   STEER LEFT...", unk_479E40 + 15 * configuration.leftSteeringGamepad);
+  drawKeyDefinition_407330(55100, "   STEER RIGHT..", unk_479E40 + 15 * configuration.rightSteeringGamepad);
+  drawKeyDefinition_407330(57020, "   TURBO BOOST..", unk_479E40 + 15 * configuration.turboGamepad);
+  drawKeyDefinition_407330(58940, "   MACHINE GUN..", unk_479E40 + 15 * configuration.gunGamepad);
+  drawKeyDefinition_407330(60860, "   DROP MINE....", unk_479E40 + 15 * configuration.mineGamepad);
   
   dword_456AF8 = 0;
   setCircuitPaletteBis_4B4020();

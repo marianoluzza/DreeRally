@@ -20,6 +20,11 @@ TABLES = [
     ("loanOfferTexts", 0x452078, 6, 6, 40),           # oferta de prestamo
 ]
 
+# Bloques que el juego reescribe (no const), copiados byte a byte: nombre, direccion, dimensiones.
+BLOCKS = [
+    ("menuTexts_446C32", 0x446C32, (4, 9, 50)),  # opciones de los menus 5 a 8, ver menuTexts.h
+]
+
 
 def read(exe, va, size):
     if not DATA_VA <= va < DATA_END:
@@ -31,6 +36,26 @@ def read(exe, va, size):
 def c_string(raw):
     text = raw.split(b"\0")[0].decode("latin-1")
     return '"' + text.replace("\\", "\\\\").replace('"', '\\"') + '"'
+
+
+def c_bytes(raw):
+    """Literal exacto de un campo, sin los ceros del final (C rellena con ceros)."""
+    raw = raw.rstrip(b"\0")
+    out = "".join(chr(b) if 0x20 <= b < 0x7F and chr(b) not in '"\\?' else "\\%03o" % b for b in raw)
+    return '"' + out + '"'
+
+
+def block(exe, name, va, dims):
+    menus, entries, width = dims
+    out = ["//%s: %d x %d x %d bytes, desde 0x%X" % (name, menus, entries, width, va),
+           "char %s[%d][%d][%d] = {" % (name, menus, entries, width)]
+    for m in range(menus):
+        out.append("  {")
+        for e in range(entries):
+            out.append("    %s," % c_bytes(read(exe, va + (m * entries + e) * width, width)))
+        out.append("  },")
+    out += ["};", ""]
+    return out
 
 
 def main(path):
@@ -50,6 +75,8 @@ def main(path):
             out.append("  },")
         out.append("};")
         out.append("")
+    for name, va, dims in BLOCKS:
+        out += block(exe, name, va, dims)
     with open("ui/util/originalTexts.c", "w", encoding="latin-1", newline="\n") as f:
         f.write("\n".join(out))
 
