@@ -267,10 +267,13 @@ int freeMusic()
   int result; // eax@1
 
   result = mainArgs.configNoSound;
+  //0x43C4D0: el original cierra FMOD. Sin esto, al salir el hilo de fmod.dll seguia llamando al
+  //callback del stream mientras el proceso liberaba la memoria (cierre en VCRUNTIME al salir).
   if ( !mainArgs.configNoSound )
-  //TODO
-	result = 0;
-    //result = FSOUND_Close();
+  {
+    FSOUND_Close();
+    result = 0;
+  }
   return result;
 }
 
