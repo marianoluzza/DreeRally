@@ -19,6 +19,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+void showEndAnim_4312D0();
+int stopSong();
+int stopAndOpenMusic();
 #include <math.h>
 #include "../diagnostics.h"
 #include "raceResultsScreen.h"
@@ -794,6 +798,25 @@ LABEL_154:
 char postLoadedOrLicense()
 {
   diagnosticLog("pantalla: postLoadedOrLicense");
+  //Prueba: DREERALLY_FORCE_ENDING=1 pasa una vez por el final del juego (animacion, Hall of Fame,
+  //mensaje) al cargar o crear una partida, sin ganarle al Adversary. Agrega el piloto al Hall of
+  //Fame de dr.cfg como el final de verdad, y como el, sale al menu principal (que recarga su paleta).
+  {
+    static int forcedEndingShown = 0;
+    const char *forcedEnding = getenv("DREERALLY_FORCE_ENDING");
+    if ( !forcedEndingShown && forcedEnding && *forcedEnding == '1' )
+    {
+      forcedEndingShown = 1;
+      diagnosticLog("prueba: final forzado para %s (%d carreras)", drivers[driverId].name, drivers[driverId].totalRaces);
+      //La carrera contra el Adversary termina sin musica (stopAndOpenMusic); con la del taller
+      //sonando, el final la cargaba encima y el stream de efectos del menu quedaba huerfano.
+      stopSong();
+      stopAndOpenMusic();
+      showEndAnim_4312D0();
+      dword_456B64 = 1;
+      return 0;
+    }
+  }
   int v0; // esi@1
   int v1; // ecx@1
   __int64 v2; // rax@2
