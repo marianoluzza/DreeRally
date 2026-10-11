@@ -399,7 +399,9 @@ int initDrivers()
 		  offset = 1;
 	  }
 	  drivers[index].face = index+ offset;
-	  memcpy(drivers[index].name, driverNames[index+ offset], strlen(driverNames[index+offset]));
+	  //0x428EF6: copia el nombre con su cero; con memcpy de strlen quedaba la cola de un nombre
+	  //anterior mas largo ("LEE VICEK").
+	  strcpy(drivers[index].name, driverNames[index + offset]);
 	  drivers[index].racesWon = 0;
 	  drivers[index].totalRaces = 0;
 	  drivers[index].lastRaceIncome = 0;
@@ -421,7 +423,9 @@ int initDrivers()
 	  drivers[index].carMoneyCost = cars[v9].cost;
 	  v21 = index + 1;
 	  drivers[index].rank = index + 1; ///esta es la posicion
-	  drivers[index].colour = index+1;
+	  //El color es el indice del nombre, como la cara (0x428F04, 0x428F07): con index + 1 los rivales que
+	  //quedan antes de la cara del jugador tomaban el color del siguiente en CARCOL.PAL.
+	  drivers[index].colour = index + offset;
 	  
   } while (++index < 20);
  /* v5 = (signed int)dword_460890;
