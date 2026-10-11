@@ -304,16 +304,9 @@ void   previewRaceScreen(signed int participants)
   int v69; // edi@71
   unsigned int v70; // edx@71
   char v71; // cl@72
-  int v72; // ebp@76
   int v73; // esi@76
-  char *v74; // edi@76
-  char v75; // al@77
-  char *v76; // eax@78
   int v77; // ebx@78
   unsigned int v78; // edx@78
-  char v79; // cl@79
-  char *v80; // ecx@82
-  char v81; // dl@83
   signed int i; // ebp@85
 //  int v83; // esi@86
 //  int v84; // ebx@86
@@ -929,36 +922,16 @@ LABEL_44:
     _strupr(Str);
     drawTextWithFont((int)graphicsGeneral.fmed1aBpk, (int)&unk_445928, Str, 128664);
     drawImageWithPosition2((int)graphicsGeneral.facexxBpk, 64, 64, (int)((char *)screenBuffer + 82613));
-    v72 = raceIdParticipants[0];
-	v73 = raceIdParticipants[0];
-    SDL_itoa(drivers[v73].rank, Str, 10);
-    v74 = (char *)&v246 + 3;
-    do
-      v75 = (v74++)[1];
-    while ( v75 );
-    *(_WORD *)v74 = 46;
-    v76 = Str;
+    v73 = raceIdParticipants[0];
+    // Rank and name of the player. The original appended the '.' searching from the local before
+    // Str and copied the name from byte_460840 (drivers[] there); in the port both hit other
+    // stack locals, raceIdParticipants among them, and the race then read a garbage driver.
+    sprintf(Str, "%d.", drivers[v73].rank);
     v77 = 0;
-    v78 = 0;
-    do
-      v79 = *v76++;
-    while ( v79 );
-    //v244 = v76 - &Str[1];
-    if ( v76 != &Str[1] )
-    {
-      do
-        v77 += (unsigned __int8)letterSpacing_4458B0[90+(unsigned __int8)Str[v78++]];
-      while ( v78 < strlen(Str) );
-    }
+    for ( v78 = 0; v78 < strlen(Str); ++v78 )
+      v77 += (unsigned __int8)letterSpacing_4458B0[90 + (unsigned __int8)Str[v78]];
     drawTextWithFont((int)graphicsGeneral.fmed1aBpk, (int)&unk_445928, Str, 138403 - v77);
-    v80 = &byte_460840[v73 * 4];
-    do
-    {
-      v81 = *v80;
-      v80[&Str[-108 * v72] - byte_460840] = *v80;
-      ++v80;
-    }
-    while ( v81 );
+    strcpy(Str, drivers[v73].name);
     _strupr(Str);
     drawTextWithFont((int)graphicsGeneral.fmed1aBpk, (int)&unk_445928, Str, 153736);
     drawImageWithPosition2((int)*(&graphicsGeneral.face01Bpk + drivers[v73].face), 64, 64, (int)((char *)screenBuffer + 107685));
@@ -1226,7 +1199,7 @@ LABEL_160:
   if (userPoints > maxPoints && !isMultiplayerGame )
   {
     
-	  strcpy(raceParticipant[0].name, "Adversary");
+	  strcpy(raceParticipant[0].name, "ADVERSARY"); // el original lo escribe en mayusculas; la fuente de carrera no tiene minusculas
 	  /**(_DWORD *)dword_4A7A60 = 1163281473; ///adversary
     dword_4A7A64 = 1380012882;
     word_4A7A68 = 89;*/

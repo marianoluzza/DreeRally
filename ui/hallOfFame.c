@@ -44,8 +44,6 @@ int seeHallOfFame()
 {
   int v0; // esi@1
   int v1; // ebp@2
-  char *v2; // edi@2
-  char v3; // al@3
   int v4; // edx@4
   int v5; // edi@7
 //  int *v6; // eax@7
@@ -63,7 +61,6 @@ int seeHallOfFame()
   int result; // eax@26
   signed int v19; // esi@32
   signed int v20; // esi@38
-  char v21; // [sp+Bh] [bp-29h]@2
   char DstBuf[40]; // [sp+Ch] [bp-28h]@2
 
   memcpy((void *)dword_45FC00, screenBuffer, 0x4B000u);
@@ -74,13 +71,10 @@ int seeHallOfFame()
   do
   {
     v1 = v0 + 1;
-    SDL_itoa(v0 + 1, DstBuf, 10);
-    v2 = &v21;
-    do
-      v3 = (v2++)[1];
-    while ( v3 );
+    // "1." .. "10." (the original appended the '.' searching from the local before DstBuf; in
+    // the port that hit the loop counter and the table stopped after the first row)
+    sprintf(DstBuf, "%d.", v0 + 1);
     v4 = (int)graphicsGeneral.fmed1aBpk;
-    *(_WORD *)v2 = 46;
     if ( v0 == 9 )
 		//rank
       drawTextWithFont(v4, (int)&unk_445928, DstBuf, 218908);

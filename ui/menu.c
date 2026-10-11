@@ -1910,20 +1910,16 @@ int showAdjustOptions()
   char v3; // al@8
   signed int v4; // edx@23
   char *v5; // edi@24
-  char *v6; // edi@25
-  char v7; // al@26
   int v8; // eax@27
   char v9; // bl@29
   char v10; // al@33
   signed int v11; // edx@46
   char *v12; // edi@47
-  char *v13; // edi@48
-  char v14; // al@49
   int v15; // eax@50
   int v17; // eax@62
   int v18; // [sp+10h] [bp-14h]@1
   int v19; // [sp+14h] [bp-10h]@1
-  char* DstBuf=malloc(200); // [sp+18h] [bp-Ch]@25
+  char DstBuf[12]; // [sp+18h] [bp-Ch]@25
 
   v18 = configuration.musicVolume / 512;
   v0 = configuration.effectsVolume / 512;
@@ -1991,11 +1987,8 @@ LABEL_2:
 
           
           SDL_itoa((unsigned __int64)((double)v18 * 0.78125), DstBuf, 10);
-          v6 = (char *)&v19 + 3;
-          do
-            v7 = (v6++)[1];
-          while ( v7 );
-         //TODO FIX quitado porque peta *(_WORD *)v6 = 37;
+          // DstBuf followed v19 on the original stack: the scan from &v19 found its end
+          strcat(DstBuf, "%");
           v8 = getBoxBigTextOffset(DstBuf);
           drawTextWithFont((int)graphicsGeneral.fbig3aBpk, (int)&bigLetterSpacing_445848, DstBuf, 157109 - v8);
           drawKeyCursor(157024, (char *)screenBuffer + 157024, 0x78u, 32);
@@ -2060,11 +2053,7 @@ LABEL_2:
           drawImageWithPosition((int)volcur2Bpk, 10, 24, (int)((char *)screenBuffer + v0 + 160329));
           drawKeyCursor(v0 + 160327, (char *)screenBuffer + v0 + 160327, 0xEu, 24);
           SDL_itoa((unsigned __int64)((double)v19 * 0.78125),DstBuf, 10);
-          v13 = (char *)&v19 + 3;
-          do
-            v14 = (v13++)[1];
-          while ( v14 );
-          *(_WORD *)v13 = 37;
+          strcat(DstBuf, "%");
           v15 = getBoxBigTextOffset(DstBuf);
           drawTextWithFont((int)graphicsGeneral.fbig3aBpk, (int)&bigLetterSpacing_445848, DstBuf, 157109 - v15);
           drawKeyCursor(157024, (char *)screenBuffer + 157024, 0x78u, 32);
@@ -3039,50 +3028,20 @@ char GamepadNotFoundPopup_41E3B0()
 //----- (004284E0) --------------------------------------------------------
 signed int sub_4284E0()
 {
-  char *v0; // edx@1
+  // Keys the game keeps for itself: P, Tab, F1-F10, F11, F12 and Esc. The original kept them in
+  // consecutive stack bytes and walked them from the first one; here they were not consecutive.
+  static const unsigned char reservedKeys[15] = { 25, 15, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 87, 88, 1 };
   signed int v1; // ebp@1
   int v2; // eax@2
   signed int result; // eax@41
   int v4; // eax@42
   char v5; // [sp+13h] [bp-39h]@1
-  char v6; // [sp+14h] [bp-38h]@1
-  char v7; // [sp+15h] [bp-37h]@1
-  char v8; // [sp+16h] [bp-36h]@1
-  char v9; // [sp+17h] [bp-35h]@1
-  char v10; // [sp+18h] [bp-34h]@1
-  char v11; // [sp+19h] [bp-33h]@1
-  char v12; // [sp+1Ah] [bp-32h]@1
-  char v13; // [sp+1Bh] [bp-31h]@1
-  char v14; // [sp+1Ch] [bp-30h]@1
-  char v15; // [sp+1Dh] [bp-2Fh]@1
-  char v16; // [sp+1Eh] [bp-2Eh]@1
-  char v17; // [sp+1Fh] [bp-2Dh]@1
-  char v18; // [sp+20h] [bp-2Ch]@1
-  char v19; // [sp+21h] [bp-2Bh]@1
-  char v20; // [sp+22h] [bp-2Ah]@1
   char v21; // [sp+24h] [bp-28h]@42
 
-  v6 = 25;
-  v7 = 15;
-  v8 = 59;
-  v9 = 60;
-  v10 = 61;
-  v11 = 62;
-  v12 = 63;
-  v13 = 64;
-  v14 = 65;
-  v15 = 66;
-  v16 = 67;
-  v17 = 68;
-  v18 = 87;
-  v19 = 88;
-  v20 = 1;
   v5 = 0;
-  v0 = &v6;
-  v1 = 15;
-  do
+  for ( v1 = 0; v1 < 15; ++v1 )
   {
-    v2 = (unsigned __int8)*v0;
+    v2 = reservedKeys[v1];
     if (configuration.accelerateKey == v2
       || configuration.brakeKey == v2
       || configuration.leftSteeringKey == v2
@@ -3092,10 +3051,7 @@ signed int sub_4284E0()
       || configuration.mineKey == v2
       || configuration.hornKey == v2 )
       v5 = 1;
-    ++v0;
-    --v1;
   }
-  while ( v1 );
   if (configuration.accelerateKey == configuration.brakeKey
     || configuration.accelerateKey == configuration.leftSteeringKey
     || configuration.accelerateKey == configuration.rightSteeringKey
