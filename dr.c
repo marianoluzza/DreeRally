@@ -12325,7 +12325,9 @@ int   sub_41ED20(float a1, float a2, float a3)
   v4 += 3;
   ++v11;
   }
-  while ( v4 < 16 );
+  //0x41EE29: hasta 0x4604D8, siete colores (176 a 182). Con "< 16" corria una sola vez y el
+  //resaltado del ranking quedaba con el rojo de la paleta del menu.
+  while ( v4 < 549 );
   /*v4 = (signed int)&unk_460484;
   do
   {

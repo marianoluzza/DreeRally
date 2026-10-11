@@ -96,7 +96,8 @@ int indexRaceParticipant = 0;
   v2 += 3;
   ++v1;
   }
-  while ( v2 <  528 + 16);
+  //0x43538A: hasta 0x4604D8, siete colores (176 a 182); con 528 + 16 faltaba el ultimo
+  while ( v2 < 549 );
 
   /*v2 = (signed int)&unk_460484;
   do

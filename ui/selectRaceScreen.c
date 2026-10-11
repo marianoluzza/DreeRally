@@ -304,7 +304,7 @@ void selectRaceScreen()
 //  const char **v43; // [sp+0h] [bp-6Ch]@0
 //  const char **v44; // [sp+4h] [bp-68h]@0
   char name[100]; // [sp+30h] [bp-3Ch]@45
-  int index = 176;
+  int index = 528; // palette1[528] es el color 176 (0x460480)
   selectedRace_462CE8 = -1;
   calculateNextRaces();
   v0 = -80;
@@ -328,7 +328,8 @@ void selectRaceScreen()
 	index+=3;
   }
   //while ( v1 < (signed int)&unk_4604D8 );
-  while (index < 176+16);
+  //0x43586A: hasta 0x4604D8, colores 176 a 182 (antes leia los colores 58 a 63)
+  while (index < 549);
 
   
   memcpy((void *)dword_45FC00, graphicsGeneral.menubg5Bpk, 0x4B000u);
