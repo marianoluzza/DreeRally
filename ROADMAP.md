@@ -406,7 +406,8 @@ Pruebas hacia la 1.0 desde un save cerca de la final, hasta ganarle al Adversary
 que F2/F3 (silenciar música y efectos) andan, que el joystick navega los menús, la voz de la
 dificultad, el final (animación, Hall of Fame y mensaje, con `DREERALLY_FORCE_ENDING=1`), las
 noticias, el espaciado de las letras, MUSIC VOLUME con su `%` y las capturas F6 (menú y carrera). Sin
-verificar todavía: récords por circuito y la escena `ENDANI0` (primera vez 1.º en puntos).
+verificar todavía: récords por circuito, la escena `ENDANI0` (primera vez 1.º en puntos) y el color de la
+fila del jugador en el ranking.
 
 Casi todo fue la misma trampa: locales que en la pila del original eran contiguas (un texto se
 completaba buscando su final desde la variable anterior). En el port caen sobre otras locales.
@@ -429,6 +430,9 @@ completaba buscando su final desde la variable anterior). En el port caen sobre 
 | Cierre en VCRUNTIME al salir | El original cierra FMOD en `freeMusic` (0x43C4D0); estaba comentado y el hilo de `fmod.dll` mezclaba sobre memoria liberada | `sound.c` |
 | Récords por circuito: minutos "10" en vez de "01" y `malloc` sin liberar | El original rellena los tres campos a dos cifras | `drawRecordByCircuit` |
 | Capturas F6 corruptas | Cabeceras PCX de un byte, paleta sobre un `char` de la pila, RLE que comparaba con -64 | `makeSnapshot_429DC0`, `makeSnapshot_4092B0`, `sub_426460` |
+| Rivales con el color del siguiente (Mic Dair verde, Cher Stone cyan) y "LEE VICEK" | El color es el índice del nombre, como la cara (0x428F07); el port usaba `index + 1`. El nombre se copiaba sin su cero. Verificado; se guarda en la partida, así que vale para partidas nuevas | `initDrivers` |
+| Fila del jugador en el ranking en rojo | `sub_41ED20` tiñe los colores 176 a 182 con el del jugador, pero el bucle cortaba en `< 16` y tiñó uno; `adversaryPreviewScreen` copiaba uno de menos y `selectRaceScreen` leía los colores 58 a 63 | `dr.c`, `prevRaceScreen.c`, `selectRaceScreen.c` |
+| Tras "End current game" el cursor quedaba en esa opción, ya desactivada | En dr.exe cada menú es un registro de 7 enteros; `dword_445724` es el cursor del menú 1 y `dword_44570C` su cantidad de opciones, pero en el port eran globales sueltas. Ahora son alias. Verificado | `dr.h`, `menu.c` |
 
 Más allá del original (commits aparte):
 
@@ -448,7 +452,7 @@ atajo de prueba: con la música del taller sonando quedaban dos streams de efect
 
 Pendiente, en orden sugerido:
 
-1. **Ver en pantalla**: récords por circuito y `ENDANI0`.
+1. **Ver en pantalla**: récords por circuito, `ENDANI0` y la fila del jugador en el ranking.
 2. **Release no enlaza** (`_CrtSetReportHook2` solo existe en Debug): bloquea la 1.0.
 3. Multijugador fuera de alcance, con el mismo patrón: `previewRaceScreen` (`&v246`), los
    corrimientos de noticias comentados.
