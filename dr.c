@@ -421,7 +421,6 @@ int dword_4A6AD0;
 int useWeapons = 1; // weak
 int dword_4456E8 = 10000; // weak
 
-int dword_445724 = 0; // weak
 
 //contiene para cada menu de 9 posiciones si esta activa o no la entrada
 //char byte_4457EF[] = { '\0' }; // weak

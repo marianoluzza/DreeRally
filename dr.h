@@ -118,7 +118,10 @@ extern int dword_45F050; // idb
 extern int dword_45F054; // idb
 extern int dword_456BD8;
 extern int dword_456730;
-extern int dword_445724;
+//En dr.exe cada menu es un registro de 7 enteros desde 0x4456F0; el port lo partio en un arreglo
+//por campo. 0x445724 es el cursor del menu 1 (partida), que una variable suelta no movia.
+extern int dword_445708[];
+#define dword_445724 (dword_445708[1])
 extern int dword_4456E8;
 extern int dword_45FA74; // weak
 extern int dword_45FC00;

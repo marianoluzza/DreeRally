@@ -75,9 +75,9 @@ int dword_45E1C0; // weak
 int dword_456BC8 = 0; // idb
 int dword_456A1C = 1; // weak
 
-int dword_44570C = 6; // weak
 /*menus sizes*///la entrada 9 es para el menu de continuar
 int dword_4456F0[] = { 6,6,8,6,5,8,9,8,8   }; // weak  //entradas del menu
+#define dword_44570C (dword_4456F0[1]) // 0x44570C: cantidad de opciones del menu 1
 /*menus sizes*///la entrada 9 es para el menu de continuar
 int dword_4456F4[] = { 145,0x6d,0x67,0x5f,0xa8,0xe7,0x32,0xd3,0x32   }; // weak
 int dword_4456F8[] = { 124,0xab,0x76,0x92,0xc8,0x72,0x5d,0x74,0x71  }; // weak
