@@ -400,6 +400,60 @@ Pendiente para la próxima sesión, en orden sugerido (lo demás del barrido, to
 8. Siguen los del 04/10: restos de memoria, titileo del menú, `BYTE` con signo, polígonos 3D,
    animación de largada, logos de sponsors, buffer de teclas, `debug`.
 
+### Sesión del 11/10, segunda tanda
+
+Pruebas hacia la 1.0 desde un save cerca de la final, hasta ganarle al Adversary. Mariano confirmó
+que F2/F3 (silenciar música y efectos) andan, que el joystick navega los menús, la voz de la
+dificultad, el final (animación, Hall of Fame y mensaje, con `DREERALLY_FORCE_ENDING=1`), las
+noticias y el espaciado de las letras. Sin verificar todavía: MUSIC VOLUME, récords por circuito,
+capturas F6 y la escena `ENDANI0` (primera vez 1.º en puntos).
+
+Casi todo fue la misma trampa: locales que en la pila del original eran contiguas (un texto se
+completaba buscando su final desde la variable anterior). En el port caen sobre otras locales.
+
+| Síntoma | Causa | Dónde |
+| --- | --- | --- |
+| Cierre al entrar a MUSIC VOLUME después de usar SOUND | El `%` se agregaba buscando el final del texto desde `&v19`; caía sobre `v18`, la posición del deslizador de música (0x25252540). En la rama de música estaba comentado "porque peta" | `showAdjustOptions` (`menu.c`) |
+| Cierre al entrar contra el Adversary; su nombre bien, el del jugador no | El "." del puesto se escribía desde `&v246` sobre `raceIdParticipants` (un rival basura, cierre al leer su color); el nombre se copiaba de `byte_460840`, que aquí no es `drivers[]` | `previewRaceScreen` |
+| En carrera el Adversary se llamaba "A" | El original escribe "ADVERSARY"; el port lo cambió a "Adversary" y la fuente de carrera no tiene minúsculas | `previewRaceScreen` |
+| Cierre al ganarle al Adversary | "endani.haf" se armaba desde `&v23` sobre un `char Filename`; lo mismo en `openAnimation`, `checkAndOpenAnimation` y en la escena `ENDANI0` (dos copias en `postRaceMain`) | `showEndAnim_4312D0`, `haf.c`, `raceResultsScreen.c` |
+| Hall of Fame al ganar: punteros sin inicializar (`v8`, `v17`) | El decompilado quedó a medio pasar a `hallOfFameEntries`; reescrita como el original | `showHallOfFameEndGame_430FA0` |
+| Hall of Fame del menú con una sola fila | El "." del puesto desde `&v21` pisaba el contador del bucle | `seeHallOfFame` |
+| Mensaje del final reducido a "A", "S", "f", "k" | Las cuatro líneas (0x456618) eran de un carácter | `sub_427BC0` |
+| No se veía ninguna noticia en los menús | Upstream (2020) cambió la franja por tres líneas fijas propias. Vuelve el dibujo original de las líneas 16 a 21; la bienvenida original más una línea de crédito a DreeRally (la web de upstream está caída, va su GitHub) | `drawBottomMenuText`, `initMenuNews` (`bottomText.c`) |
+| Noticias de True Tom tras cada carrera: solo había la primera de 19 | La tabla (0x455150, 19 × 4 × 70) era una sola; los usados se marcaban en un `int` escribiendo de más (19 bytes desde 0x45F000, ahora un buffer con alias) | `sub_4279C0` |
+| Colores de las noticias corridos | Los corrimientos del decompilado perdían las banderas 4, 8, 12, 16 y 20; una sola `scrollMenuNews` corre líneas y colores | `bottomText.c` |
+| Huecos entre letras ("ENRIQ UE", "HORIZ ON", Z-I) y la fuente mediana de ancho fijo | Las tablas de espaciado (0x445848..: grande, chica, precios, mediana, contiguas) estaban tipeadas a mano, compensadas con `- 24`, un caso para 'Z', otro para 'z' y `-23`. Ahora es el bloque del original con alias; `drawTextWithFont` lee `tabla[c - 30]` como el original | `imageUtil.c`/`.h` |
+| Las teclas reservadas (P, Tab, F1-F12, Esc) se comparaban con basura | Las 15 eran locales contiguas en el original | `sub_4284E0` (`menu.c`) |
+| El panel derecho copiaba el dinero sobre la pila | Mismo patrón, resultado sin uso | `drawCarRightSide` |
+| Cierre en VCRUNTIME al salir | El original cierra FMOD en `freeMusic` (0x43C4D0); estaba comentado y el hilo de `fmod.dll` mezclaba sobre memoria liberada | `sound.c` |
+| Récords por circuito: minutos "10" en vez de "01" y `malloc` sin liberar | El original rellena los tres campos a dos cifras | `drawRecordByCircuit` |
+| Capturas F6 corruptas | Cabeceras PCX de un byte, paleta sobre un `char` de la pila, RLE que comparaba con -64 | `makeSnapshot_429DC0`, `makeSnapshot_4092B0`, `sub_426460` |
+
+Más allá del original (commits aparte):
+
+- El primer resultado se salteaba con el Enter que cierra el cartel de fin de carrera: queda en
+  `dword_456BF8` también en el original. Se vacía al cerrar el cartel (`racePauseMenu_4064A0`) y se
+  quitó el parche de upstream que ignoraba el Enter en esa pantalla (`|| v54==28`).
+- Al correr las noticias, la última línea conservaba su texto y se repetía arriba y abajo de cada
+  noticia nueva (en DOS se ven renglones vacíos). Ahora se vacía.
+- Prueba: `DREERALLY_FORCE_ENDING=1` pasa una vez por el final al cargar o crear una partida
+  (detiene la música antes, como al terminar la carrera, y sale al menú principal). Escribe el Hall
+  of Fame en `dr.cfg` como el final real.
+
+Revisado sin cambios (comportamiento del original, ver sección 5): el joystick se abre una sola vez
+al arrancar y no se detecta apagado; `SDLCheckJoystick` lee solo cuatro botones; la voz del final
+suena igual que en el original (nota relativa +12, ~21 kHz). La "voz rara" y un cierre fueron del
+atajo de prueba: con la música del taller sonando quedaban dos streams de efectos.
+
+Pendiente, en orden sugerido:
+
+1. **Ver en pantalla**: MUSIC VOLUME, récords por circuito, capturas F6 y `ENDANI0`.
+2. **Release no enlaza** (`_CrtSetReportHook2` solo existe en Debug): bloquea la 1.0.
+3. Multijugador fuera de alcance, con el mismo patrón: `previewRaceScreen` (`&v246`), los
+   corrimientos de noticias comentados.
+4. Siguen `dr.cfg` (`word_462D54`), el fundido de paleta (`sub_404C30`/`sub_4055A0`) y los del 04/10.
+
 ## 3. Sonido, campaña y guardados
 
 Prioridad P1; depende de una carrera estable.
@@ -446,6 +500,33 @@ Prioridad P2; después de la base estable.
       hasta que otro coche la empuja. Pasa también en el original. Mejora propia, por ejemplo
       marcha atrás girando tras unos segundos sin avanzar. Hacerla después de terminar la
       fidelidad con el original.
+
+- [ ] Joystick conectado en caliente: SDL 1.2 lo abre una sola vez al arrancar
+      (`SDL_JoystickOpen` en `dr.c`), así que si se prende después no se toma. Igual que el
+      original. Mejora propia, después del PR. Al revés también: si el mando se apaga solo
+      (ahorro de energía), SDL 1.2 no avisa y el eje queda en un extremo que se lee como
+      "izquierda" 36 veces por segundo; cada pantalla que espera una tecla avanza sola (11/10:
+      se saltearon la animación final y el Hall of Fame). Detectar el mando apagado y
+      desactivarlo.
+
+- [ ] Más botones del joystick: `SDLCheckJoystick` (0x43C650) lee solo los botones 0 a 3
+      (acelerar, turbo, disparo, mina) y el stick para dirección y freno; L/R y los gatillos no
+      se leen. Igual que el original. Mejora propia: mapear hombros, gatillos (ejes) y el pad
+      digital, por ejemplo freno en un gatillo.
+
+- [ ] Nombre del piloto de 11 letras: la licencia lo limita a 10 (`readKeyboard(..., 0xA, 300, ...)`
+      en `licenseScreen.c`), pero `name` mide 12 bytes en `drivers[]`, en el Hall of Fame y en
+      los récords, y "MATT MILLER" ya ocupa 11 en todas las pantallas. Pasar a 11 no cambia
+      partidas ni configuración; más de 11 sí (cambia el formato del guardado). Revisar el ancho
+      con letras anchas en carrera, resultados y ranking.
+
+- [ ] Grises, blanco y negro para el auto del jugador: el jugador sale de `COPPER.PAL`
+      (una rueda de tonos sin grises, índices pares 0–254 en el taller) y los rivales de
+      `CARCOL.PAL` (ahí están Greg Peck, 20,20,20, y Bogus Bill, 45,45,45). Mariano ya probó
+      parchear `MENU.BPA` (índices 248–254, que repiten el rojo del 0). En el fork conviene
+      pisarlos en memoria después de `extractFromBpa("copper.pal")` y no tocar los datos. Ojo:
+      `sub_418B00` tiñe los menús con el color del jugador, así que un negro puro puede dejar
+      los resaltados del menú invisibles; probar un gris muy oscuro.
 
 - [ ] Todos los circuitos en cualquier dificultad (quizás como opción). En el original cada
       nivel tiene su lista (Rock Zone, por ejemplo, no sale en Hard), así que hay pistas que no

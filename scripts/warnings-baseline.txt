@@ -40,8 +40,6 @@
 1	D:\Mis Docs\GitHub\DreeRally\sfx\minifmod\soundSystem.c : warning C4715: 'FSOUND_MixerClipCopy_Float32_43DE30': no todas las rutas de acceso de control devuelven un valor
 28	D:\Mis Docs\GitHub\DreeRally\sfx\minifmod\soundSystem.c : warning C4731: 'FSOUND_Mixer_FPU_Ramp_43DEA0': registro de puntero de marco 'ebp' modificado por c├│digo de ensamblado alineado
 1	D:\Mis Docs\GitHub\DreeRally\ui\blackMarketScreen.c : warning C4716: 'initBlackMarketMessages': debe devolver un valor
-1	D:\Mis Docs\GitHub\DreeRally\ui\hallOfFame.c : warning C4700: se utiliz├│ la variable local 'v17' sin inicializar
-1	D:\Mis Docs\GitHub\DreeRally\ui\hallOfFame.c : warning C4700: se utiliz├│ la variable local 'v8' sin inicializar
 1	D:\Mis Docs\GitHub\DreeRally\ui\util\anim.c : warning C4716: 'initShopMessages': debe devolver un valor
 1	dr.c: warning C4013: 'drawCursor' sin definir; se supone que extern devuelve como resultado int
 1	dr.c: warning C4013: 'drawKeyCursor' sin definir; se supone que extern devuelve como resultado int
@@ -227,13 +225,10 @@
 3	dr.c: warning C4244: 'return': conversi├│n de 'unsigned __int64' a 'int'; posible p├⌐rdida de datos
 4	dr.c: warning C4305: '=': truncamiento de 'double' a 'float'
 6	dr.c: warning C4305: 'inicializando': truncamiento de 'double' a 'float'
-2	dr.c: warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _itoa. See online help for details.
 1	drivers.c: warning C4013: 'reInitUnderGroundMarketStock' sin definir; se supone que extern devuelve como resultado int
 1	drivers.c: warning C4013: 'sub_4224E0' sin definir; se supone que extern devuelve como resultado int
 1	graphics.c: warning C4013: 'copyImageToBuffer' sin definir; se supone que extern devuelve como resultado int
 1	graphics.c: warning C4013: 'decryptTexture' sin definir; se supone que extern devuelve como resultado int
-1	imageUtil.c: warning C4013: 'drawImageWithPosition' sin definir; se supone que extern devuelve como resultado int
-1	imageUtil.c: warning C4013: 'drawImageWithPosition2' sin definir; se supone que extern devuelve como resultado int
 1	imageUtil.c: warning C4013: 'memcpy' sin definir; se supone que extern devuelve como resultado int
 1	imageUtil.c: warning C4013: 'strlen' sin definir; se supone que extern devuelve como resultado int
 7	imageUtil.c: warning C4018: '<': no coinciden signed/unsigned
@@ -446,7 +441,6 @@
 1	ui\endGameScreen.c: warning C4013: 'transitionToCurrentImage' sin definir; se supone que extern devuelve como resultado int
 1	ui\endGameScreen.c: warning C4013: 'waitWithRefresh' sin definir; se supone que extern devuelve como resultado int
 1	ui\hallOfFame.c: warning C4013: 'drawBorder_421980' sin definir; se supone que extern devuelve como resultado int
-1	ui\hallOfFame.c: warning C4013: 'drawBottomMenuText' sin definir; se supone que extern devuelve como resultado int
 1	ui\hallOfFame.c: warning C4013: 'drawTransparentBlock' sin definir; se supone que extern devuelve como resultado int
 1	ui\hallOfFame.c: warning C4013: 'eventDetected' sin definir; se supone que extern devuelve como resultado int
 1	ui\hallOfFame.c: warning C4013: 'loadMenuSoundEffect' sin definir; se supone que extern devuelve como resultado int
@@ -460,13 +454,9 @@
 1	ui\hallOfFame.c: warning C4013: 'sub_42C560' sin definir; se supone que extern devuelve como resultado int
 1	ui\hallOfFame.c: warning C4013: 'transitionToCurrentImage' sin definir; se supone que extern devuelve como resultado int
 2	ui\hallOfFame.c: warning C4024: 'drawImageWithPosition2': tipos distintos para el par├ímetro formal y el par├ímetro real 1
-2	ui\hallOfFame.c: warning C4024: 'memset': tipos distintos para el par├ímetro formal y el par├ímetro real 2
-2	ui\hallOfFame.c: warning C4047: 'funci├│n': 'int' es distinto en los niveles de direccionamiento indirecto de 'char [2]'
 2	ui\hallOfFame.c: warning C4047: 'funci├│n': 'int' es distinto en los niveles de direccionamiento indirecto de 'int *'
-1	ui\hallOfFame.c: warning C4101: 'v14': variable local sin referencia
 1	ui\hallOfFame.c: warning C4101: 'v5': variable local sin referencia
-5	ui\hallOfFame.c: warning C4244: '=': conversi├│n de 'short' a 'char'; posible p├⌐rdida de datos
-4	ui\hallOfFame.c: warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _itoa. See online help for details.
+2	ui\hallOfFame.c: warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _itoa. See online help for details.
 1	ui\licenseScreen.c: warning C4013: 'copyImageToBuffer' sin definir; se supone que extern devuelve como resultado int
 1	ui\licenseScreen.c: warning C4013: 'drawBottomMenuText' sin definir; se supone que extern devuelve como resultado int
 1	ui\licenseScreen.c: warning C4013: 'drawCursor' sin definir; se supone que extern devuelve como resultado int
@@ -509,7 +499,6 @@
 1	ui\menu.c: warning C4013: 'configJoystick' sin definir; se supone que extern devuelve como resultado int
 1	ui\menu.c: warning C4013: 'convertColorToPaletteColor' sin definir; se supone que extern devuelve como resultado int
 1	ui\menu.c: warning C4013: 'copyPalette1toPalette' sin definir; se supone que extern devuelve como resultado int
-1	ui\menu.c: warning C4013: 'drawBottomMenuText' sin definir; se supone que extern devuelve como resultado int
 1	ui\menu.c: warning C4013: 'drawTransparentBlock' sin definir; se supone que extern devuelve como resultado int
 1	ui\menu.c: warning C4013: 'eventDetected' sin definir; se supone que extern devuelve como resultado int
 1	ui\menu.c: warning C4013: 'freeMemoryGraphics' sin definir; se supone que extern devuelve como resultado int
@@ -552,7 +541,6 @@
 1	ui\prevRaceScreen.c: warning C4013: 'calculateNextRaces' sin definir; se supone que extern devuelve como resultado int
 1	ui\prevRaceScreen.c: warning C4013: 'convertColorToPaletteColor' sin definir; se supone que extern devuelve como resultado int
 1	ui\prevRaceScreen.c: warning C4013: 'copyImageToBuffer' sin definir; se supone que extern devuelve como resultado int
-1	ui\prevRaceScreen.c: warning C4013: 'drawBottomMenuText' sin definir; se supone que extern devuelve como resultado int
 1	ui\prevRaceScreen.c: warning C4013: 'drawCarRightSide' sin definir; se supone que extern devuelve como resultado int
 1	ui\prevRaceScreen.c: warning C4013: 'drawCircuitPreviewImage' sin definir; se supone que extern devuelve como resultado int
 1	ui\prevRaceScreen.c: warning C4013: 'drawKeyCursor' sin definir; se supone que extern devuelve como resultado int
@@ -648,10 +636,9 @@
 1	ui\prevRaceScreen.c: warning C4101: 'v68': variable local sin referencia
 1	ui\prevRaceScreen.c: warning C4101: 'v71': variable local sin referencia
 3	ui\prevRaceScreen.c: warning C4244: '=': conversi├│n de 'double' a 'float'; posible p├⌐rdida de datos
-5	ui\prevRaceScreen.c: warning C4244: '=': conversi├│n de 'short' a 'char'; posible p├⌐rdida de datos
 1	ui\prevRaceScreen.c: warning C4244: '=': conversi├│n de 'unsigned __int64' a 'int'; posible p├⌐rdida de datos
 1	ui\prevRaceScreen.c: warning C4244: 'funci├│n': conversi├│n de 'unsigned __int64' a 'int'; posible p├⌐rdida de datos
-7	ui\prevRaceScreen.c: warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _itoa. See online help for details.
+6	ui\prevRaceScreen.c: warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _itoa. See online help for details.
 1	ui\raceResultsScreen.c: warning C4013: 'colorToPaletteEntry' sin definir; se supone que extern devuelve como resultado int
 1	ui\raceResultsScreen.c: warning C4013: 'convertColorToPaletteColor' sin definir; se supone que extern devuelve como resultado int
 1	ui\raceResultsScreen.c: warning C4013: 'drawKeyCursor' sin definir; se supone que extern devuelve como resultado int
