@@ -222,7 +222,7 @@ signed int   readKeyboard(char *a1, int a2, int a3, int a4, unsigned int a5, sig
     v15 = eventDetected();
     v16 = (unsigned __int8)v15;
     v71 = (unsigned __int8)v15;
-    switch ( v15 )
+    switch ( (unsigned __int8)v15 )
     {
       case KEY_F1:
         //if ( ingame && isMultiplayerGame )

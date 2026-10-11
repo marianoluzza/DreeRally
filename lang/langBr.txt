@@ -23,6 +23,7 @@ Effect volume=Volume dos efeitos
 define Keyboard=Configuração do telcado
 Define Gamepad/Joystick=Configuração de gamepad/joystick
 Gamepad/Joystick Disabled=gamepad/joystick Desativados
+Gamepad/Joystick Enabled=gamepad/joystick Ativados
 
 Empty slot=Slot vazio
 Quicksave slot=Save rápido

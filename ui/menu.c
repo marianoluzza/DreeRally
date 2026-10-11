@@ -105,7 +105,8 @@ signed int   readEventInMenu(int menuType)
 	refreshAndCheckConnection_42A570();
     refreshAndCheckConnection_42A570();
     updateCursor(menuType);
-	key = eventDetected();
+	//Sin signo como en el original (movzx en 0x42E0E5): el joystick devuelve 0xC8/0xD0.
+	key = (unsigned __int8)eventDetected();
     switch (key)
     {
       default:
@@ -239,7 +240,7 @@ bool   drawYesNoMenu(int a1, int a2, int a3, signed int *a4)
     {
       v12 = -51;
     }
-    switch ( v12 )
+    switch ( (unsigned __int8)v12 )
     {
       default:
         continue;

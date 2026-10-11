@@ -23,6 +23,7 @@ Effect volume=Volume Effetti
 define Keyboard=Configura Tastiera
 Define Gamepad/Joystick=Configura gamepad/joystick
 Gamepad/Joystick Disabled=gamepad/joystick Disattivato
+Gamepad/Joystick Enabled=gamepad/joystick Attivato
 
 Empty slot=Slot Vuoto
 Quicksave slot=Salvataggio Rapido

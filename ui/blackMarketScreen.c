@@ -1311,7 +1311,7 @@ void enterBlackMarketScreen()
       default:
         break;
     }
-    switch ( eventDetected() )
+    switch ( (unsigned __int8)eventDetected() )
     {
       case KEY_F1:
        // if ( isMultiplayerGame )

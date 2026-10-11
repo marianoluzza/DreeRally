@@ -388,7 +388,7 @@ void enterShop()
         {
           v52 = -51;
         }
-        switch ( v52 )
+        switch ( (unsigned __int8)v52 )
         {
           default:
             continue;
@@ -1461,7 +1461,7 @@ LABEL_219:
       goto LABEL_203;
     }
 LABEL_220:
-    switch ( v42 )
+    switch ( (unsigned __int8)v42 )
     {
       //case KEY_F1:
         //-//if ( isMultiplayerGame )

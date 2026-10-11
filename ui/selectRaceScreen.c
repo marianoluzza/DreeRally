@@ -353,7 +353,7 @@ void selectRaceScreen()
     refreshAndCheckConnection_42A570();
     refreshAndCheckConnection_42A570();
     addParticipantToRace(75);
-    switch ( eventDetected() )
+    switch ( (unsigned __int8)eventDetected() )
     {
       case KEY_LEFT:
       case 0xCB:

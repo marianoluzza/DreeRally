@@ -11888,7 +11888,9 @@ char sub_418090()
         dword_456B30 = v3;
         return result;
       }
-      dword_456B1C = v2;
+      //El original cancela aqui la espera de 700 ms (dword_456B1C = v2) aunque el boton siga
+      //apretado: al cerrar un cartel con el joystick, la pantalla siguiente leia el mismo Enter.
+      //Ahora la espera se mantiene; eventDetected ya la cancela cuando ve el boton suelto.
       dword_456B30 = v2 - 400;
       dword_456B34 = v2;
     }

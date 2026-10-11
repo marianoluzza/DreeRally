@@ -12,6 +12,7 @@
 
 extern char unk_462DA0[];
 extern char unk_45EAC0[];
+extern char aGamepadDisable[];
 
 char * menu0[] = { "Start Racing", "Multiplayer Race", "Configure","See hall of fame","Credits","Exit to os" };
 char * menu1[] = { "Start a new game", "End current Game", "See current Stadistics","Load game","save game","Previous menu" };
@@ -80,6 +81,9 @@ char* getMenuText(int menu, int position) {
 		break;
 	
 	case CONFIGURE_MENU://
+		//La opcion 4 la reescribe el menu al activar o desactivar el joystick.
+		if (position == 4)
+			return getLanguageEntry(aGamepadDisable);
 		return getLanguageEntry(menu3[position]);
 		break;
 	case LOAD_MENU://
