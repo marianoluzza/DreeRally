@@ -450,13 +450,33 @@ al arrancar y no se detecta apagado; `SDLCheckJoystick` lee solo cuatro botones;
 suena igual que en el original (nota relativa +12, ~21 kHz). La "voz rara" y un cierre fueron del
 atajo de prueba: con la música del taller sonando quedaban dos streams de efectos.
 
+### Sesión del 24/10: Release
+
+Release no enlazaba, y además venía de upstream con `_DEBUG` definido y `dr.c` con el CRT de
+depuración (dos CRT en un mismo ejecutable). Ahora usa `NDEBUG` y un solo CRT. Optimizado y con
+`/GS`, destapó errores que en Debug pasaban sin cerrar el juego. Mariano jugó tres carreras seguidas
+en Release (resultados, ranking, tienda, guardar y salir) sin cierres, y una partida nueva con los
+19 rivales correctos. Récords por circuito y las voces de la vuelta, verificados en pantalla.
+
+| Síntoma | Causa | Dónde |
+| --- | --- | --- |
+| Release: cierre al empezar partida | `initDrivers` recorría los 20 pilotos; el original solo los 19 rivales (0x460890..0x461094). En la vuelta del jugador leía un nombre 20 fuera de `driverNames`, que pisaba `carType` | `drivers.c` |
+| Un rival con la cara del jugador y falta otro (SAM SPEED) | El original vuelve a llamar a `initDrivers` tras la licencia (0x439DD1), ya con la cara elegida; el port la había quitado porque pisaba el nombre del jugador | `menu.c` |
+| Release: cierre al salir de los resultados (`/GS`) | `Str` medía 16; "NUMBER OF LAPS: " más el número son 18. En el original ocupa 44 bytes | `previewRaceScreen` |
+| La inicial del nombre pasaba a "D" ("Dariano"); en Debug quedaba en minúscula | Se comparaba el byte bajo del puntero al nombre en lugar de la primera letra | `licenseScreen.c` |
+| Nunca sonaba "new lap record"; la música de pausa era siempre la de TR0 | Al ubicar los objetos 3D, el port copiaba "TR0" sobre el prefijo de la pista en cada cuadro; el original solo pregunta si es TR0 (0x40D709) | `3dSystem.c` |
+| La lista de partidas mostraba una letra de más con nombres de 15 | Copiaba 16 bytes, el último ya es `drivers[0]`; el original copia 15 | `getSaveGameName` |
+
+Formato de las partidas documentado en [doc/SAVEGAME.md](doc/SAVEGAME.md), con
+`tools/savegame.py` para verlas y editarlas (base para un editor de partidas). Cada vuelta del
+jugador queda en el log (`vuelta:` con tiempo, récord y pista).
+
 Pendiente, en orden sugerido:
 
-1. **Ver en pantalla**: récords por circuito, `ENDANI0` y la fila del jugador en el ranking.
-2. **Release no enlaza** (`_CrtSetReportHook2` solo existe en Debug): bloquea la 1.0.
-3. Multijugador fuera de alcance, con el mismo patrón: `previewRaceScreen` (`&v246`), los
+1. **Ver en pantalla**: `ENDANI0` (primera vez 1.º en puntos) y la fila del jugador en el ranking.
+2. Multijugador fuera de alcance, con el mismo patrón: `previewRaceScreen` (`&v246`), los
    corrimientos de noticias comentados.
-4. Siguen `dr.cfg` (`word_462D54`), el fundido de paleta (`sub_404C30`/`sub_4055A0`) y los del 04/10.
+3. Siguen `dr.cfg` (`word_462D54`), el fundido de paleta (`sub_404C30`/`sub_4055A0`) y los del 04/10.
 
 ## 3. Sonido, campaña y guardados
 
