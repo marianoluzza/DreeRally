@@ -92,8 +92,10 @@ char* getSaveGameName(int savegame) {
 		previousStr = Str;
 		decryptEntireSavegame(0, Filename);
 
-		memcpy(saveGameName, ((unsigned char *)Str + 4), 16);
-		saveGameName[16] = 0;
+		//El nombre ocupa los bytes 4 a 18; el 19 ya es la primera letra de drivers[0]. Con 16, un
+		//nombre de 15 letras mostraba una de mas. El original copia 15 (0x41C9D0).
+		memcpy(saveGameName, ((unsigned char *)Str + 4), 15);
+		saveGameName[15] = 0;
 		free(Str);
 		Str = previousStr;
 
