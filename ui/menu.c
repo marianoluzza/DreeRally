@@ -348,7 +348,9 @@ LABEL_2:
           showWelcomePopup_456B74 = 1;
 		  
 		  isMultiplayerGame = 0; ///puesto por mi!
-		 //initDrivers();
+		  //0x439DD1: con la cara ya elegida, los rivales se reparten las otras 19 (antes uno repetia
+		  //la del jugador y faltaba SAM SPEED). Estaba quitada porque initDrivers pisaba al jugador.
+		  initDrivers();
           drivers[driverId].colour = v1;
           copyPalette1toPalette();
           *(_DWORD *)menuaStartANewGam_0 = 1702129221;
