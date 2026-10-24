@@ -59,7 +59,7 @@ int   licenseScreen(int useWeapons_mal)
   signed int v30; // edx@49
   char *v31; // edi@50
   int v32; // ebp@74
-  char *v33; // al@74
+  char v33; // al@74
   char *v34; // ecx@74
   int v35; // ebx@77
   char *v36; // eax@77
@@ -343,7 +343,9 @@ LABEL_74:
   //strlwr(&byte_460840[108 * v20]);
   //v32 = 27 * driverId;
   //v33 = byte_460840[108 * driverId];
-  v33 = drivers[driverId].name;
+  //Es la primera letra (al@74), no el puntero: se comparaba el byte bajo de la direccion del nombre
+  //y, si caia entre a y z (en Release cae en "d"), se escribia como inicial: "Dariano".
+  v33 = drivers[driverId].name[0];
   v34 = drivers[driverId].name;
   //v34 = &byte_460840[108 * driverId];
   if ( (unsigned __int8)v33 > 0x60u && (unsigned __int8)v33 < 0x7Bu )
