@@ -9538,6 +9538,9 @@ int checkVaiZones_412DF0()
             currentRaceBestLapSeconds_45EB48 = currentLapSeconds_463CD4;
             currentRaceBestLapMilliseconds_461FEC = currentLapMilliseconds_45FC1C;
           }
+          diagnosticLog("vuelta: n=%d tiempo=%d record=%d:%02d.%02d aviso=%d pista=%s", raceParticipantIngame[v11].currentLap_4A7E08,
+                        v13, circuitRecordMinutes_50A160, circuitRecordSeconds_501260, circuitRecordMilliseconds_4A9B8C,
+                        isLapRecord_456AE4, raceFilePrefix_45EA50);
           if ( v13 >= circuitRecordMilliseconds_4A9B8C + 100 * (circuitRecordSeconds_501260 + 60 * circuitRecordMinutes_50A160)
             && (circuitRecordMinutes_50A160 || circuitRecordSeconds_501260 || circuitRecordMilliseconds_4A9B8C) )
           {
