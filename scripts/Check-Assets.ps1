@@ -17,5 +17,5 @@ foreach ($name in $required) {
 }
 # The upstream README lists this legacy dependency; it may be needed by its DLLs.
 if (!(Test-Path -LiteralPath (Join-Path $Source 'msvcr71.dll'))) { Write-Warning 'msvcr71.dll is absent; validate the dependencies of the original Windows DLLs.' }
-if ($missing.Count -and !$ReportOnly) { throw "Missing runtime files: $($missing -join ', '). See doc/ASSETS.md." }
+if ($missing.Count -and !$ReportOnly) { throw "Missing runtime files: $($missing -join ', '). See doc/DEVELOPMENT.md." }
 if (!$missing.Count) { Write-Host 'Required filenames are present. Format/architecture and gameplay still need validation.' }

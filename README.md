@@ -1,12 +1,11 @@
-# DreeRally — fork personal de Mariano Luzza
+# DreeRally (fork)
 
-Base de trabajo para recuperar una versión jugable en Windows, conservando el historial y los créditos de enriquesomolinos/DreeRally.
+Fork de [enriquesomolinos/DreeRally](https://github.com/enriquesomolinos/DreeRally), rama `0.3.x`. Una campaña completa se juega en Windows, en Debug y en Release. Los archivos originales y las partidas quedan fuera de Git.
 
-- [Roadmap y próximos hitos](ROADMAP.md)
-- [Preparar VS Code y compilar](doc/DEVELOPMENT.md)
-- [Assets originales y compatibilidad DOS/Windows](doc/ASSETS.md)
-
-Estado inicial: Debug y Release x86 compilan; assets Windows preparados localmente y proceso propio iniciado. Intro y llegada al menú confirmadas por Mariano; carrera completa pendiente. Los archivos originales y las partidas permanecen fuera de Git.
+- [Roadmap](ROADMAP.md)
+- [Qué se arregló](doc/CHANGELOG.md)
+- [Compilar, probar y diagnosticar en Windows](doc/DEVELOPMENT.md)
+- [Formato de las partidas](doc/SAVEGAME.md)
 
 ---
 
