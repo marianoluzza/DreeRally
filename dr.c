@@ -15455,10 +15455,13 @@ LABEL_68:
         }
         else if (event.key.keysym.sym == SDLK_RETURN &&  event.key.keysym.mod & 0x300 )
         {
-          if ( *(_DWORD *)screenSurface >= 0 )
+          //Alt+Enter alterna ventana y pantalla completa (0x43BCD9). Desactivado para la v1: la pantalla
+          //completa pasa el monitor a 640x480 y en uno ancho se ve estirada, y se escapa sin querer.
+          //Vuelve cuando la pantalla completa respete el 4:3 (ROADMAP, seccion 5).
+          /*if ( *(_DWORD *)screenSurface >= 0 )
             SetVideoMode(1);
           else
-            SetVideoMode(0);
+            SetVideoMode(0);*/
           continue;
         }
         keysRead_45E0C0[event.key.keysym.scancode] = 0;
