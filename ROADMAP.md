@@ -511,7 +511,11 @@ Salida: build desde un checkout limpio, instrucciones verificadas y automatizaci
 
 Prioridad P2; después de la base estable.
 
-- [ ] Ventana/pantalla completa, escalado y relación de aspecto.
+- [ ] Ventana/pantalla completa, escalado y relación de aspecto. Alt+Enter alterna ventana y pantalla
+      completa también con `-window`, como el original (0x43BCD9); la pantalla completa pasa el monitor a
+      640×480 y en uno ancho se ve estirada. Para la v1 Alt+Enter está desactivado (`dr.c`, en el
+      manejo de `SDL_KEYUP`), porque se escapa sin querer; vuelve cuando la pantalla completa respete el
+      4:3 (franjas o un fondo gráfico a los costados).
 - [ ] Configuración de teclado y gamepad.
 - [ ] Rutas de datos y guardados configurables, con mensajes claros.
 - [ ] Mejorar organización e idioma de menús sin alterar reglas.
@@ -557,6 +561,13 @@ Prioridad P2; después de la base estable.
       JPG mancharía los bordes del texto), quizás al tamaño de la ventana y con fecha en el nombre,
       y una sola por pulsación (hoy guarda una por cuadro mientras F6 sigue apretada, como el
       original). Mejora propia, después del PR.
+
+- [ ] Racha de victorias entre partidas guardadas: el bono del sponsor sale con 3 victorias seguidas
+      (`consecutiveWins_456BA8`), pero el contador no está en la partida guardada (solo cabecera y
+      `drivers[]`, ver [doc/SAVEGAME.md](doc/SAVEGAME.md)), así que al cargar vuelve a 0. Igual que el
+      original. Mejora propia: guardarlo en uno de los tres campos que `dr.exe` no usa del registro del
+      jugador (`unk_460860..68`); el formato no cambia y el original lo ignora. Lo mismo vale para
+      `noPaintJob` y `allCarsCrash` si quedan pendientes al guardar.
 
 - [ ] Todos los circuitos en cualquier dificultad (quizás como opción). En el original cada
       nivel tiene su lista (Rock Zone, por ejemplo, no sale en Hard), así que hay pistas que no
