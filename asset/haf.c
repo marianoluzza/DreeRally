@@ -344,6 +344,12 @@ void   openAnimation(const char *animFile, int a2, char * music, int a4, char * 
     loadMusic(a2, music, a4, effect);
   nullsub_1();
   setWindowCaption3(19);
+  //Los cuadros se escriben en screenPtr y la pantalla 320x200 se lee desde el inicio del buffer.
+  //setWindowCaption3 solo lo devuelve al inicio cuando cambia de modo; tras ganarle al Adversary el
+  //juego sigue en modo carrera y addParticipantToRace acaba de refrescar el menu (refreshAllScreen
+  //deja screenPtr en el bloque 4), asi que el final se dibujaba fuera de la vista: audio y pantalla
+  //negra. Pasa igual en dr.exe 1.0 (0x423C7A, 0x43BD70, 0x4188BC); en DOS el modo 13h no tiene bloques.
+  updateScreenPtr(0);
   recalculateSDLTicks_43C740();
   if ( (BYTE)a2 )
   {
