@@ -33,6 +33,8 @@ int hash_index (hash_t *h, char *key) {
 void hash_insert (hash_t *h, char *key, void *value) {
     //int i = hash_index(h, key);
 
+    if (h->filled >= 150)
+        return;
     h->keys[h->filled] = key;
     h->values[h->filled] = value;
 	h->filled = h->filled +1;
@@ -42,7 +44,8 @@ void *hash_lookup (hash_t *h, char *key) {
     signed int i = hash_index(h, key);
     if(i==-1)
 		return NULL;
-	h->filled = h->filled +1;
+	//Aqui se sumaba 1 a filled en cada busqueda con exito: las siguientes recorrian claves sin
+	//inicializar y el juego se cerraba con cualquier mod activo (con -mod, al llegar al final).
 
 	return h->values[i];
 }
