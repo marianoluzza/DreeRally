@@ -990,7 +990,9 @@ LABEL_43:
           v56 = 6;
           goto LABEL_44;
         }
-        v13 = 27 * driverId;
+        //0x438A8D: driverId * 0x6C es un desplazamiento en bytes; como indice de drivers[] (27 * driverId)
+        //leia dinero y dano de memoria ajena y a veces dibujaba "End of the road" a escondidas.
+        v13 = driverId;
         if ( drivers[driverId].loanRaces == 4 )
 		//if (dword_460878[27 * driverId] == 4)
         {
