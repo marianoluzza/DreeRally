@@ -374,7 +374,6 @@ void recalculatePolygonsInScreeenPosition_40D6B0()
     int v2; // edi@2
     _UNKNOWN* v3; // eax@2
     int v4; // ebx@3
-    bool v5; // zf@3
     int v6; // [sp+0h] [bp-4h]@2
     int id3dObject = 0;
     dword_4AA928 = 0;

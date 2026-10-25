@@ -17,6 +17,7 @@ int drawInRaceImageToBuffer_43B160(int a1, int a2, int a3, int a4);
 //Ranking: ordena drivers[] por puntos y recalcula los puestos.
 int sub_423C90(int a1, int a2);
 void recalcRank(int a1);
+int updateScreenPtr(int a1);
 
 extern char byte_463E00[256]; // weak
 extern void *volcur2Bpk; // idb
@@ -24,7 +25,7 @@ extern void *volcur2Bpk; // idb
 //Noticias del menu. En el original son dos bloques contiguos: el color de cada linea
 //(0x461EC0, 22 bytes) y las lineas (0x462000, 22 x 150 bytes). El decompilado los partio en
 //globales sueltas y los bucles que desplazan las lineas corrian hasta &blacktx1Bpk, que aqui
-//esta en cualquier lado: pisaban memoria cada 150 bytes (drivers[] tras una carrera, 27/09).
+//esta en cualquier lado: pisaban memoria cada 150 bytes (drivers[] tras una carrera).
 #define MENU_NEWS_LINES 22
 #define MENU_NEWS_LINE_SIZE 150
 extern char unk_461EC0[256]; // idb
