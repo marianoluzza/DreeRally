@@ -471,12 +471,24 @@ Formato de las partidas documentado en [doc/SAVEGAME.md](doc/SAVEGAME.md), con
 `tools/savegame.py` para verlas y editarlas (base para un editor de partidas). Cada vuelta del
 jugador queda en el log (`vuelta:` con tiempo, récord y pista).
 
+### Sesión del 25/10: campaña completa en Release
+
+Mariano jugó una campaña entera en Release, de 14.º a 1.º y hasta ganarle al Adversary, sin cierres.
+Verificado en pantalla: `ENDANI0` (la llamada coincide con dr.exe, 0x42B5EB), la fila del jugador en
+el ranking con su color, el final (animación, Hall of Fame y mensaje) y los bonos del sponsor.
+
+| Síntoma | Causa | Dónde |
+| --- | --- | --- |
+| "End of the road, driver" asomaba detrás de otro cartel en la tienda | El dinero y el daño del jugador se leían de `drivers[27 * driverId]`: `driverId * 0x6C` es un desplazamiento en bytes (0x438A8D), no un índice | `shopScreen.c` |
+| La animación final (tras ganarle al Adversary) se oía pero quedaba en negro | `addParticipantToRace` refresca el menú y `refreshAllScreen` deja `screenPtr` en el bloque 4; el juego sigue en modo carrera, así que `setWindowCaption3(19)` no lo devuelve al inicio y los cuadros quedan fuera de la vista. **Pasa igual en dr.exe 1.0** (0x423C7A, 0x43BD70, 0x4188BC); se corrige igual por ser un error evidente | `openAnimation` (`haf.c`) |
+| Cierre con cualquier mod activo (`-mod=`) | `hash_lookup` sumaba 1 a `filled` en cada búsqueda con éxito y las siguientes recorrían claves sin inicializar | `util/hash.c` |
+
 Pendiente, en orden sugerido:
 
-1. **Ver en pantalla**: `ENDANI0` (primera vez 1.º en puntos) y la fila del jugador en el ranking.
-2. Multijugador fuera de alcance, con el mismo patrón: `previewRaceScreen` (`&v246`), los
+1. Multijugador fuera de alcance, con el mismo patrón: `previewRaceScreen` (`&v246`), los
    corrimientos de noticias comentados.
-3. Siguen `dr.cfg` (`word_462D54`), el fundido de paleta (`sub_404C30`/`sub_4055A0`) y los del 04/10.
+2. Siguen `dr.cfg` (`word_462D54`), el fundido de paleta (`sub_404C30`/`sub_4055A0`) y los del 04/10.
+3. Antes del PR a upstream: decidir qué infraestructura local va (ver "Forma de avanzar").
 
 ## 3. Sonido, campaña y guardados
 
